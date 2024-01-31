@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-center mx-5 mt-5 mb-4 flex-wrap">
   <div style="width:500px; height: 500px">
-    <input type="date" v-model="date" @click="setDate"/>
+    <input type="date" v-model="date" @input="setDate"/>
   
     
     <!-- <v-date-picker

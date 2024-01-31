@@ -101,12 +101,15 @@ export default {
            });
            if (response.status === 200) {
                //this.$store.commit('setDetails', response.data)
-
+               const amount = response.data.amount;
                if(window.confirm('Are you sure you want to continue to pay'))
                {
                    console.log('backend api to razorpay')
                    try{
-                     const response1 = await axios.post(`http://localhost:8080/api/payment/create-order?amount=${this.details.total}&sessionId=${this.session.Details}`)
+                    const response1 = await axios.post(`http://localhost:8080/api/payment/create-order`, {
+                      "amount": amount,
+                      "sessionId": this.session.Details
+                    });
                      if (response1.status === 200) {
                        this.$store.commit('setRazor', response1.data)
                        this.payon = true;
@@ -136,7 +139,10 @@ export default {
               {
                 console.log('backend api to razorpay')
                 try{
-                    const response1 = await axios.post(`http://localhost:8080/api/payment/create-order?amount=${amount}&sessionId=${this.session.Details}`)
+                    const response1 = await axios.post(`http://localhost:8080/api/payment/create-order`, {
+                      "amount": amount,
+                      "sessionId": this.session.Details
+                    });
                 if (response1.status === 200) {
                   console.log('razorpay response from backend',response1.data)
                     this.$store.commit('setRazor', response1.data)

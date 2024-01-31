@@ -37,7 +37,7 @@
             required
           ></v-text-field>
 <div class="d-flex justify-content-between align-items-center mt-1">
-  <h6>No. of Teachers (Rs.{{institute[0].price}}): </h6>
+  <h6>No. of Teachers (Rs.{{institute[1].price}}): </h6>
       <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementAdult">
           <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityAdult">
@@ -46,7 +46,7 @@
 </div>
 
 <div class="d-flex justify-content-between align-items-center my-3">
-  <h6>No. of Students (Rs.{{institute[1].price}}): </h6>
+  <h6>No. of Students (Rs.{{institute[0].price}}): </h6>
       <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
           <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
@@ -197,7 +197,7 @@ import {mapGetters} from 'vuex';
       ...mapGetters(['getMobile']),
       total() {
         if (this.institute && this.institute.length >= 2) {
-    return this.quantityAdult * this.institute[0].price + this.quantityChild * this.institute[1].price;
+    return this.quantityAdult * this.institute[1].price + this.quantityChild * this.institute[0].price;
   } else {
     return 0;
       }},

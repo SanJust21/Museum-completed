@@ -42,7 +42,7 @@ export default {
       return
     }
     const options = {
-      key: this.razor.key,
+      key: this.razor.razorpayKeyId,
       amount:  this.razor.amount,
       currency:  this.razor.currency,
       name: `Aksharam Museum`,
@@ -55,23 +55,23 @@ export default {
         this.signature = response.razorpay_signature;
         // console.log(this.pay_id);
         try {
-        const response1 = await axios.post(`http://localhost:8080/api/payment/verify-payment?orderId=${this.order_id}&paymentId=${this.pay_id}&signature=${this.signature}`);
-      if(response1.status === 200 ){
-        const response2 = await axios.post(`http://localhost:8080/api/book`,{"paymentid": this.pay_id});
-        if(response2.status === 200 ){
+        const response1 = await axios.post(`http://localhost:8080/api/payment/verify-payment`,{
+          "orderId":this.order_id,
+          "paymentId":this.pay_id,
+          "signature":this.signature,
+        });
+        if(response1.status === 200 ){
+         const response2 = await axios.post(`http://localhost:8080/api/book`,{"paymentid": this.pay_id});
+         if(response2.status === 200 ){
           this.$store.commit('setQR',response2.data);
-          
-
           this.$router.push('/ticket')
-        }
-      }
-    }
-    catch(error){
-      console.error(error);
-    }
-        
-        // It is function executed on success
-      },
+         }
+        } 
+       }
+       catch(error){
+         console.error(error);
+       }
+     },
       prefill: {
         name: this.details.name,
         email: this.details.email,
@@ -81,20 +81,10 @@ export default {
             "color": "#74a965"
         },
       };
-
-
-
     const paymentObject = new window.Razorpay(options);
-
     paymentObject.on('payment.failed', function (response){
       console.log(response.error)
-        // alert(response.error.code);
-        alert(response.error.description);
-        // alert(response.error.source);
-        // alert(response.error.step);
-        // alert(response.error.reason);
-        // alert(response.error.metadata.order_id);
-        // alert(response.error.metadata.payment_id);
+      alert(response.error.description);
 });
 paymentObject.open();
   }
