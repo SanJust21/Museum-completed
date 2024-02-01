@@ -1,21 +1,22 @@
 <template>
-  <div class=" d-flex flex-column mx-5 mt-5 mb-4 flex-wrap mx-auto" style="height: 600px; width:fit-content">
+  <!-- <div class=" d-flex flex-column mx-5 mt-5 mb-4 flex-wrap mx-auto" style="height: 600px; width:fit-content"> -->
+    <div class="d-flex justify-content-center mx-5 mt-5 mb-4 flex-wrap mx-auto">
   <div>
-    <div class="d-flex mb-2 justify-content-start mx-5">
+    <!-- <div class="d-flex mb-2 justify-content-start mx-5">
       <label class="me-2 fs-5">Visit date: </label>
       <input type="date" v-model="date" @input="setDate"/>
-    </div>
+    </div> -->
     
   
     
-    <!-- <v-date-picker
+    <v-date-picker
       v-model="date"
       :allowed-dates="allowedDates"
       min="2024-01-01"
       :max='maxDate'
       class="mx-5"
       @input="setDate"
-    ></v-date-picker> -->
+    ></v-date-picker>
     <!-- <v-date-picker
         color="primary"
       ></v-date-picker> -->
@@ -58,7 +59,7 @@ computed: {
   maxDate() {
     const currentDate = new Date();
     const maxDate = new Date(currentDate);
-    maxDate.setDate(currentDate.getDate() + 60);
+    maxDate.setDate(currentDate.getDate() + 14);
     return maxDate.toISOString().slice(0, 10); // Format as "YYYY-MM-DD"
   },
 },
