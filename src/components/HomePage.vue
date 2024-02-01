@@ -18,10 +18,10 @@
               <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
                Home
              </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5">
+             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/about-page')">
                About
              </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5">
+             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/contact-page')">
                Contact
              </li>
              <li>
@@ -150,6 +150,9 @@ button{
 }
 .full-caption{
   height: fit-content;
+}
+.nav-item {
+  cursor: pointer ;
 }
 .heading{
   background-image: linear-gradient(to bottom right,rgb(43, 30, 8),#4d6032d9);
