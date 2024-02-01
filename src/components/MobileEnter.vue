@@ -15,7 +15,7 @@
         <v-btn
             block
             height="40"
-            color = "success"
+            color = "#74a965aa"
             class="bg-gradient"
             @click="validate"
     >Generate OTP</v-btn>

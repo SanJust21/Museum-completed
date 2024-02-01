@@ -139,7 +139,7 @@ import {mapGetters} from 'vuex';
           this.$store.commit('setDetails', details)
           this.$router.push('/review-details')
         } else 
-        {alert('not ok')}
+        {alert('Fields should not be empty')}
       },
       incrementAdult() {
       this.quantityAdult += 1
