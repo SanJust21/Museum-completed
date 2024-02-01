@@ -1,7 +1,11 @@
 <template>
-  <div class="d-flex justify-content-center mx-5 mt-5 mb-4 flex-wrap">
-  <div style="width:500px; height: 500px">
-    <input type="date" v-model="date" @input="setDate"/>
+  <div class=" d-flex flex-column mx-5 mt-5 mb-4 flex-wrap mx-auto" style="height: 600px; width:fit-content">
+  <div>
+    <div class="d-flex mb-2 justify-content-start mx-5">
+      <label class="me-2 fs-5">Visit date: </label>
+      <input type="date" v-model="date" @input="setDate"/>
+    </div>
+    
   
     
     <!-- <v-date-picker
