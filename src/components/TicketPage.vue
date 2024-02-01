@@ -1,22 +1,22 @@
 <template>
     <v-card
-    class="mx-auto mt-5"
+    class="mx-auto mt-0"
     max-width="600"
     hover
   >
     <v-card-item>
       <v-card-title>
-        <h1 class="text-center text-success">Congratulations !! </h1>
+        <h1 class="text-center text-success my-0">Congratulations !! </h1>
       </v-card-title>
       <v-card-subtitle class="d-flex justify-content-center ">
-        <v-icon class="mdi mdi-check-circle-outline text-success"
+        <v-icon class="mdi mdi-check-circle-outline text-success my-0"
         size="x-large"></v-icon>
       </v-card-subtitle>
     </v-card-item>
 
     <v-card-text>
-      <h6 class="text-center text-danger">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</h6>
-      <h5 class="text-center text-danger mb-0">Thank You!!</h5>
+      <h6 class="text-center text-danger my-0">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</h6>
+      <h5 class="text-center text-danger mb-0 mt-0">Thank You!!</h5>
     </v-card-text>
     <div class="d-flex justify-content-center mt-0">
       <v-btn 
@@ -25,16 +25,7 @@
     rounded="xl"
     @click="$router.push('/')">Home</v-btn>
     </div>
-    
-  </v-card>
-    <!-- <h3 class="text-center mt-4"></h3>
-  
-<p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
-
-
-<hr class="mx-5">
-
-<div class="m-ticket my-5 mx-auto">
+    <div class="m-ticket mt-0 mx-auto">
         <div class="d-flex pt-2 pb-1 justify-content-center w-100  " style="background-color: #110b03;">
     <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
     <h5 class="text-center text-white">Aksharam Museum</h5>
@@ -44,7 +35,7 @@
   <p class="m">Aksharam</p>
   <div class="movie-details d-flex flex-column align-items-center">
     <p >{{adultsCount + childrenCount}} Ticket(s)</p>
-    <p class="mb-0">Date: {{userDetails.Date}}</p>
+    <p class="mb-0 mt-0">Date: {{userDetails.Date}}</p>
     <p class="mb-0">{{userDetails.Teachers?'Teachers':'Adults'}}: {{adultsCount}}</p>
     <p class="mb-0">{{userDetails.Students?'Students':'Children'}}: {{childrenCount}}</p>
      
@@ -68,6 +59,16 @@
   </div>
  
 </div>
+    
+  </v-card>
+    <!-- <h3 class="text-center mt-4"></h3>
+  
+<p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
+
+
+<hr class="mx-5">
+
+
 
 
 
