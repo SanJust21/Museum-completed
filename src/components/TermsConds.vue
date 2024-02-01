@@ -25,7 +25,7 @@
             <li>Ticket Rates :
               <ul class="rate">
             <li> Public : Adult - Rs.<b>{{ pub[0].price }}</b>/- , Children - Rs.<b>{{ pub[1].price }}</b>/-</li>
-            <li> Institution :  Teacher - Rs.<b>{{institute[0].price}}</b>/- , Student - Rs.<b>{{institute[1].price}}</b>/-</li>
+            <li> Institution :  Teacher - Rs.<b>{{institute[1].price}}</b>/- , Student - Rs.<b>{{institute[0].price}}</b>/-</li>
             <li> Foreigner : Adult - Rs.<b>{{ foreigner[0].price }}</b>/- , Children - Rs.<b>{{ foreigner[1].price }}</b>/-</li>
               </ul>
             </li>

@@ -9,9 +9,9 @@
   <p class="m">Aksharam</p>
   <div class="movie-details d-flex flex-column align-items-center">
     <p >{{adultsCount + childrenCount}} Ticket(s)</p>
-    <p class="mb-0">Date: {{qrdetails.userDetails.Date}}</p>
-    <p class="mb-0">{{qrdetails.userDetails.Teachers?'Teachers':'Adults'}}: {{adultsCount}}</p>
-    <p class="mb-0">{{qrdetails.userDetails.Students?'Students':'Children'}}: {{childrenCount}}</p>
+    <p class="mb-0">Date: {{userDetails.Date}}</p>
+    <p class="mb-0">{{userDetails.Teachers?'Teachers':'Adults'}}: {{adultsCount}}</p>
+    <p class="mb-0">{{userDetails.Students?'Students':'Children'}}: {{childrenCount}}</p>
      
   </div>
   <div class="info">
@@ -20,7 +20,7 @@
   <div class="ticket-details mt-1 d-flex flex-column align-items-center">
     <p class="m-0">{{adultsCount + childrenCount}} Ticket(s)</p>
     <v-img id="qr-code" :src="'data:image/png;base64,'+ qrdetails.qrCodeImage" alt="QR Code" class="scan"></v-img>
-    <h6>{{ qrdetails.Payment_ID }}</h6>
+    <!-- <h6>{{ qrdetails.Payment_ID }}</h6> -->
   </div>
   <p class="m m1">Aksharam</p>
   <div class="info-cancel bg-dark-subtle ">
@@ -28,7 +28,7 @@
   </div>
   <div class="total-amount">
     <p>Total Amount:</p>
-    <p>Rs.{{ qrdetails.Amount }}/-</p>
+    <p>Rs.{{ userDetails.Amount }}/-</p>
     
   </div>
 </div>
@@ -43,16 +43,30 @@ computed: {
     return this.$store.getters.getQR || {};
   },
 
-adultsCount() {
-      // Check if 'adults' key exists, if not, default to 0
-      return this.qrdetails.userDetails.Teachers || this.qrdetails.userDetails.Adults || 0;
+  userDetails() {
+      // Parse userDetails string into an object
+      const userDetailsString = this.qrdetails.userDetails || '';
+      const userDetailsArray = userDetailsString.split(', ');
+      const userDetailsObject = {};
+
+      userDetailsArray.forEach((detail) => {
+        const [key, value] = detail.split(': ');
+        userDetailsObject[key.trim()] = isNaN(value) ? value.trim() : parseFloat(value.trim());
+      });
+
+      return userDetailsObject;
+    },
+    adultsCount() {
+      // Check if 'Teachers' key exists, if not, default to 0
+      return this.userDetails.Teachers || this.userDetails.Adults || 0;
     },
     childrenCount() {
-      // Check if 'child' key exists, if not, default to 0
-      return this.qrdetails.userDetails.Students || this.qrdetails.userDetails.Children || 0;
+      // Check if 'Students' key exists, if not, default to 0
+      return this.userDetails.Students || this.userDetails.Children || 0;
     }
+  }
 }
-};
+
 </script>
 
 <style scoped>
