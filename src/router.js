@@ -17,9 +17,14 @@ const router = createRouter({
           },
         ]
       },
-         
-      
-     
+      {
+        path: '/about-page',
+        component: () => import('./components/AboutPage.vue'),   
+      },
+      // {
+      //   path: '/contact-page',
+      //   component: () => import('./components/ContactPage.vue'),
+      // },
       {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),

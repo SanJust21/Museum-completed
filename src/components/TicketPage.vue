@@ -1,4 +1,12 @@
 <template>
+  
+    <h3 class="text-center mt-4">Congratulations !! <span class="mdi mdi-check-circle-outline"></span></h3>
+  
+<p class="text-danger text-center">Note : Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p>
+
+
+<hr class="mx-5">
+
 <div class="m-ticket my-5 mx-auto">
         <div class="d-flex pt-2 pb-1 justify-content-center w-100  " style="background-color: #110b03;">
     <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
@@ -31,18 +39,32 @@
     <p>Rs.{{ userDetails.Amount }}/-</p>
     
   </div>
+ 
 </div>
+<!-- <router-link to="/" class="centered-link margin-top: 20px">Back To Home</router-link> -->
+<div class="d-flex justify-content-end">
+  <router-link to="/" class="me-5 mb-5">Back To Home</router-link>
+</div>
+
 
 </template>
 <script>
 
 export default {
-
+data() {
+  return {
+    qrdetails : {
+    "qrCodeImage": "iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQAAAABRBrPYAAAClElEQVR4Xu2WQY7dIBBEmxXH4KaAb8oRsvSKTlWBR/5WpGSZ33Lry2PD80h+XWCb/0v9sufIH+vFHvVij3qxR/332DBU9uMsh/PoJy5HNaucsBYIw8nkeOkGciT8zsKRvGfDYHz2SwjInkc7aaPmATPhsGFGCZKDWyydUTFH09sJG8RQPY94WFPI0e7GhewkjTEQHwozlB7/+eOEBcKuopCyVZhVBWBVFIxC8OyJb6JtoFORtrKzRMLaVkEJOGLLahr8bH0AbHngdwWn1sa192c68TgYL1Ezc/027dKrun0m5OsxklU5BzPlYQGHLlscjF+JjT8mHN1POkk0MxoDHwZzhZyrmACCLcx4wns9EOZncU7hOKowjExlPoXC0N8yLyE9K+Q48q79H8JgpjDj8XGSFIOmI4Xc1sL3Y2z6vCQcDLYUZYY/ncUDYbzULk0bcCIMopjwm5AIGLPN30TTKUQvI95OLR4I65pdHqYC4Mw813i7CQmAofUVNjIbbcBoZqs4eAiEKc89byHpWuBo/XEXEgGjDY0bbcAJuo8kYI3j3jgYPfDBGYC9fTUl3xT+SFhlo/XsSntXBvxa4B4ISxDim8cfyKlbBacCYdyvMC4h3JYB97zX+NSNUTDGGBI0yITbfgXzFq3rQNjqtUjXXm1y0m2PBML2FwXOK2d1mRmJJF1hsMpdi7MHbbDpJB1a1r1hsFUctMzjyjlsNAzmHyEBsA00vmrhZIhZ3cdU8UAYgJnZ9AMq2HcAW8jHcv5+rHKcb9hpnGLmuWXBBsdbOIwjJLk5T15SRY+JYcviCdoN+Dj5JWmCw2DNlwEJwZSVdW/jh0eJhJmtjYs5d9no8uBY3Tch34/9vV7sUS/2qBd7VATsNzWwlJp4gjBpAAAAAElFTkSuQmCC",
+    "userDetails": "Name of Institution: BVB, Students: 50, Teachers: 2, Date: 2024-02-06, Amount: 1500, Payment ID: pay_NUuUYwB4uu0uPz",
+    "errorMessage": null
+}
+  }
+},
 computed: {
-  qrdetails(){
-    return this.$store.getters.getQR || {};
-  },
-
+  // qrdetails(){
+  //   return this.$store.getters.getQR || {};
+  // },
+  
   userDetails() {
       // Parse userDetails string into an object
       const userDetailsString = this.qrdetails.userDetails || '';
