@@ -38,6 +38,7 @@
 
 <div class="d-flex justify-content-between align-items-center my-3">
   <h6>No. of Children (Rs.{{ foreigner[1].price }}): </h6>
+  <p class="bg-danger">( 5 to 12 years)</p>
       <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
           <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
@@ -139,7 +140,7 @@ import {mapGetters} from 'vuex';
           this.$store.commit('setDetails', details)
           this.$router.push('/review-details')
         } else 
-        {alert('not ok')}
+        {alert('Fields should not be empty')}
       },
       incrementAdult() {
       this.quantityAdult += 1
