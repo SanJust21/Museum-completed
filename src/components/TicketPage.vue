@@ -1,8 +1,34 @@
 <template>
+    <v-card
+    class="mx-auto mt-5"
+    max-width="600"
+    hover
+  >
+    <v-card-item>
+      <v-card-title>
+        <h1 class="text-center text-success">Congratulations !! </h1>
+      </v-card-title>
+      <v-card-subtitle class="d-flex justify-content-center ">
+        <v-icon class="mdi mdi-check-circle-outline text-success"
+        size="x-large"></v-icon>
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text>
+      <h6 class="text-center text-danger">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</h6>
+      <h5 class="text-center text-danger mb-0">Thank You!!</h5>
+    </v-card-text>
+    <div class="d-flex justify-content-center mt-0">
+      <v-btn 
+    size="small"
+    class="mb-3 mt-0"
+    @click="$router.push('/')">Home</v-btn>
+    </div>
+    
+  </v-card>
+    <!-- <h3 class="text-center mt-4"></h3>
   
-    <h3 class="text-center mt-4">Congratulations !! <span class="mdi mdi-check-circle-outline"></span></h3>
-  
-<p class="text-danger text-center">Note : Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p>
+<p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
 
 
 <hr class="mx-5">
@@ -41,10 +67,7 @@
   </div>
  
 </div>
-<!-- <router-link to="/" class="centered-link margin-top: 20px">Back To Home</router-link> -->
-<div class="d-flex justify-content-end">
-  <router-link to="/" class="me-5 mb-5">Back To Home</router-link>
-</div>
+
 
 
 </template>
