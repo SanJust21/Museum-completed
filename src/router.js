@@ -26,6 +26,10 @@ const router = createRouter({
         component: () => import('./components/ContactPage.vue'),
       },
       {
+        path: '/terms-page',
+        component: () => import('./components/TermsPage.vue'),   
+      },
+      {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
         children: [
