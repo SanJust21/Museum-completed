@@ -1,7 +1,7 @@
 <template>
   <nav class="d-flex justify-content-between container-fluid" style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
       <div class="d-flex mt-md-3 mt-sm-1">
-        <v-img src="@/assets/logo.png" class="image"></v-img>
+        <v-img src="@/assets/logo.png" class="image"  @click="$router.push('/')"></v-img>
         <div class="d-flex flex-column justify-content-lg-center ">
           <h1 class="logo-h1">അക്ഷരം</h1>
           <p class="logo-p">Museum of letters, literature<br> & culture</p>
