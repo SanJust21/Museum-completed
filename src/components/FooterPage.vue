@@ -39,7 +39,7 @@
         
       </div>
       <div class="col-md-5 offset-md-1 mb-3 d-flex justify-content-end ">
-        <p ><a  class="text-white cond" @click="$router.push('/terms-page')">Terms & Conditions</a> | <a href="#" class="text-white cond">Privacy Policy</a> | <a href="#" class="text-white cond">Copyright Policy</a> </p>
+        <p ><a  class="text-white cond" @click="$router.push('/terms-page')">Terms & Conditions</a> |  <a class="text-white cond" @click="$router.push('/copyright-page')">Copyright Policy</a> </p>
       </div>
     </div>
 

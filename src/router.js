@@ -30,6 +30,10 @@ const router = createRouter({
         component: () => import('./components/TermsPage.vue'),   
       },
       {
+        path: '/copyright-page',
+        component: () => import('./components/CopyRight.vue'),   
+      },
+      {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
         children: [
