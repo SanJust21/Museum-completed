@@ -3,7 +3,7 @@
     <v-form ref="form">
       <v-text-field
         v-model="name"
-        density="compact" 
+        density="comfortable" 
         variant="underlined"
         label="Name*"
         :rules="nameRules"
@@ -12,7 +12,7 @@
 
       <v-text-field
         v-model="mobileNum"
-        density="compact" 
+        density="comfortable" 
         variant="underlined"
         label="Mobile Number*"
         :rules="mobRules"
@@ -21,7 +21,7 @@
 
       <v-text-field
             v-model="email"
-            density="compact" 
+            density="comfortable" 
             variant="underlined"
             :rules="emailRules"
             label="E-mail*"
@@ -37,8 +37,10 @@
 </div>
 
 <div class="d-flex justify-content-between align-items-center my-3">
-  <h6>No. of Children (Rs.{{ foreigner[1].price }}): </h6>
-  <p class="bg-danger">( 5 to 12 years)</p>
+  <div class="d-flex flex-column mt-3">
+    <h6 class="mb-0">No. of Children (Rs.{{ foreigner[1].price }}): </h6>
+  <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
+  </div>
       <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
           <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
@@ -56,7 +58,7 @@
 </div>
       
 <div class="d-flex justify-content-center">
-  <v-btn  class="mt-4 w-50"  @click="submit">Get Tickets</v-btn>
+  <v-btn  class="mt-3 w-50"  @click="submit">Get Tickets</v-btn>
 </div>
       
     </v-form>
@@ -127,6 +129,12 @@ import {mapGetters} from 'vuex';
         const { valid } = await this.$refs.form.validate()
         if (valid && this.total !== 0 && this.$store.getters.getCategory!== null) 
         { 
+          if(this.quantityAdult === 0 && this.quantityChild >0 ) 
+          {
+            alert('Atleast one adult must be present.') 
+          }
+          else 
+          {
         const details = {
                         cat:this.$store.getters.getCategory,
                         date:this.$store.getters.getDate,
@@ -139,6 +147,7 @@ import {mapGetters} from 'vuex';
                         }
           this.$store.commit('setDetails', details)
           this.$router.push('/review-details')
+                      }
         } else 
         {alert('Fields should not be empty')}
       },

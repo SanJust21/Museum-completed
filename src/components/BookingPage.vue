@@ -17,24 +17,18 @@
               <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
                Home
              </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5">
+             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/about-page')">
                About
              </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5">
+             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/contact-page')">
                Contact
              </li>
          </ul>
     </div>
   </div>
 </nav>
-    <!-- <div class="d-flex align-items-center me-3">
-      <p class="me-sm-5 fs-5 text-white nav-text">About</p>
-      <p class="me-sm-5 fs-5 text-white nav-text">Contact us</p> -->
-     <!-- <LoginDialog/> -->
-     <!-- <TermsConds/> -->
-
-    <!-- </div>   -->
   </nav>
+
 <router-view></router-view>
   
 </template>
@@ -57,6 +51,10 @@
     .image{
 height: 120px;
 width: 120px;
+cursor: pointer;
+}
+.nav-item {
+  cursor: pointer;
 }
 @media screen and (max-width: 1000px) {
   .image{
