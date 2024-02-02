@@ -11,6 +11,7 @@
     
     <v-date-picker
       v-model="date"
+      color="green-darken-4"
       :allowed-dates="allowedDates"
       min="2024-01-01"
       :max='maxDate'
