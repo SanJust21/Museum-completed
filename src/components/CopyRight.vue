@@ -29,58 +29,59 @@
   </div>
 </nav>
 </nav> -->
+<div class="mx-5 my-5 px-4">
     <h3 class="text-center mb-4" style="text-decoration: underline;">CopyRight Policy</h3>
-<p>
-
-
-1. **Admission Policies:**
+    <ol class="text-justify" style="font-size: 17px;">
+<li>Admission Policies:<br>
    - All visitors must purchase a valid admission ticket for entry.
    - Children under a certain age may be admitted for free or at a reduced rate.
-   - Special rates may be available for seniors, students, and group visits.
+   - Special rates may be available for seniors, students, and group visits.</li>
+ 
 
-2. **Visitor Conduct:**
-   - Visitors are expected to conduct themselves respectfully towards exhibits, staff, and other visitors.
+   <li>Visitor Conduct:<br>
+   - Visitors are expected to conduct themselves respectfully towards exhibits, staff, and other visitors.<br>
    - Running, shouting, or any disruptive behavior is not allowed within the museum premises.
-   - Touching artifacts or exhibits is strictly prohibited unless otherwise specified.
-
-3. **Photography and Filming:**
+   - Touching artifacts or exhibits is strictly prohibited unless otherwise specified.</li>
+ 
+   <li>Photography and Filming:<br>
    - Photography and filming may be allowed in designated areas. Flash photography may be restricted.
    - Tripods and professional camera equipment may require special permission.
-   - Photography for commercial purposes must be approved in advance.
+   - Photography for commercial purposes must be approved in advance.</li>
 
-4. **Security Measures:**
+   <li>Security Measures:<br>
    - All bags and personal items are subject to inspection upon entry.
-   - Large bags, backpacks, or items deemed potentially harmful may need to be stored in designated areas.
+   - Large bags, backpacks, or items deemed potentially harmful may need to be stored in designated areas.</li>
 
-5. **Guided Tours:**
+   <li>Guided Tours:<br>
    - Guided tours may be available at scheduled times. Advance booking may be required.
-   - Follow tour guidelines provided by museum staff, including staying with the group.
-
-6. **Educational Programs:**
+   - Follow tour guidelines provided by museum staff, including staying with the group.</li>
+  
+   <li>Educational Programs:<br>
    - Educational programs may be available for schools and groups. Advance booking is recommended.
-   - Teachers and group leaders are responsible for the behavior of their students or group members.
-
-7. **Lost and Found:**
+   - Teachers and group leaders are responsible for the behavior of their students or group members.</li> 
+  
+   <li>Lost and Found:<br>
    - The museum is not responsible for lost or stolen items.
-   - Found items should be reported to museum staff and will be held at the lost and found area.
-
-8. **Health and Safety:**
+   - Found items should be reported to museum staff and will be held at the lost and found area.</li> 
+  
+   <li>Health and Safety:<br>
    - Smoking, vaping, or the use of any open flames is prohibited.
-   - Emergency exits and evacuation routes are clearly marked. Visitors should familiarize themselves with emergency procedures.
-
-9. **Exhibit Restrictions:**
+   - Emergency exits and evacuation routes are clearly marked. Visitors should familiarize themselves with emergency procedures.</li> 
+  
+   <li>Exhibit Restrictions:<br>
    - Some exhibits may have age or height restrictions. Follow posted guidelines.
-   - Food and beverages are typically not allowed near exhibits.
+   - Food and beverages are typically not allowed near exhibits.</li> 
 
-10. **Cancellation and Refund Policies:**
+   <li>Cancellation and Refund Policies:<br>
     - Refunds for admission tickets may be available under certain circumstances.
-    - Cancellations for guided tours or educational programs may require advance notice.
-
-11. **Accessibility:**
-    - The museum strives to provide accessibility for all visitors. Inquire about available services for visitors with disabilities.
-
+    - Cancellations for guided tours or educational programs may require advance notice.</li>
+    
+    <li>Accessibility:<br>
+    - The museum strives to provide accessibility for all visitors. Inquire about available services for visitors with disabilities.</li> 
+    <br>
 These are general terms and conditions and may need to be adapted based on the specific policies and features of your museum. Always consult with legal and museum professionals to ensure compliance with local regulations and best practices.
-</p>
+</ol>
+</div>
 </template>
 
 

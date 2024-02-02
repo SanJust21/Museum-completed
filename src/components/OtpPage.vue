@@ -14,7 +14,7 @@
 
     <v-btn
       class="my-4"
-      color="success"
+      color="green-darken-4"
       height="40"
       text="Verify"
       block

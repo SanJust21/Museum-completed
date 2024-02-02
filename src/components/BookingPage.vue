@@ -17,6 +17,9 @@
               <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
                Home
              </li>
+             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/gallery-page')">
+               Gallery
+             </li>
              <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/about-page')">
                About
              </li>
