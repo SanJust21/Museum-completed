@@ -78,7 +78,7 @@ export default {
         });
         if (response.status === 200) {
           alert("New OTP sent!");
-          this.verifyOtp;
+          this.verifyOtp();
         }
       }
       catch(error) {
