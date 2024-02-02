@@ -65,20 +65,20 @@ export default {
    <template>
     <div class="d-flex flex-wrap">
     <div v-for="gal in gallery" :key="gal.name" class="ms-4" >
-      <v-card class="mx-auto mt-5 mb-5" max-width="344" v-motion-pop-visible-once>
+      <v-card class="mx-auto mt-5 mb-5" max-width="344">
         <v-img :src="gal.image" height="200px" cover></v-img>
   
-        <v-card-title>{{ gal.name }}</v-card-title>
+        <v-card-title >{{ gal.name }}</v-card-title>
   
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :icon="gal.show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="toggleShow(gal)"></v-btn>
+          <v-btn :icon="gal.show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="toggleShow(gal)"  color="white"></v-btn>
         </v-card-actions>
   
         <v-expand-transition>
           <div v-show="gal.show">
-            <v-divider></v-divider>
-            <v-card-text>{{ gal.description }}</v-card-text>
+            <!-- <v-divider class="bg-success-subtle"></v-divider> -->
+            <v-card-text class=" text-justify" >{{ gal.description }}</v-card-text>
           </div>
         </v-expand-transition>
       </v-card>
@@ -144,4 +144,9 @@ export default {
     },
   };
   </script>
+  <style scoped>
+.v-btn{
+  background-color: #1B5E20;
+}
+</style>
   
