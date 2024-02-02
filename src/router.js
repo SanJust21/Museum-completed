@@ -17,22 +17,7 @@ const router = createRouter({
           },
         ]
       },
-      {
-        path: '/about-page',
-        component: () => import('./components/AboutPage.vue'),   
-      },
-      {
-        path: '/contact-page',
-        component: () => import('./components/ContactPage.vue'),
-      },
-      {
-        path: '/terms-page',
-        component: () => import('./components/TermsPage.vue'),   
-      },
-      {
-        path: '/copyright-page',
-        component: () => import('./components/CopyRight.vue'),   
-      },
+      
       {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
@@ -67,7 +52,23 @@ const router = createRouter({
           {
             path: '/ticket',
             component: () => import('./components/TicketPage.vue')
-          },        
+          },   
+          {
+            path: '/about-page',
+            component: () => import('./components/AboutPage.vue'),   
+          },
+          {
+            path: '/contact-page',
+            component: () => import('./components/ContactPage.vue'),
+          },
+          {
+            path: '/terms-page',
+            component: () => import('./components/TermsPage.vue'),   
+          },
+          {
+            path: '/copyright-page',
+            component: () => import('./components/CopyRight.vue'),   
+          },     
           
        
         ]

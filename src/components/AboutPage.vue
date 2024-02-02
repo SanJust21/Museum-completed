@@ -1,34 +1,5 @@
 <template>
-  <nav class="d-flex justify-content-between container-fluid" style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
-      <div class="d-flex mt-md-3 mt-sm-1">
-        <v-img src="@/assets/logo.png" class="image"  @click="$router.push('/')"></v-img>
-        <div class="d-flex flex-column justify-content-lg-center ">
-          <h1 class="logo-h1">അക്ഷരം</h1>
-          <p class="logo-p">Museum of letters, literature<br> & culture</p>
-        </div> 
-        </div>
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid d-flex justify-content-end">
-          <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-end">
-              <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
-               Home
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/about-page')">
-               About
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/contact-page')">
-               Contact
-             </li>
-         </ul>
-    </div>
-  </div>
-</nav>
-</nav>
-    <v-carousel class="mt-0 mb-5">
+<v-carousel class="mt-0 mb-5">
   <v-carousel-item
     src="@/assets/am1.jpeg"
     cover
@@ -44,10 +15,10 @@
     cover
   ></v-carousel-item>
 </v-carousel>
-<!-- <h3 class="text-center mb-4">Aksharam Museum</h3> -->
-<h3 class="text-center mb-4" style="text-decoration: underline;">Aksharam Museum</h3>
+<div class="mx-5 mb-5">
+  <h3 class="text-center mb-4" style="text-decoration: underline;">Aksharam Museum</h3>
 
-<p>
+<p class="content">
 Aksharam Museum is a comprehensive project initiated by the Cooperative Society of Literary Practitioners under the leadership of the Cooperation Department of the Kerala Government. With financial assistance from the state government in 2020, this literary cooperative venture is being realized in Kottayam, near the cultural capital of Kerala.
 
 The Kerala government has allocated funds for this project in the 2020 State Budget, demonstrating its commitment to literature, culture, and heritage.
@@ -59,7 +30,9 @@ Aksharam Museum is dedicated to literature, language, and culture, contributing 
 The project aims to complete Aksharam Museum in four phases. Alongside the museum, facilities like a library and research center are planned. The project encompasses various fields such as epigraphy, museology, archiving, and conservation. Study and training programs related to these areas, including printing, are also part of the ambitious plan.
 
 In an international perspective, the project emphasizes the study and practices of epigraphy, museology, archiving, conservation, and printing. The aim is to create a holistic cultural and educational space that aligns with modern technological advancements.</p>
-<br>
+</div>
+
+
 </template>
 
 <style scoped>
@@ -75,6 +48,10 @@ In an international perspective, the project emphasizes the study and practices 
         font-size: 16px;
         line-height: 15px;
     }
+    .content{
+      font-size: 17px;
+      text-align: justify;
+    }
     .image{
 height: 120px;
 width: 120px;
@@ -82,6 +59,7 @@ width: 120px;
 .nav-item {
   cursor: pointer ;
 }
+
 @media screen and (max-width: 1000px) {
   .image{
     height: 50px;

@@ -1,86 +1,62 @@
 <template>
 
-<nav class="d-flex justify-content-between container-fluid" style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
-      <div class="d-flex mt-md-3 mt-sm-1">
-        <v-img src="@/assets/logo.png" class="image"  @click="$router.push('/')"></v-img>
-        <div class="d-flex flex-column justify-content-lg-center ">
-          <h1 class="logo-h1">അക്ഷരം</h1>
-          <p class="logo-p">Museum of letters, literature<br> & culture</p>
-        </div> 
-        </div>
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid d-flex justify-content-end">
-          <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-end">
-              <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
-               Home
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/about-page')">
-               About
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/contact-page')">
-               Contact
-             </li>
-         </ul>
-    </div>
-  </div>
-</nav>
-</nav>
+<div class="mx-5 my-5">
+
+
     <h3 class="text-center mb-4" style="text-decoration: underline;">Terms And Conditions</h3>
-<p>
+<ol class="text-justify" style="font-size: 17px;">
 
 
-1. **Admission Policies:**
+<li>**Admission Policies:**
    - All visitors must purchase a valid admission ticket for entry.
    - Children under a certain age may be admitted for free or at a reduced rate.
-   - Special rates may be available for seniors, students, and group visits.
+   - Special rates may be available for seniors, students, and group visits.</li>
+ 
 
-2. **Visitor Conduct:**
+   <li>**Visitor Conduct:**
    - Visitors are expected to conduct themselves respectfully towards exhibits, staff, and other visitors.
    - Running, shouting, or any disruptive behavior is not allowed within the museum premises.
-   - Touching artifacts or exhibits is strictly prohibited unless otherwise specified.
-
-3. **Photography and Filming:**
+   - Touching artifacts or exhibits is strictly prohibited unless otherwise specified.</li>
+ 
+   <li>**Photography and Filming:**
    - Photography and filming may be allowed in designated areas. Flash photography may be restricted.
    - Tripods and professional camera equipment may require special permission.
-   - Photography for commercial purposes must be approved in advance.
+   - Photography for commercial purposes must be approved in advance.</li>
 
-4. **Security Measures:**
+   <li>**Security Measures:**
    - All bags and personal items are subject to inspection upon entry.
-   - Large bags, backpacks, or items deemed potentially harmful may need to be stored in designated areas.
+   - Large bags, backpacks, or items deemed potentially harmful may need to be stored in designated areas.</li>
 
-5. **Guided Tours:**
+   <li>**Guided Tours:**
    - Guided tours may be available at scheduled times. Advance booking may be required.
-   - Follow tour guidelines provided by museum staff, including staying with the group.
-
-6. **Educational Programs:**
+   - Follow tour guidelines provided by museum staff, including staying with the group.</li>
+  
+   <li>**Educational Programs:**
    - Educational programs may be available for schools and groups. Advance booking is recommended.
-   - Teachers and group leaders are responsible for the behavior of their students or group members.
-
-7. **Lost and Found:**
+   - Teachers and group leaders are responsible for the behavior of their students or group members.</li> 
+  
+   <li>**Lost and Found:**
    - The museum is not responsible for lost or stolen items.
-   - Found items should be reported to museum staff and will be held at the lost and found area.
-
-8. **Health and Safety:**
+   - Found items should be reported to museum staff and will be held at the lost and found area.</li> 
+  
+   <li>**Health and Safety:**
    - Smoking, vaping, or the use of any open flames is prohibited.
-   - Emergency exits and evacuation routes are clearly marked. Visitors should familiarize themselves with emergency procedures.
-
-9. **Exhibit Restrictions:**
+   - Emergency exits and evacuation routes are clearly marked. Visitors should familiarize themselves with emergency procedures.</li> 
+  
+   <li>**Exhibit Restrictions:**
    - Some exhibits may have age or height restrictions. Follow posted guidelines.
-   - Food and beverages are typically not allowed near exhibits.
+   - Food and beverages are typically not allowed near exhibits.</li> 
 
-10. **Cancellation and Refund Policies:**
+   <li>**Cancellation and Refund Policies:**
     - Refunds for admission tickets may be available under certain circumstances.
-    - Cancellations for guided tours or educational programs may require advance notice.
-
-11. **Accessibility:**
-    - The museum strives to provide accessibility for all visitors. Inquire about available services for visitors with disabilities.
-
+    - Cancellations for guided tours or educational programs may require advance notice.</li>
+    
+    <li>**Accessibility:**
+    - The museum strives to provide accessibility for all visitors. Inquire about available services for visitors with disabilities.</li> 
+    <br>
 These are general terms and conditions and may need to be adapted based on the specific policies and features of your museum. Always consult with legal and museum professionals to ensure compliance with local regulations and best practices.
-</p>
+</ol>
+</div>
 </template>
 
 

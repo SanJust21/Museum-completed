@@ -3,7 +3,7 @@
     <v-form ref="form">
       <v-text-field
         v-model="name"
-        density="compact" 
+        density="comfortable"
         variant="underlined"
         label="Name of Institution*"
         :rules="nameRules"
@@ -12,7 +12,7 @@
       ></v-text-field>
       <v-select
       v-model="district"
-      density="compact"
+      density="comfortable"
       variant ="underlined"
        required
       :items="items"
@@ -21,7 +21,7 @@
 
       <v-text-field
         v-model="mobileNum"
-        density="compact" 
+        density="comfortable"
         variant="underlined"
         label="Mobile Number*"
         :rules="mobRules"
@@ -30,7 +30,7 @@
 
       <v-text-field
             v-model="email"
-            density="compact" 
+           
             variant="underlined"
             :rules="emailRules"
             label="E-mail*"
@@ -152,47 +152,56 @@ import {mapGetters} from 'vuex';
         const { valid } = await this.$refs.form.validate()
         if (valid && this.total !== 0 && this.$store.getters.getCategory!== null) 
         { 
-        const details = {
-                        cat:this.$store.getters.getCategory,
-                        date:this.$store.getters.getDate,
-                        name: this.name,
-                        mobile: this.mobileNum,
-                        email:this.email,
-                        adult:this.quantityAdult,
-                        child: this.quantityChild,
-                        total: this.total,
-                        district: this.district
-                        }
-          this.$store.commit('setDetails', details)
-          this.$router.push('/review-details')
-        } else 
-        {alert('Fields should not be empty')}
+          if(this.quantityAdult === 0 && this.quantityChild >0 ) 
+          {
+            alert('Atleast one teacher must be present.') 
+          }
+          else 
+          {
+            console.log(this.quantityAdult === 0 && this.quantityChild >0)
+              const details = {
+                cat:this.$store.getters.getCategory,
+                date:this.$store.getters.getDate,
+                name: this.name,
+                mobile: this.mobileNum,
+                email:this.email,
+                adult:this.quantityAdult,
+                child: this.quantityChild,
+                total: this.total,
+                district: this.district
+                }
+            this.$store.commit('setDetails', details)
+            this.$router.push('/review-details')
+            }
+        } else {
+          alert('Fields should not be empty')
+        }
       },
       incrementAdult() {
       this.quantityAdult += 1
-    },
-    decrementAdult() {
-      if(this.quantityAdult === 0)
-        {
-        this.quantityAdult = 0;
-        }
-        else {
-        this.quantityAdult -= 1;
-        }
-    },
-    incrementChild() {
-      this.quantityChild += 1
-    },
-    decrementChild() {
-      if(this.quantityChild === 0)
-        {
-        this.quantityChild = 0;
-        }
-        else {
-        this.quantityChild -= 1;
-        }
-    },
-    },
+      },
+      decrementAdult() {
+        if(this.quantityAdult === 0)
+          {
+          this.quantityAdult = 0;
+          }
+          else {
+          this.quantityAdult -= 1;
+          }
+      },
+      incrementChild() {
+        this.quantityChild += 1
+      },
+      decrementChild() {
+        if(this.quantityChild === 0)
+          {
+          this.quantityChild = 0;
+          }
+          else {
+          this.quantityChild -= 1;
+          }
+      },
+      },
     computed: {
       ...mapGetters(['getMobile']),
       total() {

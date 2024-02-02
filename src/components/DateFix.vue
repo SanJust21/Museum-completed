@@ -15,14 +15,15 @@
       min="2024-01-01"
       :max='maxDate'
       class="mx-5"
-      @input="setDate"
+      @click="setDate"
     ></v-date-picker>
+    
     <!-- <v-date-picker
         color="primary"
       ></v-date-picker> -->
   </div>
   <div v-if="date" class="d-flex mx-5 flex-column" style="width:500px">
-    <h5>Choose a category:</h5>
+    <h5 v-if="!category">Choose a category:</h5>
     <div class="d-flex">
       <div>
         <input type="radio" value="Public" id="public" class="me-3" v-model="category" name="category" @click="$store.commit('setCategory', 'public');$router.push('/public-details-enter');"/>
@@ -38,7 +39,7 @@
       </div>
     </div>
     
-    <div class="mt-3" v-if="category">
+    <div class="mt-3 mb-0" v-if="category">
       <router-view></router-view>
     </div>
   </div>
@@ -80,14 +81,17 @@ methods: {
   setDate() {
     // // Parse the string into a JavaScript Date object
   const parsedDate = new Date(this.date);
-
+  console.log(parsedDate)
 // Check if the parsedDate is a valid Date object
 if (!isNaN(parsedDate.getTime())) {
 // If it's a valid Date, set it to this.date
 this.date = parsedDate;
+console.log(this.date)
 
 // Format and set the date to the store
 const formattedDate = parsedDate.toISOString().split('T')[0];
+
+console.log(formattedDate)
     this.$store.commit('setDate', formattedDate)
   }
 }

@@ -1,6 +1,6 @@
 <template>
 
-<nav class="d-flex justify-content-between container-fluid" style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
+<!-- <nav class="d-flex justify-content-between container-fluid" style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
       <div class="d-flex mt-md-3 mt-sm-1">
         <v-img src="@/assets/logo.png" class="image" @click="$router.push('/')"></v-img>
         <div class="d-flex flex-column justify-content-lg-center ">
@@ -28,7 +28,7 @@
     </div>
   </div>
 </nav>
-</nav>
+</nav> -->
     <h3 class="text-center mb-4" style="text-decoration: underline;">CopyRight Policy</h3>
 <p>
 
