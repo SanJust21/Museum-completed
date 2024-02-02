@@ -34,6 +34,10 @@ const router = createRouter({
         component: () => import('./components/CopyRight.vue'),   
       },
       {
+        path: '/gallery-page',
+        component: () => import('./components/GalleryPage.vue'),   
+      },
+      {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
         children: [
