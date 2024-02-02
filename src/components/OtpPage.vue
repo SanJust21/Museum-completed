@@ -71,6 +71,20 @@ export default {
         alert( error.response.data.message);
       }
     },
+    async resendOtp(){
+      try{
+      const response = await axios.post(`http://localhost:8080/api/2factor/generate-otp`, {
+          "mobileNumber": this.mobile,
+        });
+        if (response.status === 200) {
+          alert("New OTP sent!");
+          this.verifyOtp;
+        }
+      }
+      catch(error) {
+        alert( error.response.data.message);
+      } 
+    },
     startResendTimer() {
 
       this.resendTimeout = setInterval(() => {
