@@ -59,27 +59,12 @@
    <li>Educational Programs:<br>
    - Educational programs may be available for schools and groups. Advance booking is recommended.
    - Teachers and group leaders are responsible for the behavior of their students or group members.</li> 
-  
-   <li>Lost and Found:<br>
-   - The museum is not responsible for lost or stolen items.
-   - Found items should be reported to museum staff and will be held at the lost and found area.</li> 
-  
-   <li>Health and Safety:<br>
-   - Smoking, vaping, or the use of any open flames is prohibited.
-   - Emergency exits and evacuation routes are clearly marked. Visitors should familiarize themselves with emergency procedures.</li> 
-  
-   <li>Exhibit Restrictions:<br>
-   - Some exhibits may have age or height restrictions. Follow posted guidelines.
-   - Food and beverages are typically not allowed near exhibits.</li> 
 
    <li>Cancellation and Refund Policies:<br>
     - Refunds for admission tickets may be available under certain circumstances.
     - Cancellations for guided tours or educational programs may require advance notice.</li>
-    
-    <li>Accessibility:<br>
-    - The museum strives to provide accessibility for all visitors. Inquire about available services for visitors with disabilities.</li> 
-    <br>
-These are general terms and conditions and may need to be adapted based on the specific policies and features of your museum. Always consult with legal and museum professionals to ensure compliance with local regulations and best practices.
+   
+
 </ol>
 </div>
 </template>
