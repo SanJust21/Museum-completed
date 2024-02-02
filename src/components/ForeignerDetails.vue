@@ -193,9 +193,6 @@ import {mapGetters} from 'vuex';
           this.$store.commit('setMobile', value);
         },
       },
-      // foreigner() {
-      //   return this.$store.getters.getForeign
-      // } 
     } 
   }
 </script>

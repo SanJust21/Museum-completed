@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class=" d-flex flex-column mx-5 mt-5 mb-4 flex-wrap mx-auto" style="height: 600px; width:fit-content"> -->
+ 
     <div class="d-flex justify-content-center mx-5 mt-5 mb-4 flex-wrap mx-auto">
   <div>
     <!-- <div class="d-flex mb-2 justify-content-start mx-5">
@@ -18,10 +18,7 @@
       class="mx-5"
       @click="setDate"
     ></v-date-picker>
-    
-    <!-- <v-date-picker
-        color="primary"
-      ></v-date-picker> -->
+
   </div>
   <div v-if="date" class="d-flex mx-5 flex-column" style="width:500px">
     <h5 v-if="!category">Choose a category:</h5>

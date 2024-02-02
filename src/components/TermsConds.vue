@@ -49,7 +49,7 @@
             color="green-darken-1"
             variant="text"
             class="bg-white"
-            @click="dialog2 = true; dialog= !dialog"
+            @click="dialog2 = true; dialog= !dialog;"
           >
             Agree
           </v-btn>
@@ -114,6 +114,9 @@
   width: fit-content;
   height: fit-content;
   background-color: #f0403a !important;
+}
+.book:hover {
+  transform: scale(1.1);
 }
 /* @media screen and (max-width: 1200px) {
 .book{

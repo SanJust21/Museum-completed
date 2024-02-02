@@ -14,18 +14,16 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-end">
-              <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/')">
-               Home
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"  @click="$router.push('/gallery-page')">
+              <router-link to="/"><li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"> Home</li></router-link>
+               <router-link to="/gallery-page"><li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5">
                Gallery
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/about-page')">
+             </li></router-link>
+             <router-link to="/about-page"><li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/about-page')">
                About
-             </li>
-             <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/contact-page')">
+             </li></router-link>
+             <router-link to="/contact-page"><li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5" @click="$router.push('/contact-page')">
                Contact
-             </li>
+             </li></router-link>
          </ul>
     </div>
   </div>
@@ -56,8 +54,17 @@ height: 120px;
 width: 120px;
 cursor: pointer;
 }
-.nav-item {
+.nav-item,a {
   cursor: pointer;
+  text-decoration: none;
+}
+.nav-item:hover{
+  transform: scale(1.1);
+  color: rgb(193, 193, 9) !important;
+}
+a.router-link-active li {
+  color: rgb(193, 193, 9) !important;
+  transform: scale(1.1);
 }
 @media screen and (max-width: 1000px) {
   .image{

@@ -137,7 +137,14 @@ export default {
   color: transparent;
   letter-spacing: 3px;
     }
-
+    .nav-item:hover{
+  transform: scale(1.1);
+  color: rgb(193, 193, 9) !important;
+}
+a.router-link-active li {
+  color: rgb(193, 193, 9) !important;
+  transform: scale(1.1);
+}
 
 .cover{
   background-color: #221d18;

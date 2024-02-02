@@ -39,7 +39,7 @@
         
       </div>
       <div class="col-md-5 offset-md-1 mb-3 d-flex justify-content-end ">
-        <p ><a  class="text-white cond" @click="$router.push('/terms-page')">Terms & Conditions</a> |  <a class="text-white cond" @click="$router.push('/copyright-page')">Copyright Policy</a> </p>
+        <p ><router-link to="/terms-page" class="text-white cond">Terms & Conditions</router-link> |  <router-link to="/copyright-page" class="text-white cond">Copyright Policy</router-link> </p>
       </div>
     </div>
 
@@ -81,5 +81,13 @@
 }
 .nav-item , .cond{
   cursor: pointer ;
+}
+.cond:hover{
+  transform: scale(1.1);
+  color: rgb(193, 193, 9) !important;
+}
+a.router-link-active{
+  color: rgb(193, 193, 9) !important;
+  transform: scale(1.1);
 }
 </style>
