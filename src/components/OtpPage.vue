@@ -77,6 +77,10 @@ export default {
           "mobileNumber": this.mobile,
         });
         if (response.status === 200) {
+          const messag = JSON.parse(response.data.message);
+          console.log(messag);
+          this.$store.commit('setMobile', response.data.mobileNumber);  
+          this.$store.commit('setSession', messag);    
           alert("New OTP sent!");
           this.verifyOtp();
         }
@@ -86,7 +90,6 @@ export default {
       } 
     },
     startResendTimer() {
-
       this.resendTimeout = setInterval(() => {
         if (this.resendCountdown > 0) {
           this.resendCountdown -= 1;
