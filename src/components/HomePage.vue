@@ -59,7 +59,7 @@
        
       
       <div class="d-flex gap-3 justify-content-center lead fw-normal">
-        <a class="icon-link text-decoration-none" href="#" style="color: #221d18;" >
+        <a class="icon-link text-decoration-none" @click="$router.push('/about-page')" style="color: #221d18;" >
           <b>Learn more &rarr;</b>
         </a>
       </div>
@@ -155,6 +155,9 @@ button{
   height: fit-content;
 }
 .nav-item {
+  cursor: pointer ;
+}
+.icon-link {
   cursor: pointer ;
 }
 .heading{
