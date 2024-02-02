@@ -68,7 +68,7 @@ export default {
         }  
       }
       catch(error){
-        alert('Error fetching user details', error);
+        alert( error.response.data.message);
       }
     },
     startResendTimer() {
