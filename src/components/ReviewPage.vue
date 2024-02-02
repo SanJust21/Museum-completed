@@ -57,7 +57,7 @@
            </div>
            <div class="d-flex justify-content-end ">
            
-           <v-btn class="mt-4 w-25 mb-5"  @click="pay">Pay</v-btn></div>
+           <v-btn class="mt-4 w-25 mb-5 text-white" color="green-darken-4" @click="pay">Pay</v-btn></div>
     </div>
         </div>
            

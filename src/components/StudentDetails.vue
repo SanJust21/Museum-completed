@@ -64,7 +64,7 @@
 </div>
       
 <div class="d-flex justify-content-center">
-  <v-btn  class="mt-4 w-50"  @click="submit">Get Tickets</v-btn>
+  <v-btn  class="mt-4 w-50 text-white"  @click="submit"  color="green-darken-4">Get Tickets</v-btn>
 </div>
       
     </v-form>
