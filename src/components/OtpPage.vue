@@ -81,13 +81,13 @@ export default {
           console.log(messag);
           this.$store.commit('setMobile', response.data.mobileNumber);  
           this.$store.commit('setSession', messag);    
-          alert("New OTP sent!");
-          this.verifyOtp();
-        }
-      }
-      catch(error) {
+          alert("New OTP sent!")  
+      }}
+      catch(error){
         alert( error.response.data.message);
-      } 
+      }
+          // 
+    
     },
     startResendTimer() {
       this.resendTimeout = setInterval(() => {
