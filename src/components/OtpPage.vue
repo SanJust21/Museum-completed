@@ -80,17 +80,14 @@ export default {
           const messag = JSON.parse(response.data.message);
           console.log(messag);
           this.$store.commit('setMobile', response.data.mobileNumber);  
-          this.$store.commit('setSession', messag);   
-          alert('New OTP sent') 
-          // if(window.confirm("New OTP sent!")){
-          //   this.verifyOtp();
-          // }
-          
-        }
-      }
-      catch(error) {
+          this.$store.commit('setSession', messag);    
+          alert("New OTP sent!")  
+      }}
+      catch(error){
         alert( error.response.data.message);
-      } 
+      }
+          // 
+    
     },
     startResendTimer() {
       this.resendTimeout = setInterval(() => {
