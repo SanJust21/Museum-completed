@@ -8,6 +8,8 @@ const store = createStore({
       pubPrice: [],
       forPrice: [],
       instPrice: [],
+      snrPrice: [],
+      tax: [],
       category: null,
       date: null,
       qrDetails:{},
@@ -45,6 +47,12 @@ const store = createStore({
     setSession(state, payload) {
       state.session = payload;
     },
+    setSenior(state, payload) {
+      state.snrPrice = payload;
+    },
+    setTax(state, payload) {
+      state.tax = payload;
+    }
   },
   getters: {
     getMobile(state) {
@@ -77,6 +85,12 @@ const store = createStore({
     getsession(state) {
       return state.session 
     },
+    getSenior(state) {
+      return state.snrPrice;
+    },
+    getTax(state) {
+      return state.tax;
+    }
   },
 });
 export default store;

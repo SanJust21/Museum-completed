@@ -15,6 +15,11 @@ data() {
     ctg: []
   }
 },
+computed: {
+tax() {
+  return this.$store.getters.getTax;
+}
+},
 methods: {
   async loadPrice() {
 try{
@@ -31,6 +36,9 @@ if(response.status === 200) {
   const foreignTickets = this.ctg.filter(ticket => ticket.category === 'foreigner');
   this.$store.commit('setForeign',foreignTickets)
   console.log(foreignTickets)
+  const tax = this.ctg.filter(ticket => ticket.category === 'tax');
+  this.$store.commit('setTax',tax)
+  console.log(tax)
 }
 }
 catch(error){
