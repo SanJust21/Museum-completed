@@ -24,14 +24,14 @@
             <li>Closed on <b>Mondays</b> and <b>  Hoildays.</b></li>
             <li>Ticket Rates :
               <ul class="rate">
-            <li> Public : Adult - Rs.<b>{{ pub[0].price }}</b>/- , Children - Rs.<b>{{ pub[1].price }}</b>/-</li>
+            <li> Public : Adult - Rs.<b>{{ pub[0].price }}</b>/- , Children - Rs.<b>{{ pub[1].price }}</b>/-, Senior Citizen - Rs.<b>{{ pub[2].price }}</b>/-</li>
             <li> Institution :  Teacher - Rs.<b>{{institute[1].price}}</b>/- , Student - Rs.<b>{{institute[0].price}}</b>/-</li>
             <li> Foreigner : Adult - Rs.<b>{{ foreigner[0].price }}</b>/- , Children - Rs.<b>{{ foreigner[1].price }}</b>/-</li>
               </ul>
             </li>
-
             <li>Visitors are excepted to arrive atleast half an hour before closing time. </li>
             <li>Visitors should not damage/alter/vandalise the property of Aksharam Museum.</li>
+            <li><b>GST</b> is applicable.</li>
             <li>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></li>
             </ul>
         </v-card-text>

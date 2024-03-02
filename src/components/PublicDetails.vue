@@ -7,7 +7,6 @@
         variant="underlined"
         label="Name*"
         :rules="nameRules"
-       
         required
       ></v-text-field>
 
@@ -28,27 +27,39 @@
             label="E-mail*"
             required
           ></v-text-field>
-<div class="d-flex justify-content-between align-items-center mt-3">
+<div class="d-flex justify-content-between align-items-center mt-1">
   <h6 class="mt-2">No. of Adults (Rs.{{ pub[0].price }}): </h6>
-      <div class="input-group w-auto align-items-center">
-          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementAdult">
-          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityAdult">
-          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementAdult">
-        </div>
+  <div class="input-group w-auto align-items-center">
+    <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementAdult">
+    <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityAdult">
+    <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementAdult">
+  </div>
 </div>
 
-<div class="d-flex justify-content-between align-items-center my-3">
+<div class="d-flex justify-content-between align-items-center mt-3">
   <div class="d-flex flex-column mt-3">
     <h6 class="mb-0">No. of Children (Rs.{{ pub[1].price }}): </h6>
-  <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
+    <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
   </div>
-  
-      <div class="input-group w-auto align-items-center">
-          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
-          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
-          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementChild">
-        </div>
+  <div class="input-group w-auto align-items-center">
+    <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
+    <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
+    <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementChild">
+  </div>
 </div>
+
+<div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex flex-column mt-3">
+    <h6 class="mb-0">No. of Senior Citizens (Rs.{{ pub[2].price }}): </h6>
+    <p class="lh-1 text-end" style="font-size:14px;">( above 65 years)</p>
+  </div>
+  <div class="input-group w-auto align-items-center">
+    <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementSnr">
+    <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantitySnr">
+    <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementSnr">
+  </div>
+</div>
+
 <hr>
 <div class="d-flex justify-content-between my-0">
   <h5> Total </h5>
@@ -72,8 +83,10 @@ import {mapGetters} from 'vuex';
     data() {
      return{
       pub:this.$store.getters.getPublic || [],
+      tax: this.$store.getters.getTax || [],
       quantityAdult: 0,
       quantityChild: 0,
+      quantitySnr: 0,
       name: '',
       nameRules: [
         value => {
@@ -134,7 +147,7 @@ import {mapGetters} from 'vuex';
             alert('Atleast one adult must be present.') 
           }
           else 
-          {
+          {console.log('tax',this.totalTax)
             const details = {
               cat:this.$store.getters.getCategory,
               date:this.$store.getters.getDate,
@@ -143,7 +156,9 @@ import {mapGetters} from 'vuex';
               email:this.email,
               adult:this.quantityAdult,
               child: this.quantityChild,
+              senior: this.quantitySnr,
               total: this.total,
+              totalTax: this.totalTax
               }
            this.$store.commit('setDetails', details)
            this.$router.push('/review-details')
@@ -176,15 +191,41 @@ import {mapGetters} from 'vuex';
           this.quantityChild -= 1;
           }
       },
+      incrementSnr() {
+        this.quantitySnr += 1
+      },
+      decrementSnr() {
+        if(this.quantitySnr === 0)
+          {
+          this.quantitySnr = 0;
+          }
+          else {
+          this.quantitySnr -= 1;
+          }
+      },
     },
     computed: {
       ...mapGetters(['getMobile']),
       total() {
         if (this.pub && this.pub.length >= 2) {
-    return this.quantityAdult * this.pub[0].price + this.quantityChild * this.pub[1].price;
-  } else {
-    return 0; // or any default value you want
-  }
+          return this.quantityAdult * this.pub[0].price + this.quantityChild * this.pub[1].price + this.quantitySnr * this.pub[2].price;
+        } else {
+          return 0; 
+        }
+      },
+      totalTax() {
+        let totalTaxAmount = 0;
+        if (this.tax && this.tax.length > 0) {
+          for (let i = 0; i < this.tax.length; i++) {
+            const tax = this.tax[i];
+            if (tax.type === "GST" || tax.type === "IGST") {
+              totalTaxAmount += (0.01 * tax.price * this.total);
+            } else {
+              totalTaxAmount += tax.price;
+            }
+          }
+        }
+        return totalTaxAmount.toFixed(2);
       },
       mobileNum: {
         get(){
@@ -193,9 +234,6 @@ import {mapGetters} from 'vuex';
         set(value) {
       this.$store.commit('setMobile', value); 
       },
-      // pub() {
-      //   return this.$store.getters.getPublic
-      // },
     } 
   }};
 </script>

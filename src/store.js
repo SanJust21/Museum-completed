@@ -3,7 +3,8 @@ const store = createStore({
   state() {
     return{ 
       mobile: null,
-      details: null,
+      // details: null,
+      details: {},
       razordetails: null,
       pubPrice: [],
       forPrice: [],

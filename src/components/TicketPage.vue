@@ -33,7 +33,7 @@
 <p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
 <!-- <hr class="mx-5"> -->
 <div class="m-ticket mt-4 mb-5 mx-auto">
-        <div class="d-flex pt-2 pb-1 justify-content-center w-100  " style="background-color: #110b03;">
+        <div class="d-flex pt-2 pb-1 justify-content-center w-100" style="background-color: #110b03;">
     <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
     <h5 class="text-center text-white">Aksharam Museum</h5>
   </div>

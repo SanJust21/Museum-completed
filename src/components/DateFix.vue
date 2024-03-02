@@ -44,13 +44,14 @@
 </div>
 </template>
 <script>
-
+import axios from 'axios';
 export default {
 name: 'App',
 
 data() {
   return{
     date: null,
+    formattedDate: null,
     category: null
   };
 },
@@ -76,21 +77,39 @@ methods: {
     const isBeforeToday = selectedDate < today;
     return !isMonday && !isBeforeToday;
   },
+  async fetchCapacity(date) {
+      try {
+        const response = await axios.get(`/api/capacity?date=${date}`);
+        this.capacity = response.data.capacity;
+      } catch (error) {
+        alert('Error fetching capacity:', error);
+      }
+    },
   setDate() {
     // // Parse the string into a JavaScript Date object
   const parsedDate = new Date(this.date);
-  console.log(parsedDate)
+  // console.log(parsedDate)
 // Check if the parsedDate is a valid Date object
 if (!isNaN(parsedDate.getTime())) {
 // If it's a valid Date, set it to this.date
 this.date = parsedDate;
-console.log(this.date)
+// console.log(this.date)
 
 // Format and set the date to the store
-const formattedDate = parsedDate.toISOString().split('T')[0];
+// this.formattedDate = this.date.toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: '2-digit',
+//       day: '2-digit'
+//     });
+const year = this.date.getFullYear();
+    const month = String(this.date.getMonth() + 1).padStart(2, '0');
+    const day = String(this.date.getDate()).padStart(2, '0');
+    this.formattedDate = `${year}-${month}-${day}`;
+    console.log(this.formattedDate)
+// this.formattedDate = parsedDate.toISOString().split('T')[0];
 
-console.log(formattedDate)
-    this.$store.commit('setDate', formattedDate)
+// console.log(this.formattedDate)
+    this.$store.commit('setDate', this.formattedDate)
   }
 }
 }
