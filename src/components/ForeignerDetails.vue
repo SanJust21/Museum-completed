@@ -36,7 +36,7 @@
         </div>
 </div>
 
-<div class="d-flex justify-content-between align-items-center my-3">
+<div class="d-flex justify-content-between align-items-center mt-2">
   <div class="d-flex flex-column mt-3">
     <h6 class="mb-0">No. of Children (Rs.{{ foreigner[1].price }}): </h6>
   <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
@@ -71,6 +71,7 @@ import {mapGetters} from 'vuex';
     data() {
      return{
       quantityAdult: 0,
+      tax: this.$store.getters.getTax || [],
       foreigner: this.$store.getters.getForeign || [],
       quantityChild: 0,
       name: '',
@@ -144,6 +145,7 @@ import {mapGetters} from 'vuex';
                         adult:this.quantityAdult,
                         child: this.quantityChild,
                         total: this.total,
+                        totalTax: this.totalTax
                         }
           this.$store.commit('setDetails', details)
           this.$router.push('/review-details')
@@ -178,6 +180,20 @@ import {mapGetters} from 'vuex';
     },
     computed: {
       ...mapGetters(['getMobile']),
+      totalTax() {
+        let totalTaxAmount = 0;
+        if (this.tax && this.tax.length > 0) {
+          for (let i = 0; i < this.tax.length; i++) {
+            const tax = this.tax[i];
+            if (tax.type === "GST" || tax.type === "IGST") {
+              totalTaxAmount += (0.01 * tax.price * this.total);
+            } else {
+              totalTaxAmount += tax.price;
+            }
+          }
+        }
+        return totalTaxAmount.toFixed(2);
+      },
       total() {
         if (this.foreigner && this.foreigner.length >= 2) {
     return this.quantityAdult * this.foreigner[0].price + this.quantityChild * this.foreigner[1].price;

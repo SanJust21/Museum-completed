@@ -1,7 +1,7 @@
 <template>
  
-    <div class="d-flex justify-content-center mx-5 mt-5 mb-4 flex-wrap mx-auto">
-  <div>
+    <div class="d-flex justify-content-center mx-5 mt-3 mb-4 flex-wrap mx-auto">
+  <div class="d-flex flex-column align-items-center">
     <!-- <div class="d-flex mb-2 justify-content-start mx-5">
       <label class="me-2 fs-5">Visit date: </label>
       <input type="date" v-model="date" @input="setDate"/>
@@ -11,33 +11,67 @@
     
     <v-date-picker
       v-model="date"
-      color="green-darken-4"
+      color="light-green-darken-4"
       :allowed-dates="allowedDates"
       min="2024-01-01"
       :max='maxDate'
-      class="mx-5"
+      class="mx-5 custom-date-picker"
       @click="setDate"
     ></v-date-picker>
+<div class="d-flex">
+  <v-icon class="mdi mdi-circle-medium text-success"></v-icon><p class="text-success me-4">Available</p>
+  <v-icon class="mdi mdi-circle-medium text-warning"></v-icon><p class="text-warning me-4">Limited</p>
+  <v-icon class="mdi mdi-circle-medium text-danger"></v-icon><p class="text-danger me-1">Sold Out</p>
+</div>
+
 
   </div>
   <div v-if="date" class="d-flex mx-5 flex-column" style="width:500px">
-    <h5 v-if="!category">Choose a category:</h5>
+    <!-- Capacity -->
+    <h6 class="mt-3 mb-0">{{slot? 'Slot':'Choose a Slot'}}:</h6>
+        <div class="capacity mb-0">
+      <div class="d-flex">
+      <div class="d-flex align-items-start">
+        <input type="radio" value="slot1" id="slot1" class="me-1 mt-2" v-model="slot" name="slot1" @click="$store.commit('setCapacity', 'slot1');"/>
+        <div class="d-flex flex-column">
+         <label for="slot1" class="me-5">Slot 1</label> 
+         <label for="slot1" class="me-5 text-warning" style="font-size: 12px;"><i>10 remaining</i></label> 
+        </div>
+      </div>
+      <div class="d-flex align-items-start">
+        <input type="radio" value="slot2" id="slot2" class="me-1 mt-1" v-model="slot" name="slot2" @click="$store.commit('setCapacity', 'slot2');"/>
+        <div class="d-flex flex-column">
+         <label for="slot2" class="me-5">Slot 2</label> 
+         <label for="slot2" class="me-5 text-success" style="font-size: 12px;"><i>50 remaining</i></label> 
+        </div>
+      </div>
+       <div class="d-flex align-items-start">
+        <input type="radio" value="slot3" id="slot3" class="me-1 mt-1" v-model="slot" name="slot3" @click="$store.commit('setCategory', 'slot3');"/>
+        <div class="d-flex flex-column">
+         <label for="slot3" class="me-5">Slot 3</label> 
+         <label for="slot3" class="me-5 text-danger" style="font-size: 12px; "><i>Sold out</i></label> 
+        </div>
+      </div>
+    </div>
+    </div>
+    <!-- Category -->
+    <h6  class="mt-1 mb-0">{{category? 'Category' : 'Choose a category'}}:</h6>
     <div class="d-flex">
       <div>
-        <input type="radio" value="Public" id="public" class="me-3" v-model="category" name="category" @click="$store.commit('setCategory', 'public');$router.push('/public-details-enter');"/>
-        <label for="public" class="me-5"><h6>Public</h6></label>
+        <input type="radio" value="Public" id="public" class="me-1" v-model="category" name="category" @click="$store.commit('setCategory', 'public');$router.push('/public-details-enter');"/>
+        <label for="public" class="me-5"><p>Public</p></label>
       </div>
       <div>
-        <input type="radio" value="Institution" id="institution" class="me-3" v-model="category" name="category" @click="$store.commit('setCategory', 'institution');$router.push('/institution-details-enter');"/>
-        <label for="institution" class="me-5"><h6>Institution</h6></label>
+        <input type="radio" value="Institution" id="institution" class="me-1" v-model="category" name="category" @click="$store.commit('setCategory', 'institution');$router.push('/institution-details-enter');"/>
+        <label for="institution" class="me-5"><p>Institution</p></label>
       </div>
       <div>
-        <input type="radio" value="Foreigner" id="foreigner" class="me-3" v-model="category" name="category" @click="$store.commit('setCategory', 'foreigner');$router.push('/foreigner-details-enter'); "/>
-        <label for="foreigner" class="me-5"><h6>Foreigner</h6></label>
+        <input type="radio" value="Foreigner" id="foreigner" class="me-1" v-model="category" name="category" @click="$store.commit('setCategory', 'foreigner');$router.push('/foreigner-details-enter'); "/>
+        <label for="foreigner" class="me-5"><p>Foreigner</p></label>
       </div>
     </div>
     
-    <div class="mt-3 mb-0" v-if="category">
+    <div class="mt-1 mb-0" v-if="category">
       <router-view></router-view>
     </div>
   </div>
@@ -52,19 +86,22 @@ data() {
   return{
     date: null,
     formattedDate: null,
-    category: null
+    bookingDate: null,
+    category: null,
+    slot: null
   };
 },
 computed: {
   maxDate() {
     const currentDate = new Date();
     const maxDate = new Date(currentDate);
-    maxDate.setDate(currentDate.getDate() + 14);
+    maxDate.setDate(currentDate.getDate() + 15);
     return maxDate.toISOString().slice(0, 10); // Format as "YYYY-MM-DD"
   },
 },
 methods: {
   allowedDates(val) {
+
     const selectedDate = new Date(val);
     const today = new Date();
     // Set hours, minutes, seconds, and milliseconds to zero for both dates
@@ -101,17 +138,41 @@ this.date = parsedDate;
 //       month: '2-digit',
 //       day: '2-digit'
 //     });
-const year = this.date.getFullYear();
-    const month = String(this.date.getMonth() + 1).padStart(2, '0');
-    const day = String(this.date.getDate()).padStart(2, '0');
+var year = this.date.getFullYear();
+    var month = String(this.date.getMonth() + 1).padStart(2, '0');
+    var day = String(this.date.getDate()).padStart(2, '0');
     this.formattedDate = `${year}-${month}-${day}`;
-    console.log(this.formattedDate)
+  console.log(this.formattedDate);
+  var today = new Date();
+  month = String(today.getMonth() + 1).padStart(2, '0');
+  day = String(today.getDate()).padStart(2, '0');
+  year = today.getFullYear();
+
+  today = `${year}-${month}-${day}`
+   
+  console.log(today)
 // this.formattedDate = parsedDate.toISOString().split('T')[0];
 
 // console.log(this.formattedDate)
-    this.$store.commit('setDate', this.formattedDate)
+  this.$store.commit('setDate', this.formattedDate)
+    this.$store.commit('setBdate', today)
   }
 }
 }
 };
 </script>
+<style scoped>
+button{
+  background-color: #1B5E20 !important;
+}
+.v-date-picker-header {
+  padding-bottom: 1px !important;
+}
+::v-deep .v-date-picker-header__content{
+  font-size: 24px !important;
+}
+::v-deep .v-picker-title{
+  font-weight: 400 !important;
+  padding-bottom: 0px !important;
+}
+</style>

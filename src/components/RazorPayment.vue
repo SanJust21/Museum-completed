@@ -78,7 +78,7 @@ export default {
         contact: this.details.mobile
       },
       "theme": {
-            "color": "#74a965"
+          "color": "#74a965"
         },
       };
     const paymentObject = new window.Razorpay(options);

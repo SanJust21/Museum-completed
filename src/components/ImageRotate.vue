@@ -1,5 +1,5 @@
 <template>
-<div class="image-container container">
+<div class="image-container container mt-4">
         <v-img class="image left" src="@/assets/museum2.jpeg" alt="Left Image"></v-img>
         <v-img class="image middle" src="@/assets/museum.jpeg" alt="Middle Image"></v-img>
         <v-img class="image right" src="@/assets/museum3.jpeg" alt="Right Image"></v-img>
@@ -45,7 +45,7 @@
 
 .image.left {
     left: 0;
-    top:0;
+    top:30px;
     z-index: 1;
     transform: translateX(-1%);
     transform: scale(1.3); 
@@ -54,7 +54,7 @@
 
 .image.right {
     right: 0;
-    bottom:0;
+    bottom:30px;
     z-index: 3;
     transform: translateX(1%);
     transform: scale(1.3); 

@@ -79,7 +79,8 @@ import {mapGetters} from 'vuex';
       quantityAdult: 0,
       quantityChild: 0,
       name: '',
-      institute: this.$store.getters.getInstitute || [],
+       institute: this.$store.getters.getInstitute || [],
+        tax: this.$store.getters.getTax || [],
       items : [
         'Thiruvananthapuram',
         'Kollam',
@@ -168,7 +169,8 @@ import {mapGetters} from 'vuex';
                 adult:this.quantityAdult,
                 child: this.quantityChild,
                 total: this.total,
-                district: this.district
+                district: this.district,
+                totalTax: this.totalTax
                 }
             this.$store.commit('setDetails', details)
             this.$router.push('/review-details')
@@ -209,7 +211,22 @@ import {mapGetters} from 'vuex';
     return this.quantityAdult * this.institute[1].price + this.quantityChild * this.institute[0].price;
   } else {
     return 0;
-      }},
+        }
+      },
+        totalTax() {
+        let totalTaxAmount = 0;
+        if (this.tax && this.tax.length > 0) {
+          for (let i = 0; i < this.tax.length; i++) {
+            const tax = this.tax[i];
+            if (tax.type === "GST" || tax.type === "IGST") {
+              totalTaxAmount += (0.01 * tax.price * this.total);
+            } else {
+              totalTaxAmount += tax.price;
+            }
+          }
+        }
+        return totalTaxAmount.toFixed(2);
+      },
       // institute() {
       //   return this.$store.getters.getInstitute
       // },

@@ -40,18 +40,19 @@
 .logo-h1 {
         font-family: 'Noto Sans Malayalam', sans-serif;
         color: white;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 900;
         line-height: 16px;
+        margin-bottom: 0px;
     }
     .logo-p{
       color: white;
-        font-size: 16px;
+        font-size: 12px;
         line-height: 15px;
     }
     .image{
-height: 120px;
-width: 120px;
+height: 80px;
+width: 80px;
 cursor: pointer;
 }
 .nav-item,a {

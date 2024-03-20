@@ -89,13 +89,14 @@ export default {
     .logo-h1 {
         font-family: 'Noto Sans Malayalam', sans-serif;
         color: white;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 900;
         line-height: 16px;
+        margin-bottom: 0px;
     }
     .logo-p{
       color: white;
-        font-size: 16px;
+        font-size: 12px;
         line-height: 15px;
     }
     .button{
@@ -152,8 +153,8 @@ a.router-link-active li {
   height: 100%;
 }
 .image{
-height: 120px;
-width: 120px;
+height: 80px;
+width: 80px;
 }
 button{
   background-color:#74a965 !important ;

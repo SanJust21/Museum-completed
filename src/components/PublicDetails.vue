@@ -27,8 +27,8 @@
             label="E-mail*"
             required
           ></v-text-field>
-<div class="d-flex justify-content-between align-items-center mt-1">
-  <h6 class="mt-2">No. of Adults (Rs.{{ pub[0].price }}): </h6>
+<div class="d-flex justify-content-between align-items-center mt-1 mb-2">
+  <h6 class="mt-1">No. of Adults (Rs.{{ pub[0].price }}): </h6>
   <div class="input-group w-auto align-items-center">
     <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementAdult">
     <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityAdult">
@@ -36,10 +36,10 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-between align-items-center mt-3">
-  <div class="d-flex flex-column mt-3">
-    <h6 class="mb-0">No. of Children (Rs.{{ pub[1].price }}): </h6>
-    <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
+<div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex flex-column mb-0">
+    <h6 class="mb-0 mt-3">No. of Children (Rs.{{ pub[1].price }}): </h6>
+    <p class="lh-1 text-end mb-0" style="font-size:12px; font-style: italic;">( 5 to 12 years)</p>
   </div>
   <div class="input-group w-auto align-items-center">
     <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
@@ -49,11 +49,11 @@
 </div>
 
 <div class="d-flex justify-content-between align-items-center">
-  <div class="d-flex flex-column mt-3">
-    <h6 class="mb-0">No. of Senior Citizens (Rs.{{ pub[2].price }}): </h6>
-    <p class="lh-1 text-end" style="font-size:14px;">( above 65 years)</p>
+  <div class="d-flex flex-column">
+    <h6 class="mb-0 mt-3">No. of Senior Citizens (Rs.{{ pub[2].price }}): </h6>
+    <p class="lh-1 text-end" style="font-size:12px; font-style: italic;">( above 65 years)</p>
   </div>
-  <div class="input-group w-auto align-items-center">
+  <div class="input-group w-auto align-items-center pt-0">
     <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementSnr">
     <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantitySnr">
     <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementSnr">
@@ -150,7 +150,8 @@ import {mapGetters} from 'vuex';
           {console.log('tax',this.totalTax)
             const details = {
               cat:this.$store.getters.getCategory,
-              date:this.$store.getters.getDate,
+              date: this.$store.getters.getDate,
+              bDate : this.$store.getters.getBdate,
               name: this.name,
               mobile: this.mobileNum,
               email:this.email,

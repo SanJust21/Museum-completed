@@ -73,7 +73,7 @@
         <div class="mx-2">
         <p class="mt-2 mb-1">Ticket Price : Rs.{{ details.total }}/-</p>
         <div v-for="amt in tax" :key="amt.type">
-          <p class="mb-0">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST'? (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST'? amt.price * 0.01 * details.total : amt.price }}/-</p>
+          <p class="mb-0">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST'? (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST'? amt.price.toFixed(2)* 0.01 * details.total : amt.price }}/-</p>
         </div>
           <h5 class="mt-1 text-end">Grand Total : Rs.{{grandTotal }}/-</h5></div>
           <div class="d-flex justify-content-end ">
@@ -115,13 +115,14 @@ export default {
           const response = await axios.post('http://localhost:8080/api/details/submit', {
            "type": this.details.cat,
            "institutionName": this.details.name,
-           "mobileNumber": this.details.mobile,
+            "mobileNumber": this.details.mobile,
+            "bookDate" : this.details.bDate,
            "email": this.details.email,
            "district": this.details.district,
            "numberOfTeachers": this.details.adult,
            "numberOfStudents": this.details.child,
            "visitDate": this.details.date,
-           "totalPrice": this.details.total,
+           "totalPrice": this.details.total + this.details.totalTax,
            "sessionId": this.session.Details,
           });
           if (response.status === 200) {
@@ -152,12 +153,13 @@ export default {
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
+              "bookDate" : this.details.bDate,
               "numberOfAdults": this.details.adult,
               "numberOfChildren": this.details.child,
               "numberOfSeniors" : this.details.senior,
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
-              "totalPrice": this.details.total
+              "totalPrice": this.details.total + this.details.totalTax
             }); 
             if (response.status === 200) {
             const amount = response.data.amount;
@@ -187,11 +189,12 @@ export default {
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
+              "bookDate" : this.details.bDate,
               "numberOfAdults": this.details.adult,
               "numberOfChildren": this.details.child,
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
-              "totalPrice": this.details.total
+              "totalPrice": this.details.total + this.details.totalTax
             });
               if (response.status === 200) {
                 const amount = response.data.amount;
