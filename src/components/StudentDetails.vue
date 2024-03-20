@@ -162,7 +162,8 @@ import {mapGetters} from 'vuex';
             console.log(this.quantityAdult === 0 && this.quantityChild >0)
               const details = {
                 cat:this.$store.getters.getCategory,
-                date:this.$store.getters.getDate,
+                date: this.$store.getters.getDate,
+                bDate : this.$store.getters.getBdate,
                 name: this.name,
                 mobile: this.mobileNum,
                 email:this.email,

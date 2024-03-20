@@ -140,6 +140,7 @@ import {mapGetters} from 'vuex';
                         cat:this.$store.getters.getCategory,
                         date:this.$store.getters.getDate,
                         name: this.name,
+                        bDate : this.$store.getters.getBdate,
                         mobile: this.mobileNum,
                         email:this.email,
                         adult:this.quantityAdult,
