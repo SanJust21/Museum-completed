@@ -194,7 +194,7 @@ export default {
               "numberOfChildren": this.details.child,
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
-              "totalPrice": this.details.total + this.details.totalTax
+              "totalPrice": this.grandTotal
             });
               if (response.status === 200) {
                 const amount = response.data.amount;
