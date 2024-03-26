@@ -53,7 +53,7 @@
         <p class="mb-0 mt-0">Date: {{ userDetails.Date }}</p>
         <p class="mb-0">{{ userDetails.Teachers ? 'Teachers' : 'Adults' }}: {{ adultsCount }}</p>
         <p class="mb-0">{{ userDetails.Students ? 'Students' : 'Children' }}: {{ childrenCount }}</p>
-        <p class="mb-0" v-if="userDetails.Senior">Senior Citizens : {{ seniorCount }}</p>
+        <p class="mb-0" v-if="userDetails.Seniors">Senior Citizens : {{ seniorCount }}</p>
       </div>
       <div class="info">
         -----------------------------------------------------------
@@ -117,7 +117,7 @@ computed: {
     },
     seniorCount() {
       // Check if 'Teachers' key exists, if not, default to 0
-      return this.userDetails.Senior || 0;
+      return this.userDetails.Seniors || 0;
     },
   }
 }
