@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="350">
-    <v-form ref="form">
+    <v-form ref="form" class="p-3">
       <v-text-field
         v-model="name"
         density="comfortable"
@@ -76,11 +76,11 @@ import {mapGetters} from 'vuex';
   export default {
     data() {
      return{
-      quantityAdult: 0,
-      quantityChild: 0,
-      name: '',
-       institute: this.$store.getters.getInstitute || [],
-        tax: this.$store.getters.getTax || [],
+      quantityAdult: this.$store.getters.getDetails.adult || 0,
+      quantityChild: this.$store.getters.getDetails.child || 0,
+      name: this.$store.getters.getDetails.name || '',
+      institute: this.$store.getters.getInstitute || [],
+      tax: this.$store.getters.getTax || [],
       items : [
         'Thiruvananthapuram',
         'Kollam',
@@ -97,7 +97,7 @@ import {mapGetters} from 'vuex';
         'Kannur',
         'Kasaragod'
       ],
-      district: null,
+       district: this.$store.getters.getDetails.district || null,
       nameRules: [
         value => {
           if (value) return true
@@ -118,7 +118,7 @@ import {mapGetters} from 'vuex';
      
        
       ],
-      mobile: null,
+      
       mobRules: [
       value => {
           if (value) return true;
@@ -133,7 +133,7 @@ import {mapGetters} from 'vuex';
           return 'Enter a valid number.';
         }
       ],
-      email: '',
+      email: this.$store.getters.getDetails.email || '',
       emailRules: [
         value => {
           if (value) return true

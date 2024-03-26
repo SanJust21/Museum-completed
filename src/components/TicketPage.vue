@@ -1,69 +1,89 @@
 <template>
-    <v-card
-    class="mx-auto mt-0"
-    max-width="600"
-    hover
-  >
-    <v-card-item>
-      <v-card-title>
-        <h1 class="text-center text-dark my-1">Congratulations !! </h1>
-      </v-card-title>
-      <!-- <v-card-subtitle class="d-flex justify-content-center ">
+  <div class="d-flex justify-content-center px-5 flex-wrap py-3">
+    <v-card flat class=" d-flex flex-column justify-content-center rounded-5 " max-width="500">
+      <v-card-item>
+        <v-card-title class="d-flex align-items-center justify-content-center">
+
+          <h2 class="text-center mt-2 text-green-darken-3">Congratulation!</h2>
+          <v-icon class="mdi mdi-party-popper ms-3" size="x-large" color="green-darken-3"></v-icon>
+        </v-card-title>
+        <v-card-text class="text-center">
+          <h5 class="text-center ">You have successfully booked your tickets.</h5>
+          <p>Get ready for an unforgettable experience at Aksharam Museum! Explore our latest exhibitions and
+            immerse yourself in the history of language.</p>
+          <h6 class="text-center text-danger my-0">Take a screenshot or download your QR ticket and remember to bring it
+            along
+            when you visit.</h6>
+          <h5 class="text-center text-danger mb-0 mt-0">Thank You!!</h5>
+        </v-card-text>
+        <!-- <v-card-subtitle class="d-flex justify-content-center ">
         <v-icon class="mdi mdi-check-circle-outline text-success my-0"
         size="x-large"></v-icon>
       </v-card-subtitle> -->
-    </v-card-item>
 
-    <v-card-text>
-      <h6 class="text-center text-danger my-0">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</h6>
-      <h5 class="text-center text-danger mb-0 mt-0">Thank You!!</h5>
-    </v-card-text>
-    <div class="d-flex justify-content-center mt-0">
-      <v-btn 
-    size="small"
-    class="mb-3 mt-0 text-white"
-    rounded="xl"
-    color="green-darken-4"
-    @click="$router.push('/')">Home</v-btn>
-    </div>
 
-  </v-card>
+
+        <div class="d-flex justify-content-center mt-0">
+          <v-btn size="small" class="mb-3 mt-0 me-2 text-white" rounded="xl" color="green-darken-4"
+            @click="download">Download</v-btn>
+          <v-btn size="small" class="mb-3 mt-0 text-white" rounded="xl" color="green-darken-4"
+            @click="$router.push('/')">Home</v-btn>
+        </div>
+      </v-card-item>
+
+
+
+    </v-card>
     <!-- <h3 class="text-center mt-4"></h3>
   
 <p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
-<!-- <hr class="mx-5"> -->
-<div class="m-ticket mt-4 mb-5 mx-auto">
-        <div class="d-flex pt-2 pb-1 justify-content-center w-100" style="background-color: #110b03;">
-    <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
-    <h5 class="text-center text-white">Aksharam Museum</h5>
+    <!-- <hr class="mx-5"> -->
+
+
+    <div class="m-ticket mt-4 mb-5">
+      <div class="d-flex pt-2 pb-1 justify-content-center w-100 bg-grey-darken-4" style="background-color: #110b03;">
+        <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
+        <h5 class="text-center text-white">Aksharam Museum</h5>
+      </div>
+
+
+      <p class="m">Aksharam</p>
+      <div class="movie-details d-flex flex-column align-items-center">
+        <p>{{ adultsCount + childrenCount }} Ticket(s)</p>
+        <p class="mb-0 mt-0">Date: {{ userDetails.Date }}</p>
+        <p class="mb-0">{{ userDetails.Teachers ? 'Teachers' : 'Adults' }}: {{ adultsCount }}</p>
+        <p class="mb-0">{{ userDetails.Students ? 'Students' : 'Children' }}: {{ childrenCount }}</p>
+        <p class="mb-0" v-if="userDetails.Senior">Senior Citizens : {{ seniorCount }}</p>
+      </div>
+      <div class="info">
+        -----------------------------------------------------------
+      </div>
+      <div class="ticket-details mt-1 d-flex flex-column align-items-center">
+        <p class="m-0">{{ adultsCount + childrenCount }} Ticket(s)</p>
+        <v-img id="qr-code" :src="'data:image/png;base64,' + qrdetails.qrCodeImage" alt="QR Code" class="scan"></v-img>
+        <h6 class="pb-2">{{ userDetails["Booking ID"] }}</h6>
+      </div>
+      <p class="m m1">Aksharam</p>
+      <div class="info-cancel bg-dark-subtle ">
+        Cancellation not available
+      </div>
+      <div class="total-amount">
+        <p>Total Amount:</p>
+        <p>Rs.{{ userDetails.Amount }}/-</p>
+      </div>
+    </div>
+
   </div>
 
-  
-  <p class="m">Aksharam</p>
-  <div class="movie-details d-flex flex-column align-items-center">
-    <p >{{adultsCount + childrenCount}} Ticket(s)</p>
-    <p class="mb-0 mt-0">Date: {{userDetails.Date}}</p>
-    <p class="mb-0">{{userDetails.Teachers?'Teachers':'Adults'}}: {{adultsCount}}</p>
-    <p class="mb-0">{{userDetails.Students?'Students':'Children'}}: {{childrenCount}}</p>
-     
-  </div>
-  <div class="info">
-    -----------------------------------------------------------
-  </div>
-  <div class="ticket-details mt-1 d-flex flex-column align-items-center">
-    <p class="m-0">{{adultsCount + childrenCount}} Ticket(s)</p>
-    <v-img id="qr-code" :src="'data:image/png;base64,'+ qrdetails.qrCodeImage" alt="QR Code" class="scan"></v-img>
-    <!-- <h6>{{ qrdetails.Payment_ID }}</h6> -->
-  </div>
-  <p class="m m1">Aksharam</p>
-  <div class="info-cancel bg-dark-subtle ">
-   Cancellation not available
-  </div>
-  <div class="total-amount">
-    <p>Total Amount:</p>
-    <p>Rs.{{ userDetails.Amount }}/-</p>
-  </div>
-</div>
+
+
+
+
+
+
+
+
+
 </template>
 <script>
 
@@ -94,7 +114,11 @@ computed: {
     childrenCount() {
       // Check if 'Students' key exists, if not, default to 0
       return this.userDetails.Students || this.userDetails.Children || 0;
-    }
+    },
+    seniorCount() {
+      // Check if 'Teachers' key exists, if not, default to 0
+      return this.userDetails.Senior || 0;
+    },
   }
 }
 
@@ -112,6 +136,7 @@ computed: {
   align-items:center;
   position:relative;
   cursor:pointer;
+  width: clamp(260px, 80%, 280px);
 }
 .m-ticket:before{
   content:"";
@@ -151,6 +176,7 @@ computed: {
   padding:10px 20px; 
   font-size:.90em;
   line-height:19px;
+  height: 140px;
 }
 .m-ticket > .movie-details> p{
   margin: 5px;

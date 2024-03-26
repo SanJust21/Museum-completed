@@ -2,7 +2,7 @@ import {createStore} from 'vuex';
 const store = createStore({
   state() {
     return{ 
-      mobile: null,
+      mobile: sessionStorage.getItem('mobile')|| null,
       ctg : [
     {
         "id": 1,
@@ -66,36 +66,43 @@ const store = createStore({
     }
 ],
       // details: null,
-      details: {},
+      details: JSON.parse(sessionStorage.getItem('details')) || {},
       razordetails: null,
       pubPrice: [],
       forPrice: [],
       instPrice: [],
       snrPrice: [],
       tax: [],
-      category: null,
+      category: sessionStorage.getItem('category') || null,
       date: null,
-      qrDetails:{},
-      session: null,
+      qrDetails: {"qrCodeImage": "iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQAAAABRBrPYAAACRklEQVR4Xu2WwY7kIAxEzYnP4E8h/ad8wh45xVNVpHu3mdXOXEarWFgocuzXLaUok5h/J37ZWvlrbGyJjS2xsSU2tsTGlvgJ7DRGteLDau68ySi/kkCYio1pb6Pg9si4ZUWtSFi33Cu6BqYn79UKyAqVQmJWHi9BxMfFLA24+tr0B2WJh/llb9Wfsnw2+f0xY1Ro8r5YjYVdMWjyyTfH2fW7EwaDIAmWRn1YG7R6nRPNn8TCMpcUoCDJJ4O3cGE7EMZbiqAjS0m6VMJoh8L47IQhhnyeeXC59+mBYNgxH58mLxThOdqN/UBY5tfFodfQTFyMyfyRMOf8otinz5NgANRH3TAYBDE9+DkVGEVNDrXECYRJDZkc+05NGov0edMPwmBOSxcw4NsolALjPJhTn0jYsKRnhxrgnV1avQ2blgiD4akPzC9HGC1ejUcZvqmK/iUSpmdXJCYka+YsH2+C3B7zUXB5vE5mnVdM4HP1w2ConBpkdg2fT3K40wDBMOcxxSl2OpyFSwqOeShsisB9l8mrPD8FqX/Owv0xZwvGZh2zfFhB7TBjHg2jFMY3L3nZgFv/+OSQu2OnDistDfKEkYOPhTn8bJrfafi56bgsJo+AXUDjdhfX9eRxzdwDYScVwMuI67n1net9nCNgzHuTycFYZg5A9WAYD+fmEkE6nNx38DGxiroV59nFN1GCAXgbF2P3Yo5/CHJXDJfOHVfrgA1GYQMDHgyjFDqsjGoogTJcU5Mw2JexsSU2tsTGltjYEhtb4v9gH9wxNnE8riv2AAAAAElFTkSuQmCC",
+                "userDetails": "Name: anju, Adults: 2, Children: 1,  Date: 2024-02-01, Amount: 200, Booking ID: pay_NVhx"},
+      session: sessionStorage.getItem('session') || null,
       capacity: null,
-      bookDate : null
+      bookDate: sessionStorage.getItem('bookDate') || null,
+      origDate: sessionStorage.getItem('origDate') || null,
     };
   },
   mutations: {
     setMobile(state, payload) {
-       state.mobile = payload; 
+      state.mobile = payload; 
+      sessionStorage.setItem('mobile', payload);
     }, 
     setDetails(state, payload){
-    state.details = payload;
+      state.details = payload;
+      sessionStorage.setItem('details', JSON.stringify(payload));
     },
     setCategory(state, payload) {
-    state.category = payload;
+      state.category = payload;
+      sessionStorage.setItem('category', payload);
     },
     setDate(state, payload) {
       state.date = payload;
+      // sessionStorage.setItem('date', payload);
     },
     setBdate(state, payload) {
       state.bookDate = payload;
+      sessionStorage.setItem('bookDate', payload);
     },
     setRazor(state, payload) {
       state.razordetails = payload;
@@ -114,6 +121,7 @@ const store = createStore({
     },
     setSession(state, payload) {
       state.session = payload;
+      sessionStorage.setItem('session', payload);
     },
     setSenior(state, payload) {
       state.snrPrice = payload;
@@ -123,6 +131,11 @@ const store = createStore({
     },
     setCapacity(state, payload) {
       state.capacity = payload;
+    },
+    setOrigDate(state, payload) {
+      state.origDate = payload;
+      sessionStorage.setItem('origDate', payload);
+      // console.log(sessionStorage.getItem('origDate'))
     }
   },
   getters: {
@@ -170,6 +183,14 @@ const store = createStore({
     },
     getCapacity(state) {
       return state.capacity;
+    },
+    getOrigDate(state) {
+      const origDateStr = state.origDate;
+    if (origDateStr) {
+        return new Date(origDateStr);
+    } else {
+        return null; // Handle if origDate is null or undefined
+    }
     }
   },
 });

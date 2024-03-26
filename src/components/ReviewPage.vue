@@ -1,58 +1,63 @@
 <template>
-  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-5 bg-secondary-subtle py-2">
-    <div class="card main px-0 bg-white my-4 me-md-5">
-      <div class=" text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #1B5E20; color: white;">   <!-- to take the full width -->
+  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-5 bg-body-tertiary py-2">
+    <div class="card main px-0 bg-white my-4 me-md-5 pb-4">
+      <div class=" text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
+        <!-- to take the full width -->
         ORDER SUMMARY
       </div>
       <div class="container px-lg-5 px-4 details">
+        <div class="d-flex justify-content-end ">
+          <v-icon class=" edit mdi mdi-pencil" color="#388E3C" @click="editPage"></v-icon>
+        </div>
+
         <div class="row">
-            <h6 class="col-sm-4 col-3">Category</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 h6 class="col-sm-6 col-2">{{ details.cat }}</h6>
+          <h6 class="col-sm-4 col-3">Category</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-2 data">{{ details.cat }}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">{{details.cat === 'institution' ? 'Name of Institution': 'Name'}}</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.name }}</h6>
+          <h6 class="col-sm-4 col-3">{{details.cat === 'institution' ? 'Name of Institution': 'Name'}}</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.name }}</h6>
         </div>
         <div class="row" v-if="details.district">
-            <h6 class="col-sm-4 col-3">District</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.district }}</h6>
+          <h6 class="col-sm-4 col-3">District</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.district }}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">Email</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.email }}</h6>
+          <h6 class="col-sm-4 col-3">Email</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3" style="font-weight:400 ;">{{ details.email }}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">Mobile number</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.mobile }}</h6>
+          <h6 class="col-sm-4 col-3">Mobile number</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.mobile }}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">Visit date</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.date }}, {{day}}</h6>
+          <h6 class="col-sm-4 col-3">Visit date</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.date }}, {{day}}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'teachers': 'adults'}}</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.adult }}</h6>
+          <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'teachers': 'adults'}}</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.adult }}</h6>
         </div>
         <div class="row">
-            <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'students': 'children'}}</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.child }}</h6>
+          <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'students': 'children'}}</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.child }}</h6>
         </div>
         <div class="row" v-if="details.cat === 'public'">
-            <h6 class="col-sm-4 col-3">No. of Senior Citizens</h6>
-            <h6 class="col-sm-1 col-1">:</h6>
-            <h6 class="col-sm-6 col-3">{{ details.child }}</h6>
+          <h6 class="col-sm-4 col-3">No. of Senior Citizens</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.senior }}</h6>
         </div>
         <hr>
         <div>
-          <h5 class="mt-2 mb-1 text-end ">Sub Total : Rs.{{ details.total }}/-</h5>
+          <h5 class="mt-2 mb-1 text-end " style="color: #212121;">Sub Total : Rs.{{ details.total }}/-</h5>
           <!-- <p class="text-end mb-0">GST ({{ tax[0].price }}%) : Rs.{{ details.totalTax }}/-</p> -->
           <!-- <h5 class="mt-1 text-end">Grand Total : Rs.{{ details.total + details.totalTax }}/-</h5> -->
           <!-- <div class="terms">
@@ -61,37 +66,47 @@
             <p>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></p>
             <p>Visitors are excepted to arrive atleast half an hour before closing time.</p>
           </div> -->
-          <div class="d-flex justify-content-end ">
-            <v-btn class="mt-4 w-25 mb-5 text-white" color="green-darken-4" @click="editDetails">Edit</v-btn></div>
-          </div>
-        </div>  
-      </div>  
-      <div div class="card mb-3" style="width: 350px; box-shadow: 5px 8px 5px 8px #7c76760e;">
-        <div class=" text-center card-header" style="background-color: #1B5E20; color: white;">   <!-- to take the full width -->
-          PAYMENT DETAILS
+          <!-- <div class="d-flex justify-content-end ">
+            <v-btn class="mt-4 w-25 mb-5 text-white" color="green-darken-4" @click="editDetails">Edit</v-btn></div> -->
         </div>
-        <div class="mx-2">
-        <p class="mt-2 mb-1">Ticket Price : Rs.{{ details.total }}/-</p>
+      </div>
+    </div>
+    <div div class="card mb-3" style="width: 350px; box-shadow: 5px 8px 5px 8px #7c76760e;">
+      <div class=" text-center card-header" style="background-color: #33691E; color: white;">
+        <!-- to take the full width -->
+        PAYMENT DETAILS
+      </div>
+      <div class="mx-4">
+        <p class="mt-2 mb-1" style="font-size: 18px;">Ticket Price : Rs.{{ details.total }}/-</p>
         <div v-for="amt in tax" :key="amt.type">
-          <p class="mb-0">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST'? (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST'? amt.price.toFixed(2)* 0.01 * details.total : amt.price }}/-</p>
+          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST'?
+            (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST'? (amt.price*
+            0.01 * details.total).toFixed(2) : amt.price }}/-</p>
         </div>
-          <h5 class="mt-1 text-end">Grand Total : Rs.{{grandTotal }}/-</h5></div>
-          <div class="d-flex justify-content-end ">
-            <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay">Pay</v-btn>
-          </div>
-        <div class="terms mb-3 mx-2 text-dark">
-            <hr>
-            <ul>
-              <li><p>Ticket is Valid for the selected date it is purchased.</p> </li>
-              <li><p>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></p></li>
-                <li><p>Visitors are excepted to arrive atleast half an hour before closing time.</p></li>
-            </ul>
-            
-          </div>
-      </div>    
+        <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{grandTotal }}/-</h5>
+      </div>
+      <div class="d-flex justify-content-end ">
+        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay">Pay</v-btn>
+      </div>
+      <div class="terms mb-3 mx-2 text-dark">
+        <hr>
+        <ul>
+          <li>
+            <p>Ticket is Valid for the selected date it is purchased.</p>
+          </li>
+          <li>
+            <p>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></p>
+          </li>
+          <li>
+            <p>Visitors are excepted to arrive atleast half an hour before closing time.</p>
+          </li>
+        </ul>
+
+      </div>
+    </div>
   </div>
   <div v-if="payon">
-    <RazorPayment/>
+    <RazorPayment />
   </div>
 </template>
 
@@ -109,6 +124,9 @@ export default {
     RazorPayment
   },
   methods: {
+    editPage() {
+      this.$router.push('/booking-page')
+    },
     async pay(){
       try{
         if(this.details.cat === "institution") { 
@@ -226,8 +244,8 @@ export default {
     },
   },
   computed: {
-    details(){
-        return this.$store.getters.getDetails
+    details() {
+      return this.$store.getters.getDetails;
     },
     day() {
         const dateObject = new Date(this.details.date);
@@ -259,6 +277,11 @@ export default {
 .details h6{
     font-size: 16px;
 }
+.details .data {
+text-transform: capitalize; 
+font-weight: 400;
+}
+
 @media screen and (max-width: 750px) {
 .main{
     width: 82% !important;
@@ -273,6 +296,8 @@ export default {
 .terms>p {
     font-size: 8px;
 }
-
+.amt{
+  font-size: 12px;
+}
 }
 </style>

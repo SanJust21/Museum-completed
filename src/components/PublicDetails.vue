@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="350">
-    <v-form ref="form">
+    <v-form ref="form" class="p-3">
       <v-text-field
         v-model="name"
         density="comfortable"
@@ -79,15 +79,16 @@
 
 <script>
 import {mapGetters} from 'vuex';
-  export default {
+export default {
+  
     data() {
      return{
       pub:this.$store.getters.getPublic || [],
       tax: this.$store.getters.getTax || [],
-      quantityAdult: 0,
-      quantityChild: 0,
-      quantitySnr: 0,
-      name: '',
+      quantityAdult: this.$store.getters.getDetails.adult || 0,
+      quantityChild: this.$store.getters.getDetails.child || 0,
+      quantitySnr: this.$store.getters.getDetails.senior || 0,
+      name: this.$store.getters.getDetails.name || '',
       nameRules: [
         value => {
           if (value) return true
@@ -122,7 +123,7 @@ import {mapGetters} from 'vuex';
           return 'Enter a valid number.';
         }
       ],
-      email: '',
+      email: this.$store.getters.getDetails.email || '',
       emailRules: [
         value => {
           if (value) return true
@@ -148,20 +149,23 @@ import {mapGetters} from 'vuex';
           }
           else 
           {console.log('tax',this.totalTax)
-            const details = {
-              cat:this.$store.getters.getCategory,
-              date: this.$store.getters.getDate,
-              bDate : this.$store.getters.getBdate,
-              name: this.name,
-              mobile: this.mobileNum,
-              email:this.email,
-              adult:this.quantityAdult,
-              child: this.quantityChild,
-              senior: this.quantitySnr,
-              total: this.total,
-              totalTax: this.totalTax
-              }
-           this.$store.commit('setDetails', details)
+          const details = {
+            cat: this.$store.getters.getCategory,
+            date: this.$store.getters.getDate,
+            bDate: this.$store.getters.getBdate,
+            name: this.name,
+            mobile: this.mobileNum,
+            email: this.email,
+            adult: this.quantityAdult,
+            child: this.quantityChild,
+            senior: this.quantitySnr,
+            total: this.total,
+            totalTax: this.totalTax
+          };
+          
+          this.$store.commit('setDetails', details)
+          const amd = this.$store.getters.getDetails;
+          console.log(amd);
            this.$router.push('/review-details')
           }
         } else {
