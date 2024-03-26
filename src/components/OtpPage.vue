@@ -12,28 +12,21 @@
       <v-otp-input v-model="otp" variant="solo" length="6"></v-otp-input>
     </v-sheet>
 
-    <v-btn
-      class="my-4"
-      color="green-darken-4"
-      height="40"
-      text="Verify"
-      block
-      @click="verifyOtp"
-    ></v-btn>
+    <v-btn class="my-4" color="green-darken-4" height="40" text="Verify" block @click="verifyOtp"></v-btn>
 
     <div class="text-caption">
       Didn't receive the code?
       <div class="text-caption" v-if="resendCountdown > 0">
-      Resend in {{ resendCountdown }} seconds
-    </div>
-    <div v-else>
-      <a href="#" @click.prevent="resendOtp" class="text-caption">
-        Resend
-      </a>
-    </div>
+        Resend in {{ resendCountdown }} seconds
+      </div>
+      <div v-else>
+        <a href="#" @click.prevent="resendOtp" class="text-caption">
+          Resend
+        </a>
+      </div>
     </div>
 
-    
+
   </div>
 </template>
 
@@ -42,7 +35,6 @@ import axios from 'axios';
 export default {
   data: () => ({
     otp: '',
-    api: "a6207229-b6e5-11ee-8cbb-0200cd936042",
     resendTimeout: null,
     resendCountdown: 10,
   }),
@@ -56,8 +48,9 @@ export default {
   },
   methods: {
     async verifyOtp() {
-      try{
-        const response = await axios.post('http://localhost:8080/api/2factor/validate-otp', {
+      try {
+        const url = this.$store.getters.getUrl;
+        const response = await axios.post(`${url}/api/2factor/validate-otp`, {
           "enteredOtp": this.otp,
           "sessionId": this.session.Details,
           "mobileNumber": this.mobile
@@ -65,29 +58,31 @@ export default {
         });
         if (response.status === 200) {
           this.$router.push('/booking-page')
-        }  
+        }
       }
-      catch(error){
-        alert( error.response.data.message);
+      catch (error) {
+        alert(error.response.data.message);
       }
     },
-    async resendOtp(){
-      try{
-      const response = await axios.post(`http://localhost:8080/api/2factor/generate-otp`, {
+    async resendOtp() {
+      try {
+        const url = this.$store.getters.getUrl;
+        const response = await axios.post(`${url}/api/2factor/generate-otp`, {
           "mobileNumber": this.mobile,
         });
         if (response.status === 200) {
           const messag = JSON.parse(response.data.message);
           console.log(messag);
-          this.$store.commit('setMobile', response.data.mobileNumber);  
-          this.$store.commit('setSession', messag);    
-          alert("New OTP sent!")  
-      }}
-      catch(error){
-        alert( error.response.data.message);
+          this.$store.commit('setMobile', response.data.mobileNumber);
+          this.$store.commit('setSession', messag);
+          alert("New OTP sent!")
+        }
       }
-          // 
-    
+      catch (error) {
+        alert(error.response.data.message);
+      }
+      // 
+
     },
     startResendTimer() {
       this.resendTimeout = setInterval(() => {
@@ -98,7 +93,7 @@ export default {
         }
       }, 1000);
     },
-  },    
+  },
   mounted() {
     this.startResendTimer();
   },

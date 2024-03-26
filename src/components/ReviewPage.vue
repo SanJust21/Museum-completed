@@ -16,7 +16,7 @@
           <h6 class="col-sm-6 col-2 data">{{ details.cat }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">{{details.cat === 'institution' ? 'Name of Institution': 'Name'}}</h6>
+          <h6 class="col-sm-4 col-3">{{ details.cat === 'institution' ? 'Name of Institution' : 'Name' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-3 data">{{ details.name }}</h6>
         </div>
@@ -38,15 +38,15 @@
         <div class="row">
           <h6 class="col-sm-4 col-3">Visit date</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.date }}, {{day}}</h6>
+          <h6 class="col-sm-6 col-3 data">{{ details.date }}, {{ day }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'teachers': 'adults'}}</h6>
+          <h6 class="col-sm-4 col-3">No. of {{ details.cat === 'institution' ? 'teachers' : 'adults' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-3 data">{{ details.adult }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">No. of {{details.cat === 'institution' ? 'students': 'children'}}</h6>
+          <h6 class="col-sm-4 col-3">No. of {{ details.cat === 'institution' ? 'students' : 'children' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-3 data">{{ details.child }}</h6>
         </div>
@@ -79,11 +79,11 @@
       <div class="mx-4">
         <p class="mt-2 mb-1" style="font-size: 18px;">Ticket Price : Rs.{{ details.total }}/-</p>
         <div v-for="amt in tax" :key="amt.type">
-          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST'?
-            (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST'? (amt.price*
+          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ?
+            (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price *
             0.01 * details.total).toFixed(2) : amt.price }}/-</p>
         </div>
-        <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{grandTotal }}/-</h5>
+        <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
       </div>
       <div class="d-flex justify-content-end ">
         <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay">Pay</v-btn>
@@ -115,8 +115,9 @@ import RazorPayment from './RazorPayment.vue';
 import axios from 'axios';
 export default {
   data() {
-    return{
-     payon: false
+    return {
+      payon: false,
+      url: this.$store.getters.getUrl,
     }
   },
 
@@ -127,118 +128,115 @@ export default {
     editPage() {
       this.$router.push('/booking-page')
     },
-    async pay(){
-      try{
-        if(this.details.cat === "institution") { 
-          const response = await axios.post('http://localhost:8080/api/details/submit', {
-           "type": this.details.cat,
-           "institutionName": this.details.name,
+    async pay() {
+      try {
+        if (this.details.cat === "institution") {
+          const response = await axios.post(`${this.url}/api/details/submit`, {
+            "type": this.details.cat,
+            "institutionName": this.details.name,
             "mobileNumber": this.details.mobile,
-            "bookDate" : this.details.bDate,
-           "email": this.details.email,
-           "district": this.details.district,
-           "numberOfTeachers": this.details.adult,
-           "numberOfStudents": this.details.child,
-           "visitDate": this.details.date,
-           "totalPrice": this.grandTotal,
-           "sessionId": this.session.Details,
+            "bookDate": this.details.bDate,
+            "email": this.details.email,
+            "district": this.details.district,
+            "numberOfTeachers": this.details.adult,
+            "numberOfStudents": this.details.child,
+            "visitDate": this.details.date,
+            "totalPrice": this.grandTotal,
+            "sessionId": this.session.Details,
           });
           if (response.status === 200) {
             const amount = response.data.amount;
-            if(window.confirm('Are you sure you want to continue to pay'))
-            {
+            if (window.confirm('Are you sure you want to continue to pay')) {
               console.log('backend api to razorpay')
-              try{
-               const response1 = await axios.post(`http://localhost:8080/api/payment/create-order`, {
-                 "amount": amount,
-                 "sessionId": this.session.Details
-               });
+              try {
+                const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
+                  "amount": amount,
+                  "sessionId": this.session.Details
+                });
                 if (response1.status === 200) {
                   this.$store.commit('setRazor', response1.data)
                   this.payon = true;
                 }
               }
-              catch(error) {
+              catch (error) {
                 console.error(error)
               }
             }
-          } 
+          }
         }
         else {
-          if(this.details.cat === "public"){
-            const response = await axios.post('http://localhost:8080/api/details/submit', {
+          if (this.details.cat === "public") {
+            const response = await axios.post(`${this.url}/api/details/submit`, {
               "type": this.details.cat,
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
-              "bookDate" : this.details.bDate,
+              "bookDate": this.details.bDate,
               "numberOfAdults": this.details.adult,
               "numberOfChildren": this.details.child,
-              "numberOfSeniors" : this.details.senior,
+              "numberOfSeniors": this.details.senior,
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
-              "totalPrice":this.grandTotal
-            }); 
+              "totalPrice": this.grandTotal
+            });
             if (response.status === 200) {
-            const amount = response.data.amount;
-            if(window.confirm('Are you sure you want to continue to pay'))
-            {
-              console.log('backend api to razorpay')
-              try{
-                  const response1 = await axios.post(`http://localhost:8080/api/payment/create-order`, {
+              const amount = response.data.amount;
+              if (window.confirm('Are you sure you want to continue to pay')) {
+                console.log('backend api to razorpay')
+                try {
+                  const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
                     "amount": amount,
                     "sessionId": this.session.Details
                   });
                   if (response1.status === 200) {
-                    console.log('razorpay response from backend',response1.data)
+                    console.log('razorpay response from backend', response1.data)
                     this.$store.commit('setRazor', response1.data)
                     this.payon = true;
                   }
-              }
-              catch(error) {
+                }
+                catch (error) {
                   console.error(error)
+                }
               }
             }
           }
-          } 
           else {
-            const response = await axios.post('http://localhost:8080/api/details/submit', {
+            const response = await axios.post(`${this.url}/api/details/submit`, {
               "type": this.details.cat,
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
-              "bookDate" : this.details.bDate,
+              "bookDate": this.details.bDate,
               "numberOfAdults": this.details.adult,
               "numberOfChildren": this.details.child,
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
               "totalPrice": this.grandTotal
             });
-              if (response.status === 200) {
-                const amount = response.data.amount;
-                if(window.confirm('Are you sure you want to continue to pay'))
-                {
-                  console.log('backend api to razorpay')
-                  try{
-                    const response1 = await axios.post(`http://localhost:8080/api/payment/create-order`, {
-                      "amount": amount,
-                      "sessionId": this.session.Details
-                    });
-                    if (response1.status === 200) {
-                      console.log('razorpay response from backend',response1.data)
-                      this.$store.commit('setRazor', response1.data)
-                      this.payon = true;
-                    }
+            if (response.status === 200) {
+              const amount = response.data.amount;
+              if (window.confirm('Are you sure you want to continue to pay')) {
+                console.log('backend api to razorpay')
+                try {
+                  const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
+                    "amount": amount,
+                    "sessionId": this.session.Details
+                  });
+                  if (response1.status === 200) {
+                    console.log('razorpay response from backend', response1.data)
+                    this.$store.commit('setRazor', response1.data)
+                    this.payon = true;
                   }
-                  catch(error) {
-                    console.error(error)
-                  }
+                }
+                catch (error) {
+                  console.error(error)
+                }
               }
             }
           }
         }
       }
-      catch(error){
+      catch (error) {
         alert('Error fetching user details', error);
       }
     },
@@ -248,18 +246,18 @@ export default {
       return this.$store.getters.getDetails;
     },
     day() {
-        const dateObject = new Date(this.details.date);
-        const options = { weekday: 'long' };
-        const dayOfWeek = dateObject.toLocaleDateString('en-US', options);
-        return dayOfWeek;
+      const dateObject = new Date(this.details.date);
+      const options = { weekday: 'long' };
+      const dayOfWeek = dateObject.toLocaleDateString('en-US', options);
+      return dayOfWeek;
     },
     session() {
       return this.$store.getters.getsession;
     },
     tax() {
       return this.$store.getters.getTax
-    } ,
-    grandTotal(){
+    },
+    grandTotal() {
       return Math.round(parseFloat(this.details.total) + parseFloat(this.details.totalTax))
     }
   }
@@ -267,37 +265,44 @@ export default {
 </script>
 <style scoped>
 .terms p {
-    font-size: 12px;
-    margin: 0;
+  font-size: 12px;
+  margin: 0;
 }
+
 .main {
-    box-shadow: 5px 8px 5px 8px #7c76760e;
-    width: 600px
+  box-shadow: 5px 8px 5px 8px #7c76760e;
+  width: 600px
 }
-.details h6{
-    font-size: 16px;
+
+.details h6 {
+  font-size: 16px;
 }
+
 .details .data {
-text-transform: capitalize; 
-font-weight: 400;
+  text-transform: capitalize;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 750px) {
-.main{
+  .main {
     width: 82% !important;
-}
-.main h6{
+  }
+
+  .main h6 {
     padding-left: 0;
     font-size: 11px;
-}
-.terms h5{
+  }
+
+  .terms h5 {
     font-size: 13px;
-}
-.terms>p {
+  }
+
+  .terms>p {
     font-size: 8px;
-}
-.amt{
-  font-size: 12px;
-}
+  }
+
+  .amt {
+    font-size: 12px;
+  }
 }
 </style>
