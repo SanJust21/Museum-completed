@@ -6,10 +6,9 @@
     <p v-if="errorMessage" class="text-danger mt-3">{{ errorMessage }}</p>
     <v-btn block height="40" color="green-darken-4" class="bg-gradient" @click="validate">Generate OTP</v-btn>
   </v-form>
-
 </template>
+
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -27,7 +26,6 @@ export default {
           if ((value?.length === 10) && (/^[6-9]\d{9}$/.test(value))) return true;
           return 'Enter a valid 10 digit number.';
         }],
-
     }
   },
   methods: {
@@ -35,27 +33,20 @@ export default {
       try {
         const { valid } = await this.$refs.form.validate()
         if (valid) {
-          console.log('done')
-          const url = this.$store.getters.getUrl;
-          const response = await axios.post(`${url}/api/2factor/generate-otp`, {
-            "mobileNumber": this.mobile,
-          });
-          if (response.status === 200) {
-            console.log(response.data);
-
-            const messag = JSON.parse(response.data.message);
-            console.log(messag);
-            this.$store.commit('setMobile', response.data.mobileNumber);
-            this.$store.commit('setSession', messag);
+          try {
+          const success = await this.$store.dispatch('generateOtp', this.mobile);
+          if (success) {
             this.$router.push('/otp');
+          }
+          }
+          catch (err) {
+            console.error(err);
           }
         }
       }
       catch (error) {
-        alert('Error fetching user details', error);
-        console.error(error)
+        console.error('Error fetching user details', error);
       }
-
     },
   }
 };

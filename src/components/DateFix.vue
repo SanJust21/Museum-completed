@@ -173,11 +173,11 @@ button {
   padding-bottom: 1px !important;
 }
 
-::v-deep .v-date-picker-header__content {
+:deep(.v-date-picker-header__content) {
   font-size: 24px !important;
 }
 
-::v-deep .v-picker-title {
+:deep(.v-picker-title) {
   font-weight: 400 !important;
   padding-bottom: 0px !important;
 }

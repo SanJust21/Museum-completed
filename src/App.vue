@@ -2,18 +2,12 @@
   <router-view></router-view>
   <FooterPage />
 </template>
+
 <script>
 import FooterPage from './components/FooterPage.vue';
-import axios from 'axios'
-
 export default {
   components: {
     FooterPage,
-  },
-  data() {
-    return {
-      ctg: []
-    }
   },
   computed: {
     tax() {
@@ -24,52 +18,36 @@ export default {
     }
   },
   methods: {
-    // loadPrice() {
-    //   const publicTickets = this.catg.filter(ticket => ticket.category === 'public');
-    //   this.$store.commit('setPublic', publicTickets)
-    //   console.log(publicTickets)
-    //   const instituteTickets = this.catg.filter(ticket => ticket.category === 'institution');
-    //   this.$store.commit('setInstitute', instituteTickets)
-    //   console.log(instituteTickets)
-    //   const foreignTickets = this.catg.filter(ticket => ticket.category === 'foreigner');
-    //   this.$store.commit('setForeign', foreignTickets)
-    //   console.log(foreignTickets)
-    //   const tax = this.catg.filter(ticket => ticket.category === 'tax');
-    //   this.$store.commit('setTax', tax)
-    //   console.log(tax)
-
-    // }
     async loadPrice() {
-      try {
-        const url = this.$store.getters.getUrl;
-        const response = await axios.get(`${url}/api/details/loadPrice`);
-        if (response.status === 200) {
-          this.ctg = response.data;
-          console.log(this.ctg)
-          const publicTickets = this.ctg.filter(ticket => ticket.category === 'public');
-          this.$store.commit('setPublic', publicTickets)
-          console.log(publicTickets)
-          const instituteTickets = this.ctg.filter(ticket => ticket.category === 'institution');
-          this.$store.commit('setInstitute', instituteTickets)
-          console.log(instituteTickets)
-          const foreignTickets = this.ctg.filter(ticket => ticket.category === 'foreigner');
-          this.$store.commit('setForeign', foreignTickets)
-          console.log(foreignTickets)
-          const tax = this.ctg.filter(ticket => ticket.category === 'tax');
-          this.$store.commit('setTax', tax)
-          console.log(tax)
-        }
-      }
-      catch (error) {
-        console.error(error)
-      }
+      this.$store.dispatch('loadPrice')
+      // try {
+      //   const url = this.$store.getters.getUrl;
+      //   const response = await axios.get(`${url}/api/details/loadPrice`);
+      //   if (response.status === 200) {
+      //     this.ctg = response.data;
+      //     console.log(this.ctg)
+      //     const publicTickets = this.ctg.filter(ticket => ticket.category === 'public');
+      //     this.$store.commit('setPublic', publicTickets)
+      //     console.log(publicTickets)
+      //     const instituteTickets = this.ctg.filter(ticket => ticket.category === 'institution');
+      //     this.$store.commit('setInstitute', instituteTickets)
+      //     console.log(instituteTickets)
+      //     const foreignTickets = this.ctg.filter(ticket => ticket.category === 'foreigner');
+      //     this.$store.commit('setForeign', foreignTickets)
+      //     console.log(foreignTickets)
+      //     const tax = this.ctg.filter(ticket => ticket.category === 'tax');
+      //     this.$store.commit('setTax', tax)
+      //     console.log(tax)
+      //   }
+      // }
+      // catch (error) {
+      //   console.error(error)
+      // }
     },
   },
-
   mounted() {
     this.loadPrice();
   }
-
 }
 
 </script>
@@ -82,10 +60,3 @@ export default {
   box-sizing: border-box;
 }
 </style>
-
-green
-#74a965
-light green
-#536845
-coral
-#f0403a
