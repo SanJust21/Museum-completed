@@ -6,7 +6,17 @@ export default {
             const url = rootGetters.getUrl;
             const response = await axios.get(`${url}/api/details/loadPrice`);
             if (response.status === 200) {
-                const ctg = response.data;
+              const ctg = response.data;
+              console.log(ctg)
+              const categorizedData = {};
+              ctg.forEach(item => {
+              if (!categorizedData[item.category]) {
+                categorizedData[item.category] = {};
+              }
+              categorizedData[item.category][item.type] = item.price;
+            });
+              console.log(categorizedData);
+                commit('setPricing', categorizedData);
                 const publicTickets = ctg.filter(ticket => ticket.category === 'public');
                 commit('setPublic', publicTickets);
                 const instituteTickets = ctg.filter(ticket => ticket.category === 'institution');

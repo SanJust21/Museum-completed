@@ -9,7 +9,7 @@
         :rules="mobRules" required></v-text-field>
       <v-text-field v-model="email" variant="underlined" :rules="emailRules" label="E-mail*" required></v-text-field>
       <div class="d-flex justify-content-between align-items-center mt-1">
-        <h6>No. of Teachers (Rs.{{institute[1].price}}): </h6>
+        <h6>No. of Teachers (Rs.{{institute.teacher}}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityAdult', 'decrement')">
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center my-3">
-        <h6>No. of Students (Rs.{{institute[0].price}}): </h6>
+        <h6>No. of Students (Rs.{{institute.student}}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityChild', 'decrement')">
@@ -52,7 +52,8 @@ import {mapGetters} from 'vuex';
       quantityAdult: this.$store.getters.getDetails.adult || 0,
       quantityChild: this.$store.getters.getDetails.child || 0,
       name: this.$store.getters.getDetails.name || '',
-      institute: this.$store.getters.getInstitute || [],
+       // institute: this.$store.getters.getInstitute || [],
+       institute: this.$store.getters.getPricing.institution || [],
       tax: this.$store.getters.getTax || [],
       items : ['Thiruvananthapuram','Kollam','Pathanamthitta','Alappuzha','Kottayam','Idukki','Ernakulam','Thrissur','Palakkad','Malappuram','Kozhikode','Wayanad','Kannur','Kasaragod'],
       district: this.$store.getters.getDetails.district || null,
@@ -168,8 +169,8 @@ import {mapGetters} from 'vuex';
     computed: {
       ...mapGetters(['getMobile']),
       total() {
-        if (this.institute && this.institute.length >= 2) {
-          return this.quantityAdult * this.institute[1].price + this.quantityChild * this.institute[0].price;
+        if (this.institute) {
+          return this.quantityAdult * this.institute.teacher + this.quantityChild * this.institute.student;
         } else {
           return 0;
         }
@@ -189,7 +190,7 @@ import {mapGetters} from 'vuex';
         return totalTaxAmount.toFixed(2);
       },
       capacity() {
-        return parseInt(this.quantityAdult) + parseInt(this.quantityChild) + parseInt(this.quantitySnr);
+        return parseInt(this.quantityAdult) + parseInt(this.quantityChild);
       },
       mobileNum: {
         get(){

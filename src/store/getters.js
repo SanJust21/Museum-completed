@@ -23,6 +23,9 @@ export default {
     getRazor(state) {
         return state.razordetails;
     },
+    getPricing(state) {
+        return state.pricing;
+    },
     getPublic(state) {
         return state.pubPrice
     },

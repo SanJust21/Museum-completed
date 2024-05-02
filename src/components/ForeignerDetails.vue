@@ -8,7 +8,7 @@
       <v-text-field v-model="email" density="comfortable" variant="underlined" :rules="emailRules" label="E-mail*"
         required></v-text-field>
       <div class="d-flex justify-content-between align-items-center mt-3">
-        <h6>No. of Adults (Rs.{{ foreigner[0].price }}): </h6>
+        <h6>No. of Adults (Rs.{{ foreigner.foreign_adult }}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityAdult', 'decrement')">
@@ -20,7 +20,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center mt-2">
         <div class="d-flex flex-column mt-3">
-          <h6 class="mb-0">No. of Children (Rs.{{ foreigner[1].price }}): </h6>
+          <h6 class="mb-0">No. of Children (Rs.{{ foreigner.foreign_child }}): </h6>
           <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
         </div>
         <div class="input-group w-auto align-items-center">
@@ -53,7 +53,7 @@ import {mapGetters} from 'vuex';
      return{
       quantityAdult: this.$store.getters.getDetails.adult || 0,
       tax: this.$store.getters.getTax || [],
-      foreigner: this.$store.getters.getForeign || [],
+      foreigner: this.$store.getters.getPricing.foreigner || [],
       quantityChild: this.$store.getters.getDetails.child || 0,
       name: this.$store.getters.getDetails.name || '',
       nameRules: [
@@ -184,14 +184,11 @@ import {mapGetters} from 'vuex';
         return totalTaxAmount.toFixed(2);
       },
       total() {
-        if (this.foreigner && this.foreigner.length >= 2) {
-          return this.quantityAdult * this.foreigner[0].price + this.quantityChild * this.foreigner[1].price;
+        if (this.foreigner) {
+          return this.quantityAdult * this.foreigner.foreign_adult + this.quantityChild * this.foreigner.foreign_child;
         } else {
           return 0; // or any default value you want
         }
-      },
-      capacity() {
-        return parseInt(this.quantityAdult) + parseInt(this.quantityChild) + parseInt(this.quantitySnr);
       },
       mobileNum: {
         get(){
@@ -200,6 +197,9 @@ import {mapGetters} from 'vuex';
         set(value) {
           this.$store.commit('setMobile', value);
         },
+      },
+      capacity() {
+        return parseInt(this.quantityAdult) + parseInt(this.quantityChild);
       },
     } 
   }

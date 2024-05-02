@@ -8,7 +8,7 @@
       <v-text-field v-model="email" density="comfortable" variant="underlined" :rules="emailRules" label="E-mail*"
         required></v-text-field>
       <div class="d-flex justify-content-between align-items-center mt-1 mb-2">
-        <h6 class="mt-1">No. of Adults (Rs.{{ pub[0].price }}): </h6>
+        <h6 class="mt-1">No. of Adults (Rs.{{ pub.adult }}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityAdult', 'decrement')">
@@ -20,7 +20,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex flex-column mb-0">
-          <h6 class="mb-0 mt-3">No. of Children (Rs.{{ pub[1].price }}): </h6>
+          <h6 class="mb-0 mt-3">No. of Children (Rs.{{ pub.child }}): </h6>
           <p class="lh-1 text-end mb-0" style="font-size:12px; font-style: italic;">( 5 to 12 years)</p>
         </div>
         <div class="input-group w-auto align-items-center">
@@ -34,7 +34,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex flex-column">
-          <h6 class="mb-0 mt-3">No. of Senior Citizens (Rs.{{ pub[2].price }}): </h6>
+          <h6 class="mb-0 mt-3">No. of Senior Citizens (Rs.{{ pub.senior }}): </h6>
           <p class="lh-1 text-end" style="font-size:12px; font-style: italic;">( above 65 years)</p>
         </div>
         <div class="input-group w-auto align-items-center pt-0">
@@ -58,6 +58,7 @@
       </div>
     </v-form>
   </v-sheet>
+  {{ pub.adult }}
 </template>
 
 <script>
@@ -65,7 +66,7 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
      return{
-      pub:this.$store.getters.getPublic || [],
+      pub:this.$store.getters.getPricing.public || [],
       tax: this.$store.getters.getTax || [],
       quantityAdult: this.$store.getters.getDetails.adult || 0,
       quantityChild: this.$store.getters.getDetails.child || 0,
@@ -192,8 +193,8 @@ export default {
     computed: {
       ...mapGetters(['getMobile']),
       total() {
-        if (this.pub && this.pub.length >= 2) {
-          return this.quantityAdult * this.pub[0].price + this.quantityChild * this.pub[1].price + this.quantitySnr * this.pub[2].price;
+        if (this.pub) {
+          return this.quantityAdult * this.pub.adult + this.quantityChild * this.pub.child + this.quantitySnr * this.pub.senior;
         } else {
           return 0; 
         }

@@ -1,4 +1,8 @@
 export default {
+    setPricing(state, payload) {
+        state.pricing = payload;
+        sessionStorage.setItem('pricing', JSON.stringify(payload));
+    },
     setPublic(state, payload) {
         state.pubPrice = payload;
     },
