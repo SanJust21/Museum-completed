@@ -8,6 +8,12 @@ export default {
     getCategory(state) {
         return state.category;
     },
+    getSlots(state) {
+        return state.activeSlots;  
+    },
+    getSelectedSlot(state) {
+        return state.selectedSlots; 
+    },
     getDate(state) {
         return state.date;
     },
@@ -54,5 +60,8 @@ export default {
         } else {
             return null;
         }
+    },
+    getCapacityId(state) {
+        return state.capacityId;
     }
 };

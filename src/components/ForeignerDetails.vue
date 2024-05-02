@@ -1,66 +1,47 @@
 <template>
   <v-sheet width="350">
     <v-form ref="form" class="p-3">
-      <v-text-field
-        v-model="name"
-        density="comfortable" 
-        variant="underlined"
-        label="Name*"
-        :rules="nameRules"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="mobileNum"
-        density="comfortable" 
-        variant="underlined"
-        label="Mobile Number*"
-        :rules="mobRules"
-        required
-      ></v-text-field>
-
-      <v-text-field
-            v-model="email"
-            density="comfortable" 
-            variant="underlined"
-            :rules="emailRules"
-            label="E-mail*"
-            required
-          ></v-text-field>
-<div class="d-flex justify-content-between align-items-center mt-3">
-  <h6>No. of Adults (Rs.{{ foreigner[0].price }}): </h6>
-      <div class="input-group w-auto align-items-center">
-          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementAdult">
-          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityAdult">
-          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementAdult">
+      <v-text-field v-model="name" density="comfortable" variant="underlined" label="Name*" :rules="nameRules"
+        required></v-text-field>
+      <v-text-field v-model="mobileNum" density="comfortable" variant="underlined" label="Mobile Number*"
+        :rules="mobRules" required></v-text-field>
+      <v-text-field v-model="email" density="comfortable" variant="underlined" :rules="emailRules" label="E-mail*"
+        required></v-text-field>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <h6>No. of Adults (Rs.{{ foreigner[0].price }}): </h6>
+        <div class="input-group w-auto align-items-center">
+          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
+            @click="updateQuantity('quantityAdult', 'decrement')">
+          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape"
+            v-model="quantityAdult">
+          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5"
+            @click="updateQuantity('quantityAdult', 'increment')">
         </div>
-</div>
-
-<div class="d-flex justify-content-between align-items-center mt-2">
-  <div class="d-flex flex-column mt-3">
-    <h6 class="mb-0">No. of Children (Rs.{{ foreigner[1].price }}): </h6>
-  <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
-  </div>
-      <div class="input-group w-auto align-items-center">
-          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5" @click="decrementChild">
-          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape" v-model="quantityChild">
-          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5" @click="incrementChild">
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex flex-column mt-3">
+          <h6 class="mb-0">No. of Children (Rs.{{ foreigner[1].price }}): </h6>
+          <p class="lh-1 text-end" style="font-size:14px;">( 5 to 12 years)</p>
         </div>
-</div>
-<hr>
-<div class="d-flex justify-content-between ">
-  <h5> Total </h5>
-  <h5> : </h5>
-  <h5> <v-icon
-             icon="mdi mdi-currency-inr"
-             size="x-small">
-            </v-icon>{{total}} </h5>
-</div>
-      
-<div class="d-flex justify-content-center">
-  <v-btn  class="mt-3 w-50 text-white"  @click="submit"  color="green-darken-4">Get Tickets</v-btn>
-</div>
-      
+        <div class="input-group w-auto align-items-center">
+          <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
+            @click="updateQuantity('quantityChild', 'decrement')">
+          <input type="text" max="100" name="quantity" class=" border bg-light text-center icon-shape"
+            v-model="quantityChild">
+          <input type="button" value="+" class="border icon-shape bg-light font-weight-bold fs-5"
+            @click="updateQuantity('quantityChild', 'increment')">
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between ">
+        <h5> Total </h5>
+        <h5> : </h5>
+        <h5> <v-icon icon="mdi mdi-currency-inr" size="x-small">
+          </v-icon>{{total}} </h5>
+      </div>
+      <div class="d-flex justify-content-center">
+        <v-btn class="mt-3 w-50 text-white" @click="submit" color="green-darken-4">Get Tickets</v-btn>
+      </div>
     </v-form>
   </v-sheet>
 </template>
@@ -135,48 +116,56 @@ import {mapGetters} from 'vuex';
           }
           else 
           {
-        const details = {
-                        cat:this.$store.getters.getCategory,
-                        date:this.$store.getters.getDate,
-                        name: this.name,
-                        bDate : this.$store.getters.getBdate,
-                        mobile: this.mobileNum,
-                        email:this.email,
-                        adult:this.quantityAdult,
-                        child: this.quantityChild,
-                        total: this.total,
-                        totalTax: this.totalTax
-                        }
-          this.$store.commit('setDetails', details)
-          this.$router.push('/review-details')
-                      }
-        } else 
-        {alert('Fields should not be empty')}
+            const details = {
+              cat:this.$store.getters.getCategory,
+              date: this.$store.getters.getDate,
+              slot: this.$store.getters.getCapacity,
+              name: this.name,
+              bDate : this.$store.getters.getBdate,
+              mobile: this.mobileNum,
+              email:this.email,
+              adult:this.quantityAdult,
+              child: this.quantityChild,
+              total: this.total,
+              totalTax: this.totalTax
+            }
+            this.$store.commit('setDetails', details)
+            try {
+              const res = await this.$store.dispatch('lockSlot', {
+                capacity: this.capacity,
+                date: details.date,
+                slot: details.slot,
+                cat: details.cat
+              })
+              if (res) {
+                this.$router.push('/review-details')
+              }
+            }
+            catch (error) {
+              console.error(error);
+              this.message = 'Capacity not available'
+            }
+          }
+        } else {
+          if (this.$store.getters.getCapacity === null) {
+            this.message = 'Please select your visit time!';
+          }
+          else if (this.$store.getters.getCategory === null) {
+            this.message = 'Please select your category';
+          }
+          else if (!valid) {
+            this.message = 'Please fill the required fields';
+          }
+          alert(this.message)
+        }
       },
-      incrementAdult() {
-      this.quantityAdult += 1
-    },
-    decrementAdult() {
-      if(this.quantityAdult === 0)
-        {
-        this.quantityAdult = 0;
+      updateQuantity(type, action) {
+        if (action === 'increment') {
+          this[type] = parseInt(this[type]) + 1;
+        } else if (action === 'decrement' && this[type] > 0) {
+          this[type] = parseInt(this[type]) - 1;
         }
-        else {
-        this.quantityAdult -= 1;
-        }
-    },
-    incrementChild() {
-      this.quantityChild += 1
-    },
-    decrementChild() {
-      if(this.quantityChild === 0)
-        {
-        this.quantityChild = 0;
-        }
-        else {
-        this.quantityChild -= 1;
-        }
-    },
+      },
     },
     computed: {
       ...mapGetters(['getMobile']),
@@ -196,10 +185,13 @@ import {mapGetters} from 'vuex';
       },
       total() {
         if (this.foreigner && this.foreigner.length >= 2) {
-    return this.quantityAdult * this.foreigner[0].price + this.quantityChild * this.foreigner[1].price;
-  } else {
-    return 0; // or any default value you want
-  }
+          return this.quantityAdult * this.foreigner[0].price + this.quantityChild * this.foreigner[1].price;
+        } else {
+          return 0; // or any default value you want
+        }
+      },
+      capacity() {
+        return parseInt(this.quantityAdult) + parseInt(this.quantityChild) + parseInt(this.quantitySnr);
       },
       mobileNum: {
         get(){

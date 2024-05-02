@@ -3,7 +3,6 @@
     <v-card flat class=" d-flex flex-column justify-content-center rounded-5 " max-width="500">
       <v-card-item>
         <v-card-title class="d-flex align-items-center justify-content-center">
-
           <h2 class="text-center mt-2 text-green-darken-3">Congratulation!</h2>
           <v-icon class="mdi mdi-party-popper ms-3" size="x-large" color="green-darken-3"></v-icon>
         </v-card-title>
@@ -20,9 +19,6 @@
         <v-icon class="mdi mdi-check-circle-outline text-success my-0"
         size="x-large"></v-icon>
       </v-card-subtitle> -->
-
-
-
         <div class="d-flex justify-content-center mt-0">
           <v-btn size="small" class="mb-3 mt-0 me-2 text-white" rounded="xl" color="green-darken-4"
             @click="download">Download</v-btn>
@@ -30,23 +26,15 @@
             @click="$router.push('/')">Home</v-btn>
         </div>
       </v-card-item>
-
-
-
     </v-card>
     <!-- <h3 class="text-center mt-4"></h3>
-  
-<p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
+  <p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
     <!-- <hr class="mx-5"> -->
-
-
-    <div class="m-ticket mt-4 mb-5">
+    <div class="m-ticket mt-4 mb-5" ref="ticket">
       <div class="d-flex pt-2 pb-1 justify-content-center w-100 bg-grey-darken-4" style="background-color: #110b03;">
         <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
         <h5 class="text-center text-white">Aksharam Museum</h5>
       </div>
-
-
       <p class="m">Aksharam</p>
       <div class="movie-details d-flex flex-column align-items-center">
         <p>{{ adultsCount + childrenCount }} Ticket(s)</p>
@@ -56,7 +44,7 @@
         <p class="mb-0" v-if="userDetails.Seniors">Senior Citizens : {{ seniorCount }}</p>
       </div>
       <div class="info">
-        -----------------------------------------------------------
+        <v-divider></v-divider>
       </div>
       <div class="ticket-details mt-1 d-flex flex-column align-items-center">
         <p class="m-0">{{ adultsCount + childrenCount }} Ticket(s)</p>
@@ -72,28 +60,24 @@
         <p>Rs.{{ userDetails.Amount }}/-</p>
       </div>
     </div>
-
   </div>
-
-
-
-
-
-
-
-
-
-
 </template>
 <script>
-
+import html2pdf from 'html2pdf.js'
 export default {
-
+  methods: {
+    download() {
+      const ticketElement = this.$refs.ticket;
+      ticketElement.style.margin = 'auto'; // Set margin to 'auto' to horizontally center the element
+      ticketElement.style.display = 'block';
+      html2pdf().from(ticketElement).save();
+    },
+},
 computed: {
    qrdetails(){
      return this.$store.getters.getQR || {};
    },
-  
+ 
   userDetails() {
       // Parse userDetails string into an object
       const userDetailsString = this.qrdetails.userDetails || '';

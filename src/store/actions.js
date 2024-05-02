@@ -1,20 +1,20 @@
 import axios from 'axios';
 export default {
     //to filter public, institution & foreigner
-    async loadPrice({ rootGetters }) {
+    async loadPrice({ rootGetters, commit }) {
         try {
             const url = rootGetters.getUrl;
             const response = await axios.get(`${url}/api/details/loadPrice`);
             if (response.status === 200) {
                 const ctg = response.data;
                 const publicTickets = ctg.filter(ticket => ticket.category === 'public');
-                this.$store.commit('setPublic', publicTickets);
+                commit('setPublic', publicTickets);
                 const instituteTickets = ctg.filter(ticket => ticket.category === 'institution');
-                this.$store.commit('setInstitute', instituteTickets);
+                commit('setInstitute', instituteTickets);
                 const foreignTickets = ctg.filter(ticket => ticket.category === 'foreigner');
-                this.$store.commit('setForeign', foreignTickets)
-                const tax = this.ctg.filter(ticket => ticket.category === 'tax');
-                this.$store.commit('setTax', tax)
+                commit('setForeign', foreignTickets)
+                const tax = ctg.filter(ticket => ticket.category === 'tax');
+                commit('setTax', tax)
             }
         }
         catch (error) {
@@ -38,5 +38,99 @@ export default {
         catch (error) {
           console.error(error)
         }
+    },
+    //validate otp
+    async verifyOtp({rootGetters}, payload) {
+      try {
+        const url = rootGetters.getUrl;
+        const response = await axios.post(`${url}/api/2factor/validate-otp`, {
+          "enteredOtp": payload.otp,
+          "sessionId": rootGetters.getsession.Details,
+          "mobileNumber": payload.mobile
+        });
+        if (response.status === 200) {
+           return true;
+        }
+      }
+      catch (error) {
+        throw new Error(error.response.data.message);
+      }
+    },
+  //get all slots 
+  async getSlots({ rootGetters, commit }) {
+      try {
+        const url = rootGetters.getUrl;
+        const response = await axios.get(`${url}/api/stime/getSlot`);
+        if (response.status === 200) {
+           const filteredIds = response.data
+            .filter(obj => obj.status === true)
+            .map(obj => obj.id);
+          console.log(filteredIds);
+          commit('setSlots', filteredIds);
+          return true;
+        }
+      }
+      catch (error) {
+        console.error(error)
+      }
+  },
+  //get slots by date
+  async getSlotDate({ rootGetters, commit }, payload) {
+    try
+      {
+        console.log('date clicked')
+        const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}`);
+        if (response.status === 200) {
+          console.log(response.data);
+          commit('setSelectedSlot', response.data)
+        }
+      }
+      catch (error) {
+        console.error(error)
+      }
+  },
+  //lock slot
+  async lockSlot({ rootGetters,commit}, payload) {
+    try
+      {
+        const res = await axios.get(`${rootGetters.getUrl}/api/booking/lock?capacity=${payload.capacity}&visitDate=${payload.date}&slotName=${payload.slot}&category=${payload.cat}`)
+        if (res.status === 200) {
+          console.log('successfully locked')
+          console.log(res.data)
+          commit('setCapacityId', res.data);
+          return true;
+        }
+      }
+      catch (error) {
+        console.error(error);
+        alert('Sorry, capacity not available')
+      }
+  },
+  //submit details
+  async submitDetails({ rootGetters }, payload) {
+    try {
+     const url = rootGetters.getUrl;
+     const response = await axios.post(`${url}/api/details/submit`, payload);
+     if (response.status === 200) {
+      return response.data.amount;
+     }
+    } 
+    catch (error) {
+      console.error(error);
     }
+  },
+  //create orderid with razorpay
+  async createOrder({ rootGetters, commit }, payload) {
+    try {
+     const url = rootGetters.getUrl;
+     const response = await axios.post(`${url}/api/payment/create-order`, payload);
+      if (response.status === 200) {
+        commit('setRazor', response.data)
+        return true;
+      }
+    } 
+    catch (error) {
+      console.error(error);
     }
+  }
+}

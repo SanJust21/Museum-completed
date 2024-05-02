@@ -61,9 +61,11 @@ export default {
             "paymentId": this.pay_id,
             "signature": this.signature,
           });
+          
           if (response1.status === 200) {
             const response2 = await axios.post(`${this.url}/api/qr/book`, { "paymentid": this.pay_id });
             if (response2.status === 200) {
+              sessionStorage.clear();
               this.$store.commit('setQR', response2.data);
               this.$router.push('/ticket')
             }

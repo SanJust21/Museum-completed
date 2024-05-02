@@ -16,6 +16,11 @@
           <h6 class="col-sm-6 col-2 data">{{ details.cat }}</h6>
         </div>
         <div class="row">
+          <h6 class="col-sm-4 col-3">Slot</h6>
+          <h6 class="col-sm-1 col-1">:</h6>
+          <h6 class="col-sm-6 col-2 data text-lowercase ">{{ formatTime(details.slot) }}</h6>
+        </div>
+        <div class="row">
           <h6 class="col-sm-4 col-3">{{ details.cat === 'institution' ? 'Name of Institution' : 'Name' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-3 data">{{ details.name }}</h6>
@@ -108,31 +113,51 @@
   <div v-if="payon">
     <RazorPayment />
   </div>
+  <v-overlay :model-value="overlay" class="align-center justify-center">
+    <v-progress-circular color="primary" size="64" indeterminate></v-progress-circular>
+  </v-overlay>
 </template>
 
 <script>
 import RazorPayment from './RazorPayment.vue';
-import axios from 'axios';
+// import axios from 'axios';
 export default {
   data() {
     return {
       payon: false,
       url: this.$store.getters.getUrl,
+      overlay: false,
     }
   },
 
   components: {
     RazorPayment
   },
+  watch: {
+    overlay(val) {
+      val && setTimeout(() => {
+        this.overlay = false
+      }, 3000)
+    },
+  },
   methods: {
     editPage() {
       this.$router.push('/booking-page')
     },
+    formatTime(timeString) {
+      const [hours, minutes] = timeString.split(':');
+      let hoursInt = parseInt(hours, 10);
+      const ampm = hoursInt >= 12 ? 'pm' : 'am';
+      hoursInt = hoursInt % 12;
+      hoursInt = hoursInt ? hoursInt : 12; // Handle midnight (0 hours)
+      return `${hoursInt}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+    },
     async pay() {
       try {
         if (this.details.cat === "institution") {
-          const response = await axios.post(`${this.url}/api/details/submit`, {
+          const payload = {
             "type": this.details.cat,
+            "bookingId" : this.bookingId,
             "institutionName": this.details.name,
             "mobileNumber": this.details.mobile,
             "bookDate": this.details.bDate,
@@ -143,18 +168,18 @@ export default {
             "visitDate": this.details.date,
             "totalPrice": this.grandTotal,
             "sessionId": this.session.Details,
-          });
-          if (response.status === 200) {
-            const amount = response.data.amount;
+          };
+          const response = await this.$store.dispatch('submitDetails', payload);
+          if (response) {
+            const amount = response;
             if (window.confirm('Are you sure you want to continue to pay')) {
-              console.log('backend api to razorpay')
               try {
-                const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
+                const payload1 = {
                   "amount": amount,
                   "sessionId": this.session.Details
-                });
-                if (response1.status === 200) {
-                  this.$store.commit('setRazor', response1.data)
+                }
+                const response1 = await this.$store.dispatch("createOrder", payload1);
+                if (response1) {
                   this.payon = true;
                 }
               }
@@ -166,8 +191,9 @@ export default {
         }
         else {
           if (this.details.cat === "public") {
-            const response = await axios.post(`${this.url}/api/details/submit`, {
+            const payload = {
               "type": this.details.cat,
+              "bookingId": this.bookingId,
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
@@ -178,19 +204,18 @@ export default {
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
               "totalPrice": this.grandTotal
-            });
-            if (response.status === 200) {
-              const amount = response.data.amount;
+            };
+            const response = await this.$store.dispatch('submitDetails', payload);
+            if (response) {
+              const amount = response;
               if (window.confirm('Are you sure you want to continue to pay')) {
-                console.log('backend api to razorpay')
                 try {
-                  const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
+                  const payload1 = {
                     "amount": amount,
                     "sessionId": this.session.Details
-                  });
-                  if (response1.status === 200) {
-                    console.log('razorpay response from backend', response1.data)
-                    this.$store.commit('setRazor', response1.data)
+                  }
+                  const response1 = await this.$store.dispatch("createOrder", payload1);
+                  if (response1) {
                     this.payon = true;
                   }
                 }
@@ -201,8 +226,9 @@ export default {
             }
           }
           else {
-            const response = await axios.post(`${this.url}/api/details/submit`, {
+            const payload = {
               "type": this.details.cat,
+              "bookingId": this.bookingId,
               "name": this.details.name,
               "mobileNumber": this.details.mobile,
               "email": this.details.email,
@@ -212,25 +238,28 @@ export default {
               "visitDate": this.details.date,
               "sessionId": this.session.Details,
               "totalPrice": this.grandTotal
-            });
-            if (response.status === 200) {
-              const amount = response.data.amount;
-              if (window.confirm('Are you sure you want to continue to pay')) {
-                console.log('backend api to razorpay')
+            };
+            const response = await this.$store.dispatch('submitDetails', payload);
+            if (response) {
+              const amount = response;
+              const confirm = window.confirm('Are you sure you want to continue to pay');
+              if (confirm) {
                 try {
-                  const response1 = await axios.post(`${this.url}/api/payment/create-order`, {
+                  const payload1 = {
                     "amount": amount,
                     "sessionId": this.session.Details
-                  });
-                  if (response1.status === 200) {
-                    console.log('razorpay response from backend', response1.data)
-                    this.$store.commit('setRazor', response1.data)
+                  }
+                  const response1 = await this.$store.dispatch("createOrder", payload1);
+                  if (response1) {
                     this.payon = true;
                   }
                 }
                 catch (error) {
                   console.error(error)
                 }
+              }
+              else {
+                this.$router.push('/');
               }
             }
           }
@@ -242,6 +271,9 @@ export default {
     },
   },
   computed: {
+    bookingId() {
+      return this.$store.getters.getCapacityId
+    },
     details() {
       return this.$store.getters.getDetails;
     },

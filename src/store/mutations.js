@@ -53,4 +53,16 @@ export default {
         state.qrDetails = payload;
         sessionStorage.setItem('qrDetails', JSON.stringify(payload));
     },
+    setSlots(state, payload) {
+        state.activeSlots = payload;
+        sessionStorage.setItem('activeSlots', JSON.stringify(payload));
+    },
+    setSelectedSlot(state, payload) {
+        state.selectedSlots = payload;
+        sessionStorage.setItem('selectedSlots', JSON.stringify(payload));
+    },
+    setCapacityId(state, payload) {
+        state.capacityId = payload;
+        sessionStorage.setItem('capacityId', payload);
+    }
 };

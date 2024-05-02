@@ -1,81 +1,74 @@
 <template>
+  <v-responsive>
+    <div class="d-flex justify-content-center flex-wrap mx-auto bg-body-tertiary py-4">
+      <div class="d-flex flex-column align-items-center">
 
-  <div class="d-flex justify-content-center flex-wrap mx-auto bg-body-tertiary py-4">
-    <div class="d-flex flex-column align-items-center">
-      <v-date-picker v-model="date" color="light-green-darken-4" :allowed-dates="allowedDates" min="2024-01-01"
-        :max='maxDate' class="mx-5 custom-date-picker" @click="setDate"></v-date-picker>
-      <div class="d-flex">
-        <v-icon class="mdi mdi-circle-medium text-success"></v-icon>
-        <p class="text-success me-4">Available</p>
-        <v-icon class="mdi mdi-circle-medium text-warning"></v-icon>
-        <p class="text-warning me-4">Limited</p>
-        <v-icon class="mdi mdi-circle-medium text-danger"></v-icon>
-        <p class="text-danger me-1">Sold Out</p>
-      </div>
-    </div>
-    <div v-if="date" class="d-flex mx-5 flex-column ms-5 ps-5" style="width:500px">
-      <!-- Capacity -->
-      <div class="ms-3">
-        <h6 class="mt-3 mb-0">{{ slot ? 'Slot' : 'Choose a Slot' }}:</h6>
-        <div class="capacity mb-0">
-          <div class="d-flex">
-            <div class="d-flex align-items-start">
-              <input type="radio" value="slot1" id="slot1" class="me-1 mt-2" v-model="slot" name="slot1"
-                @click="$store.commit('setCapacity', 'slot1');" />
-              <div class="d-flex flex-column">
-                <label for="slot1" class="me-5">Slot 1</label>
-                <label for="slot1" class="me-5 text-warning" style="font-size: 12px;"><i>10 remaining</i></label>
-              </div>
-            </div>
-            <div class="d-flex align-items-start">
-              <input type="radio" value="slot2" id="slot2" class="me-1 mt-1" v-model="slot" name="slot2"
-                @click="$store.commit('setCapacity', 'slot2');" />
-              <div class="d-flex flex-column">
-                <label for="slot2" class="me-5">Slot 2</label>
-                <label for="slot2" class="me-5 text-success" style="font-size: 12px;"><i>50 remaining</i></label>
-              </div>
-            </div>
-            <div class="d-flex align-items-start">
-              <input type="radio" value="slot3" id="slot3" class="me-1 mt-1" v-model="slot" name="slot3"
-                @click="$store.commit('setCapacity', 'slot3');" />
-              <div class="d-flex flex-column">
-                <label for="slot3" class="me-5">Slot 3</label>
-                <label for="slot3" class="me-5 text-danger" style="font-size: 12px; "><i>Sold out</i></label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Category -->
-        <h6 class="mt-1 mb-0">{{ category ? 'Category' : 'Choose a category' }}:</h6>
+        <v-date-picker v-model="date" color="light-green-darken-4" :allowed-dates="allowedDates" min="2024-01-01"
+          :max='maxDate' class="mx-5 custom-date-picker" @click="setDate" max-width="350"></v-date-picker>
         <div class="d-flex">
-          <div>
-            <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"
-              @change="$store.commit('setCategory', category);" />
-            <label for="public" class="me-5">
-              <p>Public</p>
-            </label>
-          </div>
-          <div>
-            <input type="radio" value="institution" id="institution" class="me-1" v-model="category" name="category"
-              @change="$store.commit('setCategory', category);" />
-            <label for="institution" class="me-5">
-              <p>Institution</p>
-            </label>
-          </div>
-          <div>
-            <input type="radio" value="foreigner" id="foreigner" class="me-1" v-model="category" name="category"
-              @change="$store.commit('setCategory', category);" />
-            <label for="foreigner" class="me-5">
-              <p>Foreigner</p>
-            </label>
-          </div>
+          <v-icon class="mdi mdi-circle-medium text-success"></v-icon>
+          <p class="text-success me-4">Available</p>
+          <v-icon class="mdi mdi-circle-medium text-warning"></v-icon>
+          <p class="text-warning me-4">Limited</p>
+          <v-icon class="mdi mdi-circle-medium text-danger"></v-icon>
+          <p class="text-danger me-1">Sold Out</p>
         </div>
       </div>
-      <div class="mt-1 mb-0" v-if="category">
-        <router-view></router-view>
+      <div v-if="date" class="d-flex mx-5 flex-column ms-5 ps-5 container" style="width:500px;" ref="dateContainer">
+        <!-- Capacity -->
+        <div class="ms-3">
+          <h6 class="mt-3 mb-0">{{ slots ? 'Slot' : 'Choose a Slot' }}:</h6>
+          <div class="capacity mb-0">
+            <div class="d-flex flex-wrap">
+              <div v-for="slot in selectedSlot" :key="slot.id">
+                <div v-if="slot.status" class="d-flex align-items-start">
+                  <input type="radio" :value="slot.startTime" :id="'slot' + slot.id" class="me-1 mt-2" v-model="slots"
+                    :name="category" @change="setCapacity(slot.startTime)" />
+                  <div class="d-flex flex-column">
+                    <label :for="'slot' + slot.id" class="me-5">{{ formatTime(slot.startTime) }} - {{
+                      formatTime(slot.endTime) }}</label>
+                    <label :for="'slot' + slot.id" class="me-5" style="font-size: 12px;"
+                      :style="{ color: getRemainingColor(slot.capacity, 100 ) }"><i>{{
+                        slot.capacity }} remaining</i></label>
+                  </div>
+                </div>
+              </div>
+        
+            </div>
+          </div>
+          <!-- Category -->
+
+          <h6 class="mt-1 mb-0">{{ category ? 'Category' : 'Choose a category' }}:</h6>
+          <div class="d-flex" ref="routerViewContainer">
+            <div>
+              <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"
+                @change="setCategory" />
+              <label for="public" class="me-5">
+                <p>Public</p>
+              </label>
+            </div>
+            <div>
+              <input type="radio" value="institution" id="institution" class="me-1" v-model="category" name="category"
+                @change="setCategory" />
+              <label for="institution" class="me-5">
+                <p>Institution</p>
+              </label>
+            </div>
+            <div>
+              <input type="radio" value="foreigner" id="foreigner" class="me-1" v-model="category" name="category"
+                @change="setCategory" />
+              <label for="foreigner" class="me-5">
+                <p>Foreigner</p>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="mt-1 mb-0" v-if="category">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
-  </div>
+  </v-responsive>
 </template>
 <script>
 // import axios from 'axios';
@@ -88,7 +81,7 @@ export default {
       formattedDate: null,
       bookingDate: this.$store.getters.getBdate,
       category: this.$store.getters.getCategory,
-      slot: null
+      slots: this.$store.getters.getCapacity
     };
   },
   watch: {
@@ -97,6 +90,10 @@ export default {
     }
   },
   computed: {
+    selectedSlot() {
+      return this.$store.getters.getSelectedSlot
+    },
+
     maxDate() {
       const currentDate = new Date();
       const maxDate = new Date(currentDate);
@@ -106,10 +103,29 @@ export default {
   },
   mounted() {
     this.navigateToRoute(this.category);
+
   },
   methods: {
-    allowedDates(val) {
+    getRemainingColor(remainingCapacity, totalCapacity) {
+      const percentage = (remainingCapacity / totalCapacity) * 100;
+      if (percentage >= 50) {
+        return 'green';
+      } else if (percentage > 0) {
+        return 'orange';
+      } else {
+        return 'red';
+      }
+    },
+    formatTime(timeString) {
+      const [hours, minutes] = timeString.split(':');
+      let hoursInt = parseInt(hours, 10);
+      const ampm = hoursInt >= 12 ? 'pm' : 'am';
+      hoursInt = hoursInt % 12;
+      hoursInt = hoursInt ? hoursInt : 12; // Handle midnight (0 hours)
+      return `${hoursInt}:${minutes} ${ampm}`;
+    },
 
+    allowedDates(val) {
       const selectedDate = new Date(val);
       const today = new Date();
       selectedDate.setHours(0, 0, 0, 0);
@@ -120,6 +136,7 @@ export default {
       const isBeforeToday = selectedDate < today;
       return !isMonday && !isBeforeToday;
     },
+
     navigateToRoute(category) {
       if (category === 'public') {
         this.$router.push('/public-details-enter');
@@ -129,26 +146,25 @@ export default {
         this.$router.push('/foreigner-details-enter');
       }
     },
+    
+    setCapacity(slotId) {
+      this.slots = slotId
+      console.log('slotId', slotId)
+      console.log('category', this.slots)
+      this.$store.commit('setCapacity', slotId);
+    },
 
-    setDate() {
-      // Attempt to parse the date string into a Date object
+    async setDate() {
       const parsedDate = new Date(Date.parse(this.date));
       this.$store.commit('setOrigDate', this.date)
-      // Check if the parsedDate is a valid Date object
       if (!isNaN(parsedDate.getTime())) {
-        // If it's a valid Date, set it to this.date
         this.date = parsedDate;
-
-        // Format and set the date to the store
         var year = this.date.getFullYear();
         var month = String(this.date.getMonth() + 1).padStart(2, '0');
         var day = String(this.date.getDate()).padStart(2, '0');
         this.formattedDate = `${year}-${month}-${day}`;
-
-        // Set the formatted date to the store
         this.$store.commit('setDate', this.formattedDate);
-
-        // Set today's date to the store
+        this.$store.dispatch('getSlotDate', this.formattedDate);
         var today = new Date();
         month = String(today.getMonth() + 1).padStart(2, '0');
         day = String(today.getDate()).padStart(2, '0');
@@ -156,11 +172,27 @@ export default {
         today = `${year}-${month}-${day}`;
         this.$store.commit('setBdate', today);
       } else {
-        // Handle the case where the date string cannot be parsed
         console.error('Invalid date format:', this.date);
-        // Optionally, set a default date or handle the error in another way
       }
-    }
+      this.scrollToElement('dateContainer');
+    },
+    scrollToElement(refName) {
+      const element = this.$refs[refName];
+      if (element) {
+        const originalScrollBehavior = this.$router.options.scrollBehavior;
+        this.$router.options.scrollBehavior = null;
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          if (!this.scrolledToElement) {
+            this.$router.options.scrollBehavior = originalScrollBehavior;
+          }
+        }, 500);
+      }
+    },
+    setCategory() {
+      this.$store.commit('setCategory', this.category);
+      this.scrollToElement('routerViewContainer');
+    },
   }
 };
 </script>
