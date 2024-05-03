@@ -72,7 +72,10 @@ const router = createRouter({
             path: '/gallery-page',
             component: () => import('./components/GalleryPage.vue'),   
           },   
-          
+          {
+            path: '/loading_ticket',
+            component: () => import('./components/LoadingPage.vue'),
+          }
        
         ],
       },

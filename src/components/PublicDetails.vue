@@ -58,7 +58,6 @@
       </div>
     </v-form>
   </v-sheet>
-  {{ pub.adult }}
 </template>
 
 <script>

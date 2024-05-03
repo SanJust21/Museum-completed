@@ -2,21 +2,21 @@
   <v-responsive>
     <nav class="d-flex justify-content-between container-fluid"
       style="background-image: linear-gradient(to bottom right,#110b03,#3e7132);">
-      <div class="d-flex mt-md-3 mt-sm-1">
-        <v-img src="@/assets/logo.png" class="image" @click="$router.push('/')"></v-img>
-        <div class="d-flex flex-column justify-content-lg-center ">
-          <h1 class="logo-h1">അക്ഷരം</h1>
-          <p class="logo-p">Museum of letters, literature<br> & culture</p>
+      <div class="d-flex mt-sm-3 mt-2 logo" @click="$router.push('/')">
+        <v-img src="@/assets/logo.png" class="image"></v-img>
+        <div class="d-flex flex-column justify-content-sm-center mt-sm-0 mt-1">
+          <h1 class="logo-h1 mb-sm-1 mb-0">അക്ഷരം</h1>
+          <p class="logo-p lh-1">Museum of letters, literature<br> & culture</p>
         </div>
       </div>
-      <nav class="navbar navbar-expand-lg">
+      <!-- <nav class="navbar navbar-expand-lg">
         <div class="container-fluid d-flex justify-content-end">
           <button class="navbar-toggler p-1" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          </button> -->
+      <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0 d-flex align-items-end">
               <router-link to="/">
                 <li class="nav-item me-lg-5 text-white m-md-0 my-2 fs-5"> Home</li>
@@ -37,9 +37,9 @@
                 </li>
               </router-link>
             </ul>
-          </div>
-        </div>
-      </nav>
+          </div> -->
+      <!-- </div>
+      </nav> -->
     </nav>
     <router-view></router-view>
   </v-responsive>
@@ -49,20 +49,28 @@
 .logo-h1 {
         font-family: 'Noto Sans Malayalam', sans-serif;
         color: white;
-        font-size: 20px;
+        /* font-size: 20px; */
+        font-size: clamp(0.8rem, 3vw, 1.3rem);
         font-weight: 900;
         line-height: 16px;
-        margin-bottom: 0px;
     }
     .logo-p{
       color: white;
-        font-size: 12px;
-        line-height: 15px;
+        /* font-size: 12px; */
+        font-size: clamp(0.4rem, 3vw, 0.8rem);
+        line-height: 11px;
+    }
+    .logo{
+      cursor: pointer;
     }
     .image{
-height: 80px;
-width: 80px;
-cursor: pointer;
+/* height: 80px;
+width: 80px; */
+height: clamp(55px, 10vw, 80px);
+  /* Height scaled between 40px and 80px */
+  width: clamp(55px, 10vw, 80px);
+  /* Width scaled between 40px and 80px */
+
 }
 .nav-item,a {
   cursor: pointer;
@@ -76,7 +84,7 @@ a.router-link-active li {
   color: rgb(193, 193, 9) !important;
   transform: scale(1.1);
 }
-@media screen and (max-width: 1000px) {
+/* @media screen and (max-width: 1000px) {
   .image{
     height: 50px;
     width: 50px;
@@ -91,5 +99,5 @@ a.router-link-active li {
     font-size: 8px;
     line-height: 8px;
   }
-}
+} */
 </style>

@@ -8,6 +8,9 @@ export default {
     getCategory(state) {
         return state.category;
     },
+    getPayment(state) {
+        return state.payment_id;
+    },
     getSlots(state) {
         return state.activeSlots;  
     },

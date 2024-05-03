@@ -3,6 +3,10 @@ export default {
         state.pricing = payload;
         sessionStorage.setItem('pricing', JSON.stringify(payload));
     },
+    setPayment(state, payload) {
+        state.payment_id = payload;
+        sessionStorage.setItem('payment_id', payload);
+    },
     setPublic(state, payload) {
         state.pubPrice = payload;
     },

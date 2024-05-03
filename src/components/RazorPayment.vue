@@ -1,3 +1,4 @@
+
 <script>
 import axios from 'axios'
 
@@ -54,6 +55,7 @@ export default {
         this.pay_id = response.razorpay_payment_id;
         this.order_id = response.razorpay_order_id;
         this.signature = response.razorpay_signature;
+        this.$store.commit('setPayment', this.pay_id)
         // console.log(this.pay_id);
         try {
           const response1 = await axios.post(`${this.url}/api/payment/verify-payment`, {
@@ -63,12 +65,7 @@ export default {
           });
           
           if (response1.status === 200) {
-            const response2 = await axios.post(`${this.url}/api/qr/book`, { "paymentid": this.pay_id });
-            if (response2.status === 200) {
-              sessionStorage.clear();
-              this.$store.commit('setQR', response2.data);
-              this.$router.push('/ticket')
-            }
+            this.$router.push('/loading_ticket')
           }
         }
         catch (error) {

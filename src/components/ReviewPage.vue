@@ -150,7 +150,7 @@ export default {
       const ampm = hoursInt >= 12 ? 'pm' : 'am';
       hoursInt = hoursInt % 12;
       hoursInt = hoursInt ? hoursInt : 12; // Handle midnight (0 hours)
-      return `${hoursInt}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+      return `${hoursInt}:${minutes} ${ampm}`;
     },
     async pay() {
       try {

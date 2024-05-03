@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center px-5 flex-wrap py-3">
+  <div class="d-flex justify-content-center px-md-5 flex-wrap py-3">
     <v-card flat class=" d-flex flex-column justify-content-center rounded-5 " max-width="500">
       <v-card-item>
         <v-card-title class="d-flex align-items-center justify-content-center">
@@ -39,6 +39,7 @@
       <div class="movie-details d-flex flex-column align-items-center">
         <p>{{ adultsCount + childrenCount }} Ticket(s)</p>
         <p class="mb-0 mt-0">Date: {{ userDetails.Date }}</p>
+        <p class="mb-0 mt-0">Slot: {{ userDetails["Slot Name"] }}</p>
         <p class="mb-0">{{ userDetails.Teachers ? 'Teachers' : 'Adults' }}: {{ adultsCount }}</p>
         <p class="mb-0">{{ userDetails.Students ? 'Students' : 'Children' }}: {{ childrenCount }}</p>
         <p class="mb-0" v-if="userDetails.Seniors">Senior Citizens : {{ seniorCount }}</p>

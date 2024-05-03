@@ -2,8 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" width="600" height="650">
       <template v-slot:activator="{ props }">
-        <v-btn color="#74a965" class="btn rounded-5 book container fs-md-5 me-2 mt-3 py-2" v-bind="props">Book
-          Now</v-btn>
+        <v-btn color="#74a965" class="btn rounded-5 book container fs-md-5 me-md-5 me-1 py-2" v-bind="props" >Book <span>Now</span></v-btn>
       </template>
       <v-card width="auto" height="450">
         <v-card-title class="bg-success-subtle">
@@ -101,4 +100,7 @@
 .rate>li { 
   letter-spacing: -1px;
 }
+ @media screen and (max-width: 1200px){
+  
+ }
 </style>
