@@ -3,7 +3,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   allowedHosts: [
       'localhost',
-      '.aksharamuseum.com' 
+      '.aksharammuseum.com' 
     ],
   pluginOptions: {
     vuetify: {
