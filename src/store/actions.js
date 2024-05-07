@@ -89,7 +89,7 @@ export default {
     try
       {
         console.log('date clicked')
-        const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}`);
+        const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}&slotIds=1&slotIds=2&slotIds=3`);
         if (response.status === 200) {
           console.log(response.data);
           commit('setSelectedSlot', response.data)

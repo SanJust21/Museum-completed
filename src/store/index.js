@@ -7,7 +7,7 @@ const store = createStore({
   state() {
     return {
       mobile: sessionStorage.getItem('mobile') || null,
-      // base_url: 'http://192.168.1.13:8080',
+      // base_url: 'http://192.168.1.25:5000',
       // base_url: 'http://localhost:8448',
       payment_id: sessionStorage.getItem('payment_id') || null,
        base_url: 'https://aksharammuseum.com',
