@@ -1,10 +1,10 @@
 <template>
   <v-responsive>
-    <div class="d-flex justify-content-center flex-wrap mx-auto bg-body-tertiary py-4">
+    <div class="d-flex justify-content-center align-items-center flex-wrap mx-auto bg-body-tertiary py-4">
       <div class="d-flex flex-column align-items-center">
 
         <v-date-picker v-model="date" color="light-green-darken-4" :allowed-dates="allowedDates" min="2024-01-01"
-          :max='maxDate' class="mx-5 custom-date-picker" @click="setDate" max-width="350"></v-date-picker>
+          :max='maxDate' class="mx-5 custom-date-picker" @click="setDate" max-width="350" width="420"></v-date-picker>
         <div class="d-flex">
           <v-icon class="mdi mdi-circle-medium text-success"></v-icon>
           <p class="text-success me-4">Available</p>
@@ -27,7 +27,7 @@
                   <div class="d-flex flex-column">
                     <label :for="'slot' + slot.id" class="me-5">{{ formatTime(slot.startTime) }} - {{
                       formatTime(slot.endTime) }}</label>
-                    <label :for="'slot' + slot.id" class="me-5" style="font-size: 12px;"
+                    <label :for="'slot' + slot.id" class="me-5" style="font-size: 10px;"
                       :style="{ color: getRemainingColor(slot.capacity, 100 ) }"><i>{{
                         slot.capacity }} remaining</i></label>
                   </div>
@@ -37,8 +37,8 @@
             </div>
           </div>
           <!-- Category -->
-
-          <h6 class="mt-1 mb-0">{{ category ? 'Category' : 'Choose a category' }}:</h6>
+<v-divider></v-divider>
+          <h6 class="mt-3 mb-0">{{ category ? 'Category' : 'Choose a category' }}:</h6>
           <div class="d-flex" ref="routerViewContainer">
             <div>
               <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"

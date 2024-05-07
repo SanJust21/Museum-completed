@@ -1,5 +1,5 @@
 <template>
-  <v-sheet width="350">
+  <v-sheet width="450" max-width="320" class="mx-sm-auto">
     <v-form ref="form" class="p-3">
       <v-text-field v-model="name" density="comfortable" variant="underlined" label="Name*" :rules="nameRules"
         required></v-text-field>
@@ -8,7 +8,7 @@
       <v-text-field v-model="email" density="comfortable" variant="underlined" :rules="emailRules" label="E-mail*"
         required></v-text-field>
       <div class="d-flex justify-content-between align-items-center mt-1 mb-2">
-        <h6 class="mt-1">No. of Adults (Rs.{{ pub.adult }}): </h6>
+        <h6 class="mt-1">Adults (Rs.{{ pub.adult }}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityAdult', 'decrement')">
@@ -20,7 +20,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex flex-column mb-0">
-          <h6 class="mb-0 mt-3">No. of Children (Rs.{{ pub.child }}): </h6>
+          <h6 class="mb-0 mt-3">Children (Rs.{{ pub.child }}): </h6>
           <p class="lh-1 text-end mb-0" style="font-size:12px; font-style: italic;">( 5 to 12 years)</p>
         </div>
         <div class="input-group w-auto align-items-center">
@@ -34,7 +34,7 @@
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex flex-column">
-          <h6 class="mb-0 mt-3">No. of Senior Citizens (Rs.{{ pub.senior }}): </h6>
+          <h6 class="mb-0 mt-3">Senior Citizens (Rs.{{ pub.senior }}): </h6>
           <p class="lh-1 text-end" style="font-size:12px; font-style: italic;">( above 65 years)</p>
         </div>
         <div class="input-group w-auto align-items-center pt-0">
@@ -47,14 +47,15 @@
         </div>
       </div>
       <hr>
-      <div class="d-flex justify-content-between my-0">
+      <div class="d-flex justify-content-around my-0">
         <h5> Total </h5>
         <h5> : </h5>
         <h5> <v-icon icon="mdi mdi-currency-inr" size="x-small">
           </v-icon>{{total}} </h5>
       </div>
       <div class="d-flex justify-content-center">
-        <v-btn class="mt-3 w-50 text-white" color="green-darken-4" @click="submit">Get Tickets</v-btn>
+        <v-btn class="mt-3 w-50 text-white" color="green-darken-4" @click="submit" :disabled="disabled"
+          :loading="disabled">Get Tickets</v-btn>
       </div>
     </v-form>
   </v-sheet>
@@ -71,6 +72,7 @@ export default {
       quantityChild: this.$store.getters.getDetails.child || 0,
       quantitySnr: this.$store.getters.getDetails.senior || 0,
       name: this.$store.getters.getDetails.name || '',
+      disabled: false,
       message: '',
       nameRules: [
         value => {
@@ -152,32 +154,41 @@ export default {
            this.$store.commit('setDetails', details)
            const amd = this.$store.getters.getDetails;
           console.log(amd);
-          try {
+            try {
+              this.disabled = true;
             const res = await this.$store.dispatch('lockSlot', {
               capacity: this.capacity,
               date: details.date,
               slot: details.slot,
               cat: details.cat
             })
-            if (res) {
+              if (res) {
+                this.disabled = false;
               this.$router.push('/review-details')
             } 
           }
-          catch (error) {
-            console.error(error);
-            this.message = 'Capacity not available'
+            catch (error) {
+              this.disabled = false;
+              console.error(error);
+              
+              this.message = 'Capacity not available'
+              alert(this.message)
            }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {
+            this.disabled = false;
             this.message = 'Please select your visit time!';
           }
           else if (this.$store.getters.getCategory === null) {
+            this.disabled = false;
             this.message = 'Please select your category';
           }
           else if (!valid) {
+            this.disabled = false;
             this.message = 'Please fill the required fields';
           }
+          this.disabled = false;
           alert(this.message)
         }
       },
@@ -223,7 +234,24 @@ export default {
       capacity() {
         return parseInt(this.quantityAdult) + parseInt(this.quantityChild) + parseInt(this.quantitySnr);
       },
+  },
+  watch: {
+    quantityAdult(value) {
+      if (value < 0 || value === '') {
+        this.quantityAdult = 0;
+      }
+    },
+    quantityChild(value) {
+      if (value < 0 || value === '') {
+        this.quantityChild = 0;
+      }
+    },
+    quantitySnr(value) {
+      if (value < 0 || value === '') {
+        this.quantitySnr = 0;
+      }
     }
+  }
   };
 </script>
 

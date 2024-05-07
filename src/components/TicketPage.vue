@@ -19,18 +19,21 @@
         <v-icon class="mdi mdi-check-circle-outline text-success my-0"
         size="x-large"></v-icon>
       </v-card-subtitle> -->
-        <div class="d-flex justify-content-center mt-0">
+        <div class="d-flex justify-content-center mt-0" v-if="downloading">
           <v-btn size="small" class="mb-3 mt-0 me-2 text-white" rounded="xl" color="green-darken-4"
             @click="download">Download</v-btn>
           <v-btn size="small" class="mb-3 mt-0 text-white" rounded="xl" color="green-darken-4"
             @click="$router.push('/')">Home</v-btn>
+        </div>
+        <div v-else class="text-center">
+          <h6>Your download will begin in <span class="text-primary fw-normal "><i>{{ resendCountdown }} seconds.</i></span></h6>
         </div>
       </v-card-item>
     </v-card>
     <!-- <h3 class="text-center mt-4"></h3>
   <p class="text-danger text-center">Take a Screenshot of your QR ticket and remember to bring it along when you visit.</p> -->
     <!-- <hr class="mx-5"> -->
-    <div class="m-ticket mt-4 mb-5" ref="ticket">
+    <div class="m-ticket mt-4 mb-5 border border-1 " ref="ticket">
       <div class="d-flex pt-2 pb-1 justify-content-center w-100 bg-grey-darken-4" style="background-color: #110b03;">
         <v-img src="@/assets/logo.png" class="me-1 flex-grow-0 " style="height:25px; width:35px"></v-img>
         <h5 class="text-center text-white">Aksharam Museum</h5>
@@ -39,7 +42,7 @@
       <div class="movie-details d-flex flex-column align-items-center">
         <p>{{ adultsCount + childrenCount }} Ticket(s)</p>
         <p class="mb-0 mt-0">Date: {{ userDetails.Date }}</p>
-        <p class="mb-0 mt-0">Slot: {{ userDetails["Slot Name"] }}</p>
+        <p class="mb-0">Slot: {{ slotTime }}</p>
         <p class="mb-0">{{ userDetails.Teachers ? 'Teachers' : 'Adults' }}: {{ adultsCount }}</p>
         <p class="mb-0">{{ userDetails.Students ? 'Students' : 'Children' }}: {{ childrenCount }}</p>
         <p class="mb-0" v-if="userDetails.Seniors">Senior Citizens : {{ seniorCount }}</p>
@@ -66,32 +69,92 @@
 <script>
 import html2pdf from 'html2pdf.js'
 export default {
+  data() {
+    return {
+      downloading: false,
+      resendTimeout: null,
+      resendCountdown: 5,
+    };
+  },
   methods: {
+    startResendTimer() {
+      const interval = setInterval(() => {
+        if (this.resendCountdown > 0) {
+          this.resendCountdown--;
+        } else {
+          clearInterval(interval); // Clear the timer when countdown reaches zero
+           // Set downloading state to true
+          this.download(); // Trigger the download
+          this.downloading = true;
+        }
+      }, 1000);
+    },
     download() {
+      // const ticketElement = this.$refs.ticket;
+      // ticketElement.style.margin = 'auto'; // Set margin to 'auto' to horizontally center the element
+      // ticketElement.style.display = 'block';
+      // html2pdf().from(ticketElement).save();
       const ticketElement = this.$refs.ticket;
       ticketElement.style.margin = 'auto'; // Set margin to 'auto' to horizontally center the element
       ticketElement.style.display = 'block';
-      html2pdf().from(ticketElement).save();
+
+      // Adjust settings for paper size
+      const options = {
+        margin: 30,
+        filename: 'aksharam_ticket.pdf',
+        image: { type: 'png', quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { format: 'A5', orientation: 'portrait' } // Set paper size to letter and orientation to portrait
+      };
+
+      html2pdf().from(ticketElement).set(options).save();
     },
-},
+    formatTime(time) {
+      // Extract hours and minutes
+      const [hours, minutes] = time.split(':');
+
+      // Convert hours to 12-hour format
+      let formattedHours = parseInt(hours, 10) % 12;
+      formattedHours = formattedHours === 0 ? 12 : formattedHours;
+
+      // Construct formatted time string
+      const formattedTime = `${formattedHours}:${minutes} ${hours < 12 ? 'am' : 'pm'}`;
+
+      return formattedTime;
+    }
+  },
+  mounted() {
+    this.startResendTimer();
+
+  },
+
 computed: {
    qrdetails(){
      return this.$store.getters.getQR || {};
    },
  
   userDetails() {
-      // Parse userDetails string into an object
-      const userDetailsString = this.qrdetails.userDetails || '';
-      const userDetailsArray = userDetailsString.split(', ');
-      const userDetailsObject = {};
+    // Parse userDetails string into an object
+    const userDetailsString = this.qrdetails.userDetails || '';
+    const userDetailsArray = userDetailsString.split(', ');
+    const userDetailsObject = {};
 
-      userDetailsArray.forEach((detail) => {
+    userDetailsArray.forEach((detail) => {
+      if (detail) {
         const [key, value] = detail.split(': ');
         userDetailsObject[key.trim()] = isNaN(value) ? value.trim() : parseFloat(value.trim());
+      }
       });
-
+  
       return userDetailsObject;
-    },
+  },
+  slotTime() {
+    // Extract slot time
+    const slot = this.userDetails["Slot Name"] || '';
+    // Format slot time
+    const formattedSlot = this.formatTime(slot);
+    return formattedSlot;
+  },
     adultsCount() {
       // Check if 'Teachers' key exists, if not, default to 0
       return this.userDetails.Teachers || this.userDetails.Adults || 0;

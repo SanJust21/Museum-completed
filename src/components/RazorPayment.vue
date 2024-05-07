@@ -85,6 +85,7 @@ export default {
     paymentObject.on('payment.failed', function (response) {
       console.log(response.error)
       alert(response.error.description);
+      
     });
     paymentObject.open();
   }

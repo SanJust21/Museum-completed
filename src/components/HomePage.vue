@@ -1,11 +1,11 @@
 <template>
   <div class="container-fluid px-0 cover">
-    <nav class="d-flex justify-content-between align-items-center container-fluid">
-      <div class="d-flex mt-md-3 mt-sm-1">
+    <nav class="d-flex justify-content-between align-items-center container-fluid p-0 gap-2">
+      <div class="d-flex mt-md-3 mt-sm-3 ms-md-2 ms-0">
         <v-img src="@/assets/logo.png" class="image"></v-img>
-        <div class="d-flex flex-column justify-content-lg-center ">
-          <h1 class="logo-h1">അക്ഷരം</h1>
-          <p class="logo-p">Museum of letters, literature<br> & culture</p>
+        <div class="d-flex flex-column justify-content-lg-center mt-2">
+          <h1 class="logo-h1 mb-md-1 mb-0">അക്ഷരം</h1>
+          <p class="logo-p lh-1">Museum of letters, literature<br> & culture</p>
         </div>
       </div>
       <TermsConds />
@@ -37,25 +37,25 @@
       <!-- </nav> -->
     </nav>
     <div
-      class="d-flex lh-1 full-caption container-fluid pb-5 mb-5 ms-md-0 ps-md-0 pt-0 mt-0 align-items-center flex-wrap justify-content-xl-between justify-content-sm-center ">
+      class="d-flex lh-1 full-caption container-fluid ms-md-0 pb-5 ps-md-0 pt-0 mt-0 align-items-center flex-wrap justify-content-xl-between justify-content-center ">
       <p class="caption ">E</p>
-      <div class="d-flex flex-column sub-caption lh-1 justify-content-center">
-        <p>xplore</p>
-        <p>xperience</p>
-        <p>nchant</p>
+      <div class="d-flex flex-column sub-caption lh-1 justify-content-center ">
+        <p class="mb-lg-4 mb-md-4 mb-2 mt-sm-4">xplore</p>
+        <p class="mb-lg-4 mb-md-3 mb-2 mt-sm-4">xperience</p>
+        <p class="mt-sm-4">nchant</p>
       </div>
-      <ImageRotate class="mt-0 mt-ms-2" />
+      <ImageRotate class="mt-0" />
     </div>
   </div>
   <div class=" overflow-hidden py-5 mt-0 text-center bg-body-tertiary ">
     <div class="col-md-12 p-lg-5 mx-auto my-5">
-      <h1 class="display-3 p-2 fw-bold heading" v-motion-slide-visible-bottom>Unveiling the Tapestry of Tongues</h1>
-      <h4 class="fw-normal text-muted mb-3 " v-motion-slide-visible-bottom>Embark on a linguistic and cultural odyssey
+      <h1 class="display-3 p-2 fw-bold heading" v-motion-slide-visible>Unveiling the Tapestry of Tongues</h1>
+      <h4 class="fw-normal text-muted mb-3 " v-motion-slide-visible>Embark on a linguistic and cultural odyssey
         at Aksharam, museum of letters, literature & culture! Plan your immersive journey now and unlock the secrets of
         Kerala's vibrant heritage. </h4>
       <div class="d-flex gap-3 justify-content-center lead fw-normal">
         <a class="icon-link text-decoration-none" @click="$router.push('/about-page')" style="color: #221d18;">
-          <TermsConds/>
+          <TermsConds />
           <!-- <b>Learn more &rarr;</b> -->
         </a>
       </div>
@@ -82,14 +82,17 @@ export default {
   /* font-size: 20px; */font-size: 1.3rem;
   font-weight: 900;
   line-height: 16px;
-  margin-bottom: 1px;
-  margin-top: 5%;
+  font-size: clamp(0.8rem, 3vw, 1.3rem);
+  /* margin-bottom: 1px;
+  margin-top: 5%; */
 }
 .logo-p{
   color: white;
   /* font-size: 12px; */
   font-size: 0.8rem;
-  line-height: 16px;
+  font-size: clamp(0.4rem, 3vw, 0.8rem);
+    line-height: 11px;
+  /* line-height: 16px; */
 }
 /* .button{
   background-color: #f0403a;
@@ -141,8 +144,10 @@ a.router-link-active li {
   height: 100%;
 }
 .image{
-height: 80px;
-width: 80px;
+/* height: 80px;
+width: 80px; */
+height: clamp(55px, 15vw, 80px);
+  width: clamp(55px, 15vw, 80px);
 }
 button{
   background-color:#74a965 !important ;
@@ -184,6 +189,7 @@ button{
     font-size: 4vw;
   }
 } */
+
 </style>
 
  

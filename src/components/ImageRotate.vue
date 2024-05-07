@@ -1,5 +1,5 @@
 <template>
-<div class="image-container container mt-4">
+<div class="image-container container mt-lg-4 mt-0">
         <v-img class="image left" src="@/assets/museum2.jpeg" alt="Left Image"></v-img>
         <v-img class="image middle" src="@/assets/museum.jpeg" alt="Middle Image"></v-img>
         <v-img class="image right" src="@/assets/museum3.jpeg" alt="Right Image"></v-img>
@@ -59,10 +59,15 @@
     transform: translateX(1%);
     transform: scale(1.3); 
 }
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1150px) {
+    .image-container {
+            width: 450px;
+            height: 450px;
+        }
+    
     .image {
-    width: 100px;
-    height: 130px;
+    width: 120px;
+    height: 160px;
 }
 .image.middle {
     z-index: 2;
@@ -85,5 +90,37 @@
     transform: scale(1.3);
 
 }
+}
+@media screen and (max-width: 550px){
+    .image-container {
+            width: 300px;
+            height: 300px;
+        }
+.image {
+        width: 80px;
+        height: 100px;
+        border-radius: 0px 45px 0px 40px;
+    }
+        .image.middle {
+            z-index: 2;
+            top: 35%;
+            /* transfo2m: translateY(-50%); */
+            transform: scale(1.3);
+            /*  Adjust the scale for the zoom effect */
+        }
+    
+        .image.left {
+            left: 15%;
+            top: 10%;
+            transform: translateX(100%);
+            transform: scale(1.3);
+        }
+    
+        .image.right {
+            right: 15%;
+            top: 60%;
+            transform: scale(1.3);
+    
+        }
 }
 </style>

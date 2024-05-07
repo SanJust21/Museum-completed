@@ -1,5 +1,5 @@
 <template>
-  <v-sheet width="350">
+  <v-sheet width="450" max-width="320" class="mx-sm-auto">
     <v-form ref="form" class="p-3">
       <v-text-field v-model="name" density="comfortable" variant="underlined" label="Name of Institution*"
         :rules="nameRules" required></v-text-field>
@@ -9,7 +9,7 @@
         :rules="mobRules" required></v-text-field>
       <v-text-field v-model="email" variant="underlined" :rules="emailRules" label="E-mail*" required></v-text-field>
       <div class="d-flex justify-content-between align-items-center mt-1">
-        <h6>No. of Teachers (Rs.{{institute.teacher}}): </h6>
+        <h6>Teachers (Rs.{{institute.teacher}}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityAdult', 'decrement')">
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center my-3">
-        <h6>No. of Students (Rs.{{institute.student}}): </h6>
+        <h6>Students (Rs.{{institute.student}}): </h6>
         <div class="input-group w-auto align-items-center">
           <input type="button" value="-" class="border icon-shape bg-light font-weight-bold fs-5"
             @click="updateQuantity('quantityChild', 'decrement')">
@@ -31,14 +31,15 @@
         </div>
       </div>
       <hr>
-      <div class="d-flex justify-content-between ">
+      <div class="d-flex justify-content-around ">
         <h5> Total </h5>
         <h5> : </h5>
         <h5> <v-icon icon="mdi mdi-currency-inr" size="x-small">
           </v-icon>{{total}} </h5>
       </div>
       <div class="d-flex justify-content-center">
-        <v-btn class="mt-4 w-50 text-white" @click="submit" color="green-darken-4">Get Tickets</v-btn>
+        <v-btn class="mt-4 w-50 text-white" @click="submit" color="green-darken-4" :disabled="disabled"
+          :loading="disabled">Get Tickets</v-btn>
       </div>
     </v-form>
   </v-sheet>
@@ -51,7 +52,8 @@ import {mapGetters} from 'vuex';
      return{
       quantityAdult: this.$store.getters.getDetails.adult || 0,
       quantityChild: this.$store.getters.getDetails.child || 0,
-      name: this.$store.getters.getDetails.name || '',
+       name: this.$store.getters.getDetails.name || '',
+       disabled: false,
        // institute: this.$store.getters.getInstitute || [],
        institute: this.$store.getters.getPricing.institution || [],
       tax: this.$store.getters.getTax || [],
@@ -130,6 +132,7 @@ import {mapGetters} from 'vuex';
             }
             this.$store.commit('setDetails', details)
             try {
+              this.disabled = true;
               const res = await this.$store.dispatch('lockSlot', {
                 capacity: this.capacity,
                 date: details.date,
@@ -137,24 +140,31 @@ import {mapGetters} from 'vuex';
                 cat: details.cat
               })
               if (res) {
+                this.disabled = false;
                 this.$router.push('/review-details')
               }
             }
             catch (error) {
               console.error(error);
               this.message = 'Capacity not available'
+              this.disabled = false;
+              alert(this.message)
             }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {
+            this.disabled = false;
             this.message = 'Please select your visit time!';
           }
           else if (this.$store.getters.getCategory === null) {
+            this.disabled = false;
             this.message = 'Please select your category';
           }
           else if (!valid) {
+            this.disabled = false;
             this.message = 'Please fill the required fields';
           }
+          this.disabled = false;
           alert(this.message)
         }
       },
@@ -200,7 +210,19 @@ import {mapGetters} from 'vuex';
           this.$store.commit('setMobile', value); 
         },
       } 
-    } 
+  },
+  watch: {
+    quantityAdult(value) {
+      if (value < 0 || value === '') {
+        this.quantityAdult = 0;
+      }
+    },
+    quantityChild(value) {
+      if (value < 0 || value === '') {
+        this.quantityChild = 0;
+      }
+    }
+  } 
   }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <footer class="pt-3 pb-1 text-white">
+  <div class="container-fluid mt-0">
+    <footer class="pt-3 pb-2 text-white">
       <div class="row px-md-4 d-flex justify-content-between ">
         <div class="col-sm-6 col mb-3">
           <h6 class="ms-2">Visit us</h6>

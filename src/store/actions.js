@@ -101,20 +101,13 @@ export default {
   },
   //lock slot
   async lockSlot({ rootGetters,commit}, payload) {
-    try
-      {
-        const res = await axios.get(`${rootGetters.getUrl}/api/booking/lock?capacity=${payload.capacity}&visitDate=${payload.date}&slotName=${payload.slot}&category=${payload.cat}`)
+      const res = await axios.get(`${rootGetters.getUrl}/api/booking/lock?capacity=${payload.capacity}&visitDate=${payload.date}&slotName=${payload.slot}&category=${payload.cat}`)
         if (res.status === 200) {
           console.log('successfully locked')
           console.log(res.data)
           commit('setCapacityId', res.data);
           return true;
         }
-      }
-      catch (error) {
-        console.error(error);
-        alert('Sorry, capacity not available')
-      }
   },
   //submit details
   async submitDetails({ rootGetters }, payload) {

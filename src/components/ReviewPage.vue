@@ -11,54 +11,54 @@
         </div>
 
         <div class="row">
-          <h6 class="col-sm-4 col-3">Category</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Category</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-2 data">{{ details.cat }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.cat }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">Slot</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Slot</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-2 data text-lowercase ">{{ formatTime(details.slot) }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data text-lowercase ">{{ formatTime(details.slot) }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">{{ details.cat === 'institution' ? 'Name of Institution' : 'Name' }}</h6>
+          <h6 class="col-sm-5 col-xs-4 col">{{ details.cat === 'institution' ? 'Name of Institution' : 'Name' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.name }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.name }}</h6>
         </div>
         <div class="row" v-if="details.district">
-          <h6 class="col-sm-4 col-3">District</h6>
+          <h6 class="col-sm-5 col-xs-4 col">District</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.district }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.district }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">Email</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Email</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3" style="font-weight:400 ;">{{ details.email }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col" style="font-weight:400 ;">{{ details.email }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">Mobile number</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Mobile number</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.mobile }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.mobile }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">Visit date</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Visit date</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.date }}, {{ day }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.date }}, {{ day }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">No. of {{ details.cat === 'institution' ? 'teachers' : 'adults' }}</h6>
+          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'teachers' : 'adults' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.adult }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.adult }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-4 col-3">No. of {{ details.cat === 'institution' ? 'students' : 'children' }}</h6>
+          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'students' : 'children' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.child }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.child }}</h6>
         </div>
         <div class="row" v-if="details.cat === 'public'">
-          <h6 class="col-sm-4 col-3">No. of Senior Citizens</h6>
+          <h6 class="col-sm-5 col-xs-4 col">No. of Senior Citizens</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-3 data">{{ details.senior }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data">{{ details.senior }}</h6>
         </div>
         <hr>
         <div>
@@ -91,7 +91,7 @@
         <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
       </div>
       <div class="d-flex justify-content-end ">
-        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay">Pay</v-btn>
+        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable" :loading="disable">Pay</v-btn>
       </div>
       <div class="terms mb-3 mx-2 text-dark">
         <hr>
@@ -113,9 +113,7 @@
   <div v-if="payon">
     <RazorPayment />
   </div>
-  <v-overlay :model-value="overlay" class="align-center justify-center">
-    <v-progress-circular color="primary" size="64" indeterminate></v-progress-circular>
-  </v-overlay>
+  
 </template>
 
 <script>
@@ -126,20 +124,14 @@ export default {
     return {
       payon: false,
       url: this.$store.getters.getUrl,
-      overlay: false,
+      disable: false
     }
   },
 
   components: {
     RazorPayment
   },
-  watch: {
-    overlay(val) {
-      val && setTimeout(() => {
-        this.overlay = false
-      }, 3000)
-    },
-  },
+  
   methods: {
     editPage() {
       this.$router.push('/booking-page')
@@ -153,6 +145,7 @@ export default {
       return `${hoursInt}:${minutes} ${ampm}`;
     },
     async pay() {
+      this.disable = true;
       try {
         if (this.details.cat === "institution") {
           const payload = {
@@ -180,10 +173,12 @@ export default {
                 }
                 const response1 = await this.$store.dispatch("createOrder", payload1);
                 if (response1) {
+                  this.disable = false;
                   this.payon = true;
                 }
               }
               catch (error) {
+                this.disable = false;
                 console.error(error)
               }
             }
@@ -216,10 +211,12 @@ export default {
                   }
                   const response1 = await this.$store.dispatch("createOrder", payload1);
                   if (response1) {
+                    this.disable = false;
                     this.payon = true;
                   }
                 }
                 catch (error) {
+                  this.disable = false;
                   console.error(error)
                 }
               }
@@ -251,10 +248,12 @@ export default {
                   }
                   const response1 = await this.$store.dispatch("createOrder", payload1);
                   if (response1) {
+                    this.disable = false;
                     this.payon = true;
                   }
                 }
                 catch (error) {
+                  this.disable = false;
                   console.error(error)
                 }
               }
@@ -266,6 +265,7 @@ export default {
         }
       }
       catch (error) {
+        this.disable = false;
         alert('Error fetching user details', error);
       }
     },
