@@ -1,15 +1,12 @@
-module.exports = {
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
   transpileDependencies: true,
+  devServer: {
+        allowedHosts:"all"
+   },
   pluginOptions: {
     vuetify: {
-      // Configuration for Vuetify plugin options
-    }
-  },
-  configureWebpack: (config) => {
-    if (process.env.NODE_ENV === 'production') {
-      config.devServer = {
-        allowedHosts: ['.aksharammuseum.com']
-      };
-    }
-  }
-};
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
+  }
+})

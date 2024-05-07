@@ -2,7 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" width="600" height="650">
       <template v-slot:activator="{ props }">
-        <v-btn color="#74a965" class="btn rounded-5 book container fs-md-5 me-md-5 me-1 py-2" v-bind="props" >Book <span>Now</span></v-btn>
+        <v-btn color="#74a965" class="btn rounded-5 book container fs-md-5 me-md-5 me-1 py-2" v-bind="props">Book
+          <span>Now</span></v-btn>
       </template>
       <v-card width="auto" height="450">
         <v-card-title class="bg-success-subtle">
@@ -14,13 +15,13 @@
             <li>Closed on <b>Mondays</b> and <b> Hoildays.</b></li>
             <li>Ticket Rates :
               <ul class="rate">
-                <li> Public : Adult - Rs.<b>{{ pub.adult }}</b>/- , Children - Rs.<b>{{ pub.child }}</b>/-, Senior
-                  Citizen - Rs.<b>{{ pub.senior }}</b>/-</li>
-                <li> Institution : Teacher - Rs.<b>{{institute.teacher}}</b>/- , Student -
-                  Rs.<b>{{institute.student}}</b>/-</li>
-                <li> Foreigner : Adult - Rs.<b>{{ foreigner.foreign_adult }}</b>/- , Children - Rs.<b>{{
-                    foreigner.foreign_child
-                    }}</b>/-</li>
+                <li> Public : Adult - Rs.<b>{{ pub.adult? pub.adult : 'N/A' }}</b>/- , Children - Rs.<b>{{ pub.child?
+                    pub.child:'N/A'}}</b>/-, Senior Citizen - Rs.<b>{{ pub.senior? pub.senior: 'N/A' }}</b>/-</li>
+                <li> Institution : Teacher - Rs.<b>{{ institute.teacher ? institute.teacher :'N/A'}}</b>/- , Student -
+                  Rs.<b>{{ institute.student ? institute.student :'N/A'}}</b>/-</li>
+                <li> Foreigner : Adult - Rs.<b>{{ foreigner.foreign_adult ? foreigner.foreign_adult: 'N/A' }}</b>/- ,
+                  Children -
+                  Rs.<b>{{foreigner.foreign_child ? foreigner.foreign_child : 'N/A'}}</b>/-</li>
               </ul>
             </li>
             <li>Visitors are excepted to arrive atleast half an hour before closing time. </li>
