@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-5 bg-body-tertiary py-2">
+  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2">
     <div class="card main px-0 bg-white my-4 me-md-5 pb-4">
       <div class=" text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
         <!-- to take the full width -->
@@ -76,7 +76,8 @@
         </div>
       </div>
     </div>
-    <div div class="card mb-3" style="width: 350px; box-shadow: 5px 8px 5px 8px #7c76760e;">
+    <div div class="card mb-3 mx-lg-0 mx-4"
+      style="width: 350px; max-width:320px; box-shadow: 5px 8px 5px 8px #7c76760e;">
       <div class=" text-center card-header" style="background-color: #33691E; color: white;">
         <!-- to take the full width -->
         PAYMENT DETAILS
@@ -91,7 +92,8 @@
         <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
       </div>
       <div class="d-flex justify-content-end ">
-        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable" :loading="disable">Pay</v-btn>
+        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable"
+          :loading="disable">Pay</v-btn>
       </div>
       <div class="terms mb-3 mx-2 text-dark">
         <hr>
@@ -113,7 +115,7 @@
   <div v-if="payon">
     <RazorPayment />
   </div>
-  
+
 </template>
 
 <script>
