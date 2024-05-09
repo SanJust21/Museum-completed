@@ -5,7 +5,7 @@
         <!-- to take the full width -->
         ORDER SUMMARY
       </div>
-      <div class="container px-lg-5 px-4 details">
+      <div class="container px-lg-5 px-4 pe-2 details">
         <div class="d-flex justify-content-end ">
           <v-icon class=" edit mdi mdi-pencil" color="#388E3C" @click="editPage"></v-icon>
         </div>
@@ -305,7 +305,7 @@ export default {
 
 .main {
   box-shadow: 5px 8px 5px 8px #7c76760e;
-  width: 600px
+  width: 700px
 }
 
 .details h6 {
@@ -319,7 +319,7 @@ export default {
 
 @media screen and (max-width: 750px) {
   .main {
-    width: 82% !important;
+    width: 90% !important;
   }
 
   .main h6 {
