@@ -63,7 +63,7 @@ export default {
         }
       }
       catch (error) {
-        throw new Error(error.response.data.message);
+        throw (error.response.data.message);
       }
     },
   //get all slots 

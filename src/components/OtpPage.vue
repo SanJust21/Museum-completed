@@ -23,7 +23,7 @@
         </a>
       </div>
     </div>
-    <v-snackbar v-model="snackbar" color="blue-lighten-1" :timeout="timeout" location="top">
+    <v-snackbar v-model="snackbar" :color="color" :timeout="timeout" location="top">
       <p class="text-center fw-bold ">{{ message }}</p>
     </v-snackbar>
   </div>
@@ -36,9 +36,10 @@ export default {
     resendTimeout: null,
     resendCountdown: 30,
     error: '',
+    color: 'green',
     snackbar: false,
     buttonDisabled: false,
-    timeout: 6000, 
+    timeout: 3000, 
     message: 'New OTP sent to your mobile number !!'
   }),
   computed: {
@@ -64,8 +65,11 @@ export default {
         }
       }
       catch (error) {
+        console.error(error)
         this.buttonDisabled = false;
-        this.error = error;
+        this.message = error;
+        this.color= 'red'
+        this.snackbar = true; 
       }
     },
     async resendOtp() {

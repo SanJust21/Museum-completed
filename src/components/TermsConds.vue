@@ -9,8 +9,8 @@
         <v-card-title class="bg-success-subtle">
           <span class="text-h5 ">Terms and Conditions</span>
         </v-card-title>
-        <v-card-text>
-          <ul class="mt-md-3 mt-2 p-md-2 px-2">
+        <v-card-text class="pb-0">
+          <ul class="mt-md-3 mt-2 p-md-2 pb-md-0 px-2">
             <li>Museum Hours : <b>10:00 AM</b> to <b>5:00 PM</b></li>
             <li>Closed on <b>Mondays</b> and <b> Hoildays.</b></li>
             <li>Ticket Rates :
@@ -31,7 +31,7 @@
           </ul>
         </v-card-text>
         <v-card-actions class="mb-3">
-          <v-spacer></v-spacer>
+        
           <v-btn color="green-darken-1" variant="text" class="bg-white" @click="dialog = false">
             Disagree
           </v-btn>
