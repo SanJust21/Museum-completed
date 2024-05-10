@@ -21,25 +21,25 @@
           <h6 class="mt-3 mb-1" style="font-size: 18px;">{{ slots ? 'Slot' : 'Choose a Slot' }}:</h6>
           <div class="capacity mb-0">
             <div class="d-flex flex-wrap">
-              <div v-for="slot in selectedSlot" :key="slot.id" style="width: fit-content;">
-                <div v-if="slot.status" class="d-flex align-items-start mt-2">
-                  <input type="radio" :value="slot.startTime" :id="'slot' + slot.id" class="me-1 mt-2 lh-1"
-                    v-model="slots" :name="category" @change="setCapacity(slot.startTime)" />
-                  <div class="d-flex flex-column">
-                    <label :for="'slot' + slot.id" class="me-5 lh-1">{{ formatTime(slot.startTime) }} - {{
-                      formatTime(slot.endTime) }}</label>
-                    <label :for="'slot' + slot.id" class="me-5" style="font-size: 10px;"
-                      :style="{ color: getRemainingColor(slot.capacity, 100 ) }"><i>{{
-                        slot.capacity }} remaining</i></label>
+        
+              <div v-for="(slot,index) in selectedSlot" :key="index">
+                <div v-if="slot.status" class="d-flex align-items-start flex-column mt-2">
+                  <div class="me-3">
+                    <input type="radio" :value="slot.startTime" :id="index" class="mt-2 lh-1" v-model="slots"
+                      :name="category" @change="setCapacity(slot.startTime)" />
+                    {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}
                   </div>
+                  <p class="my-0 lh-1 ms-3" style="font-size: 10px;"
+                    :style="{ color: getRemainingColor(slot.capacity, 100) }"><i>{{
+                      slot.capacity }} remaining</i></p>
+                  
                 </div>
               </div>
-
             </div>
           </div>
           <!-- Category -->
           <v-divider></v-divider>
-          <h6 class="mt-3 mb-1" style="font-size: 18px;">{{ category ? 'Category' : 'Select your category' }}:</h6>
+          <h6 class="mt-3 mb-3" style="font-size: 18px;">{{ category ? 'Category' : 'Select your category' }}:</h6>
           <div class="d-flex flex-wrap" ref="routerViewContainer">
             <div>
               <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"
@@ -82,7 +82,8 @@ export default {
       formattedDate: null,
       bookingDate: this.$store.getters.getBdate,
       category: this.$store.getters.getCategory,
-      slots: this.$store.getters.getCapacity
+      slots: this.$store.getters.getCapacity,
+      // disabledDates: ["2024-05-11", "2024-05-22"]
     };
   },
   watch: {
@@ -131,8 +132,14 @@ export default {
       const today = new Date();
       selectedDate.setHours(0, 0, 0, 0);
       today.setHours(0, 0, 0, 0);
+      // const selectedDateString = selectedDate.toISOString().split('T')[0];
+      // console.log(selectedDateString)
+      // console.log(this.disabledDates.includes(selectedDateString))
+      // if (this.disabledDates.includes(selectedDateString)) {
+      //   return false; // Disable the date if it's in the list of disabled dates
+      // }
       const maxDate = new Date(today);
-      maxDate.setDate(today.getDate() + 15);
+      maxDate.setDate(today.getDate() + 60);
       const isMonday = selectedDate.getDay() === 1;
       const isBeforeToday = selectedDate < today;
       return !isMonday && !isBeforeToday;
@@ -156,6 +163,7 @@ export default {
     },
 
     async setDate() {
+      console.log('slot',this.selectedSlot)
       const parsedDate = new Date(Date.parse(this.date));
       this.$store.commit('setOrigDate', this.date)
       if (!isNaN(parsedDate.getTime())) {

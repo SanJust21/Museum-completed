@@ -40,9 +40,18 @@
           </v-icon>{{total}} </h5>
       </div>
       <div class="d-flex justify-content-center">
-        <v-btn class="mt-3 w-50 text-white" @click="submit" color="green-darken-4" :disabled="disabled" :loading="disabled">Get Tickets</v-btn>
+        <v-btn class="mt-3 w-50 text-white" @click="submit" color="green-darken-4" :disabled="disabled"
+          :loading="disabled">Get Tickets</v-btn>
       </div>
     </v-form>
+    <v-snackbar v-model="snackbar" :color="color" location="center" multi-line max-width="500" min-width="300">
+      {{ message }}
+      <template v-slot:actions>
+        <v-btn color="black" variant="text" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-sheet>
 </template>
 
@@ -57,6 +66,10 @@ export default {
       quantityChild: this.$store.getters.getDetails.child || 0,
       name: this.$store.getters.getDetails.name || '',
       disabled: false,
+      message: '',
+      color: 'green',
+      snackbar: false,
+      timeout: 3000,
       nameRules: [
         value => {
           if (value) return true
@@ -111,7 +124,9 @@ export default {
       const { valid } = await this.$refs.form.validate()
       if (valid && this.total !== 0 && this.$store.getters.getCategory !== null) {
         if (this.quantityAdult === 0 && this.quantityChild > 0) {
-          alert('Atleast one adult must be present.')
+          this.message = 'Atleast one adult must be present.'
+          this.color = 'red';
+          this.snackbar = true;
         }
         else {
           const details = {
@@ -142,27 +157,38 @@ export default {
             }
           }
           catch (error) {
-            console.error(error);
             this.disabled = false;
-            this.message = 'Capacity not available'
-            alert(this.message)
+            this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+            this.color = 'red';
+            this.snackbar = true;
           }
         }
       } else {
         if (this.$store.getters.getCapacity === null) {
           this.disabled = false;
           this.message = 'Please select your visit time!';
+          this.color = 'red';
+          this.snackbar = true;
         }
         else if (this.$store.getters.getCategory === null) {
           this.disabled = false;
-          this.message = 'Please select your category';
+          this.message = 'Please select your category!';
+          this.color = 'red';
+          this.snackbar = true;
+        }
+        else if (this.quantityAdult === 0 && this.quantityChild === 0) {
+          this.disabled = false;
+          this.message = 'Please enter number of people!';
+          this.color = 'red';
+          this.snackbar = true;
         }
         else if (!valid) {
           this.disabled = false;
-          this.message = 'Please fill the required fields';
+          this.message = 'Please fill the required fields!';
+          this.color = 'red';
+          this.snackbar = true;
         }
         this.disabled = false;
-        alert(this.message)
       }
     },
     updateQuantity(type, action) {
@@ -191,9 +217,9 @@ export default {
     },
     total() {
       if (this.foreigner) {
-        return this.quantityAdult * this.foreigner.foreign_adult + this.quantityChild * this.foreigner.foreign_child;
+        return this.quantityAdult * (this.foreigner.foreign_adult ? this.foreigner.foreign_adult : 0) + this.quantityChild * (this.foreigner.foreign_child?this.foreigner.foreign_child:0) ;
       } else {
-        return 0; // or any default value you want
+        return 0; 
       }
     },
     mobileNum: {

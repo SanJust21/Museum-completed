@@ -73,7 +73,7 @@ export default {
     return {
       downloading: false,
       resendTimeout: null,
-      resendCountdown: 5,
+      resendCountdown: 3,
     };
   },
   methods: {
@@ -101,7 +101,7 @@ export default {
       // Adjust settings for paper size
       const options = {
         margin: 30,
-        filename: 'aksharam_ticket.pdf',
+        filename: `aksharam_${this.userDetails["Booking ID"]}.pdf`,
         image: { type: 'png', quality: 1 },
         html2canvas: { scale: 2 },
         jsPDF: { format: 'A5', orientation: 'portrait' } // Set paper size to letter and orientation to portrait

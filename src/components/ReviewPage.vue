@@ -1,5 +1,6 @@
 <template>
-  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2">
+  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2"
+    v-if="!payon">
     <div class="card main px-0 bg-white my-4 me-md-5 pb-4">
       <div class=" text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
         <!-- to take the full width -->
@@ -63,16 +64,6 @@
         <hr>
         <div>
           <h5 class="mt-2 mb-1 text-end " style="color: #212121;">Sub Total : Rs.{{ details.total }}/-</h5>
-          <!-- <p class="text-end mb-0">GST ({{ tax[0].price }}%) : Rs.{{ details.totalTax }}/-</p> -->
-          <!-- <h5 class="mt-1 text-end">Grand Total : Rs.{{ details.total + details.totalTax }}/-</h5> -->
-          <!-- <div class="terms">
-            <hr>
-            <p>Ticket is Valid for the selected date it is purchased.</p> 
-            <p>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></p>
-            <p>Visitors are excepted to arrive atleast half an hour before closing time.</p>
-          </div> -->
-          <!-- <div class="d-flex justify-content-end ">
-            <v-btn class="mt-4 w-25 mb-5 text-white" color="green-darken-4" @click="editDetails">Edit</v-btn></div> -->
         </div>
       </div>
     </div>
@@ -112,10 +103,31 @@
       </div>
     </div>
   </div>
-  <div v-if="payon">
+  <div v-else style="height: 100vh;">
     <RazorPayment />
   </div>
-
+  <v-dialog width="400" max-width="320" v-model="dialogConfirm">
+    <v-card class="rounded-2" width="400" max-width="320">
+      <v-card-title class="bg-green-darken-2">
+        Confirm Payment
+      </v-card-title>
+      <v-card-text>
+        Are you sure you want to proceed to payment?
+      </v-card-text>
+      <v-card-actions class="d-block mx-2">
+        <v-btn color="#388E3C" @click="confirm" block variant="elevated">Yes</v-btn>
+        <v-btn @click="dialogConfirm = !dialogConfirm; disable = false;" block>Cancel</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-snackbar v-model="snackbar" :color="color" location="center" multi-line max-width="500" min-width="300">
+    {{ message }}
+    <template v-slot:actions>
+      <v-btn color="black" variant="text" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
@@ -126,7 +138,12 @@ export default {
     return {
       payon: false,
       url: this.$store.getters.getUrl,
-      disable: false
+      disable: false,
+      amount: null,
+      dialogConfirm: false,
+      message: '',
+      color: 'green',
+      snackbar: false,
     }
   },
 
@@ -166,24 +183,25 @@ export default {
           };
           const response = await this.$store.dispatch('submitDetails', payload);
           if (response) {
-            const amount = response;
-            if (window.confirm('Are you sure you want to continue to pay')) {
-              try {
-                const payload1 = {
-                  "amount": amount,
-                  "sessionId": this.session.Details
-                }
-                const response1 = await this.$store.dispatch("createOrder", payload1);
-                if (response1) {
-                  this.disable = false;
-                  this.payon = true;
-                }
-              }
-              catch (error) {
-                this.disable = false;
-                console.error(error)
-              }
-            }
+            this.amount = response;
+            this.dialogConfirm = true;
+            // if (window.confirm('Are you sure you want to continue to pay')) {
+            //   try {
+            //     const payload1 = {
+            //       "amount": amount,
+            //       "sessionId": this.session.Details
+            //     }
+            //     const response1 = await this.$store.dispatch("createOrder", payload1);
+            //     if (response1) {
+            //       this.disable = false;
+            //       this.payon = true;
+            //     }
+            //   }
+            //   catch (error) {
+            //     this.disable = false;
+            //     console.error(error)
+            //   }
+            // }
           }
         }
         else {
@@ -204,24 +222,25 @@ export default {
             };
             const response = await this.$store.dispatch('submitDetails', payload);
             if (response) {
-              const amount = response;
-              if (window.confirm('Are you sure you want to continue to pay')) {
-                try {
-                  const payload1 = {
-                    "amount": amount,
-                    "sessionId": this.session.Details
-                  }
-                  const response1 = await this.$store.dispatch("createOrder", payload1);
-                  if (response1) {
-                    this.disable = false;
-                    this.payon = true;
-                  }
-                }
-                catch (error) {
-                  this.disable = false;
-                  console.error(error)
-                }
-              }
+              this.amount = response;
+              this.dialogConfirm = true;
+              // if (window.confirm('Are you sure you want to continue to pay')) {
+              //   try {
+              //     const payload1 = {
+              //       "amount": amount,
+              //       "sessionId": this.session.Details
+              //     }
+              //     const response1 = await this.$store.dispatch("createOrder", payload1);
+              //     if (response1) {
+              //       this.disable = false;
+              //       this.payon = true;
+              //     }
+              //   }
+              //   catch (error) {
+              //     this.disable = false;
+              //     console.error(error)
+              //   }
+              // }
             }
           }
           else {
@@ -240,37 +259,45 @@ export default {
             };
             const response = await this.$store.dispatch('submitDetails', payload);
             if (response) {
-              const amount = response;
-              const confirm = window.confirm('Are you sure you want to continue to pay');
-              if (confirm) {
-                try {
-                  const payload1 = {
-                    "amount": amount,
-                    "sessionId": this.session.Details
-                  }
-                  const response1 = await this.$store.dispatch("createOrder", payload1);
-                  if (response1) {
-                    this.disable = false;
-                    this.payon = true;
-                  }
-                }
-                catch (error) {
-                  this.disable = false;
-                  console.error(error)
-                }
-              }
-              else {
-                this.$router.push('/');
-              }
+              this.amount = response;
+              this.dialogConfirm = true;
+              // const confirm = window.confirm('Are you sure you want to continue to pay');
+              // if (confirm) {
+                
+              // }
+              // else {
+              //   this.$router.push('/');
+              // }
             }
           }
         }
       }
       catch (error) {
+        console.log(error)
         this.disable = false;
-        alert('Error fetching user details', error);
+        alert('Sorry something went wrong! Please check the entered details or try again later.', error);
       }
     },
+    async confirm() {
+      this.dialogConfirm = false;
+      try {
+        const payload1 = {
+          "amount": this.amount,
+          "sessionId": this.session.Details
+        }
+        const response1 = await this.$store.dispatch("createOrder", payload1);
+        if (response1) {
+          this.disable = false;
+          this.payon = true;
+        }
+      }
+      catch (error) {
+        this.disable = false;
+        this.message = 'Something went wrong. Please try again later.';
+        this.color = 'red';
+        this.snackbar = true;
+      }
+    }
   },
   computed: {
     bookingId() {

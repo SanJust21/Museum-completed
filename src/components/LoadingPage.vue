@@ -1,6 +1,6 @@
 <template>
 
-    <div class="text-center" style="height: 700px;">
+    <div class="text-center" style="height: 100vh;">
         <!-- <v-btn append-icon="mdi-open-in-new" color="deep-purple-accent-4" @click="overlay = !overlay">
             Launch Application
         </v-btn> -->
@@ -8,9 +8,9 @@
             image="https://cdn.vuetifyjs.com/docs/images/components/v-empty-state/connection.svg"
             text="There might be a problem with your connection or our servers. Please check your internet connection or try again later. We appreciate your patience."
             title="Something Went Wrong" @click:action="getTicket"></v-empty-state>
-        <v-overlay :model-value="overlay" class="align-center justify-center">
+        <v-overlay :model-value="overlay" class="align-center justify-center" persistent>
             <div class="text-center fst-italic " v-if="!error">
-                <p>Please wait while the ticket is being generated</p>
+                <p>Please wait while the ticket is being generated. <br> Do not refresh the page.</p>
                 <v-progress-circular color="primary" size="64" indeterminate></v-progress-circular>
             </div>
 

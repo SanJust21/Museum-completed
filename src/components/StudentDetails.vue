@@ -42,6 +42,14 @@
           :loading="disabled">Get Tickets</v-btn>
       </div>
     </v-form>
+    <v-snackbar v-model="snackbar" :color="color" location="center" multi-line max-width="500" min-width="300">
+      {{ message }}
+      <template v-slot:actions>
+        <v-btn color="black" variant="text" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-sheet>
 </template>
 
@@ -58,7 +66,11 @@ import {mapGetters} from 'vuex';
        institute: this.$store.getters.getPricing.institution || [],
       tax: this.$store.getters.getTax || [],
       items : ['Thiruvananthapuram','Kollam','Pathanamthitta','Alappuzha','Kottayam','Idukki','Ernakulam','Thrissur','Palakkad','Malappuram','Kozhikode','Wayanad','Kannur','Kasaragod'],
-      district: this.$store.getters.getDetails.district || null,
+       district: this.$store.getters.getDetails.district || null,
+       message: '',
+       color: 'green',
+       snackbar: false,
+       timeout: 3000,
       nameRules: [
         value => {
           if (value) return true
@@ -112,7 +124,9 @@ import {mapGetters} from 'vuex';
         { 
           if(this.quantityAdult === 0 && this.quantityChild >0 ) 
           {
-            alert('Atleast one teacher must be present.') 
+            this.message = 'Atleast one adult must be present.'
+            this.color = 'red';
+            this.snackbar = true;
           }
           else 
           {
@@ -144,28 +158,39 @@ import {mapGetters} from 'vuex';
                 this.$router.push('/review-details')
               }
             }
-            catch (error) {
-              console.error(error);
-              this.message = 'Capacity not available'
+            catch (error) {      
               this.disabled = false;
-              alert(this.message)
+              this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+              this.color = 'red';
+              this.snackbar = true;
             }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {
             this.disabled = false;
             this.message = 'Please select your visit time!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           else if (this.$store.getters.getCategory === null) {
             this.disabled = false;
-            this.message = 'Please select your category';
+            this.message = 'Please select your category!';
+            this.color = 'red';
+            this.snackbar = true;
+          }
+          else if (this.quantityAdult === 0 && this.quantityChild === 0) {
+            this.disabled = false;
+            this.message = 'Please enter number of people!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           else if (!valid) {
             this.disabled = false;
-            this.message = 'Please fill the required fields';
+            this.message = 'Please fill the required fields!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           this.disabled = false;
-          alert(this.message)
         }
       },
       updateQuantity(type, action) {
@@ -180,7 +205,7 @@ import {mapGetters} from 'vuex';
       ...mapGetters(['getMobile']),
       total() {
         if (this.institute) {
-          return this.quantityAdult * this.institute.teacher + this.quantityChild * this.institute.student;
+          return this.quantityAdult * (this.institute.teacher ? this.institute.teacher : 0) + this.quantityChild * (this.institute.student ? this.institute.student: 0);
         } else {
           return 0;
         }

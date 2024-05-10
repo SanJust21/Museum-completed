@@ -1,4 +1,12 @@
-
+<template>
+  <v-overlay :model-value="overlay" class="align-center justify-center" persistent>
+    <div class="text-center fst-italic  fw-bold ">
+      <p>{{ proceed }}</p>
+        <p>Please do not refresh the page.</p>
+      <v-progress-circular color="primary" size="64" indeterminate></v-progress-circular>
+    </div>
+  </v-overlay>
+</template>
 <script>
 import axios from 'axios'
 
@@ -6,12 +14,14 @@ export default {
 
   data() {
     return {
+      overlay: true,
       script: `https://checkout.razorpay.com/v1/checkout.js`,
       // razor_id: 'rzp_test_Lh738g2oARGFbD',
       order_id: null,
       signature: null,
       pay_id: null,
       url: this.$store.getters.getUrl,
+      proceed: 'You are being redirected to payment gateway.'
     }
   },
   computed: {
@@ -28,7 +38,8 @@ export default {
         const script = document.createElement('script')
         script.src = this.script
         script.onload = () => {
-          resolve(true)
+          resolve(true);
+          this.overlay = false;
         }
         script.onerror = () => {
           resolve(false)
@@ -63,7 +74,7 @@ export default {
             "paymentId": this.pay_id,
             "signature": this.signature,
           });
-          
+
           if (response1.status === 200) {
             this.$router.push('/loading_ticket')
           }
@@ -78,16 +89,26 @@ export default {
         contact: this.details.mobile
       },
       "theme": {
-        "color": "#74a965"
+        "color": "#388E3C"
       },
     };
     const paymentObject = new window.Razorpay(options);
-    paymentObject.on('payment.failed', function (response) {
-      console.log(response.error)
-      alert(response.error.description);
-      
+    paymentObject.on('payment.failed', (response) => {
+      console.log('Payment failed event triggered');
+      console.log('Response:', response);
+
+      const proceed = confirm(`${response.error.description}. Do you want to proceed to another payment method?`);
+      console.log('Proceed:', proceed);
+
+      if (!proceed) {
+        this.proceed = 'You are being redirected to home page.'
+        this.overlay = true;
+        paymentObject.close();
+        setTimeout(() => { sessionStorage.clear(); this.$router.push('/'); }, 3000);
+      }
     });
     paymentObject.open();
-  }
-}
+  },
+  
+};
 </script>

@@ -58,6 +58,14 @@
           :loading="disabled">Get Tickets</v-btn>
       </div>
     </v-form>
+    <v-snackbar v-model="snackbar" :color="color"  location="center" multi-line max-width="500" min-width="300">
+      {{ message }}
+      <template v-slot:actions>
+        <v-btn color="black" variant="text" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-sheet>
 </template>
 
@@ -73,7 +81,10 @@ export default {
       quantitySnr: this.$store.getters.getDetails.senior || 0,
       name: this.$store.getters.getDetails.name || '',
       disabled: false,
-      message: '',
+       message: '',
+       color: 'green',
+       snackbar: false,
+       timeout: 3000,
       nameRules: [
         value => {
           if (value) return true
@@ -131,7 +142,9 @@ export default {
         {
           if (this.quantityAdult === 0 && this.quantityChild > 0) 
           {
-           this.message ='Atleast one adult must be present.'
+            this.message = 'Atleast one adult must be present.'
+            this.color = 'red';
+            this.snackbar = true;
           }
           else 
           {
@@ -152,11 +165,10 @@ export default {
             totalTax: this.totalTax
            };
            this.$store.commit('setDetails', details)
-           const amd = this.$store.getters.getDetails;
-          console.log(amd);
+          //  const amd = this.$store.getters.getDetails;
             try {
               this.disabled = true;
-            const res = await this.$store.dispatch('lockSlot', {
+              const res = await this.$store.dispatch('lockSlot', {
               capacity: this.capacity,
               date: details.date,
               slot: details.slot,
@@ -168,28 +180,38 @@ export default {
             } 
           }
             catch (error) {
-              this.disabled = false;
-              console.error(error);
-              
-              this.message = 'Capacity not available'
-              alert(this.message)
+              this.disabled = false;              
+              this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+              this.color = 'red';
+              this.snackbar = true;
            }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {
             this.disabled = false;
             this.message = 'Please select your visit time!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           else if (this.$store.getters.getCategory === null) {
             this.disabled = false;
-            this.message = 'Please select your category';
+            this.message = 'Please select your category!';
+            this.color = 'red';
+            this.snackbar = true;
+          }
+          else if (this.quantityAdult === 0 && this.quantityChild === 0 && this.quantitySnr === 0) {
+            this.disabled = false;
+            this.message = 'Please enter number of people!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           else if (!valid) {
             this.disabled = false;
-            this.message = 'Please fill the required fields';
+            this.message = 'Please fill the required fields!';
+            this.color = 'red';
+            this.snackbar = true;
           }
           this.disabled = false;
-          alert(this.message)
         }
       },
       updateQuantity(type, action) {
@@ -204,7 +226,7 @@ export default {
       ...mapGetters(['getMobile']),
       total() {
         if (this.pub) {
-          return this.quantityAdult * this.pub.adult + this.quantityChild * this.pub.child + this.quantitySnr * this.pub.senior;
+          return this.quantityAdult * (this.pub.adult ? this.pub.adult : 0) + this.quantityChild * (this.pub.child ? this.pub.child : 0) + this.quantitySnr * (this.pub.senior ? this.pub.senior:0) ;
         } else {
           return 0; 
         }

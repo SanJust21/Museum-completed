@@ -63,7 +63,12 @@ export default {
         }
       }
       catch (error) {
-        throw (error.response.data.message);
+        console.log(error)
+        if (error.response.data) {
+          throw (error.response.data.message);
+        }
+        else throw (error.response.message)
+        
       }
     },
   //get all slots 
@@ -91,8 +96,9 @@ export default {
         console.log('date clicked')
         const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}&slotIds=1&slotIds=2&slotIds=3&slotIds=4&slotIds=6`);
         if (response.status === 200) {
-          console.log(response.data);
-          commit('setSelectedSlot', response.data)
+          console.log('response from backend fore selected date',response.data);
+          const data = response.data.sort((a, b) => a.id - b.id);
+          commit('setSelectedSlot', data)
         }
       }
       catch (error) {
@@ -128,12 +134,14 @@ export default {
      const url = rootGetters.getUrl;
      const response = await axios.post(`${url}/api/payment/create-order`, payload);
       if (response.status === 200) {
+        console.log(response.data)
         commit('setRazor', response.data)
         return true;
       }
     } 
     catch (error) {
-      console.error(error);
+      console.log(error)
+      throw Error(error);
     }
   }
 }
