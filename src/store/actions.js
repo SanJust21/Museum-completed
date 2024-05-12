@@ -80,7 +80,6 @@ export default {
            const filteredIds = response.data
             .filter(obj => obj.status === true)
             .map(obj => obj.id);
-          console.log(filteredIds);
           commit('setSlots', filteredIds);
           return true;
         }
@@ -91,18 +90,23 @@ export default {
   },
   //get slots by date
   async getSlotDate({ rootGetters, commit }, payload) {
+   
     try
-      {
-        console.log('date clicked')
-        const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}&slotIds=1&slotIds=2&slotIds=3&slotIds=4&slotIds=6`);
+    {
+      const ids = rootGetters.getSlots.join(',');
+      console.log('ids', ids)
+        console.log('date clicked for slot')
+        const response = await axios.get(`${rootGetters.getUrl}/api/calEve/eventCal?date=${payload}&slotIds=${ids}`);
         if (response.status === 200) {
           console.log('response from backend fore selected date',response.data);
           const data = response.data.sort((a, b) => a.id - b.id);
           commit('setSelectedSlot', data)
+          return data;
         }
       }
-      catch (error) {
-        console.error(error)
+    catch (error) {
+      console.log(error)
+        throw error.message
       }
   },
   //lock slot
@@ -134,6 +138,7 @@ export default {
      const url = rootGetters.getUrl;
      const response = await axios.post(`${url}/api/payment/create-order`, payload);
       if (response.status === 200) {
+        sessionStorage.clear();
         console.log(response.data)
         commit('setRazor', response.data)
         return true;

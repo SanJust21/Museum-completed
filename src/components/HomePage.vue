@@ -72,6 +72,9 @@ export default {
     ImageRotate,
     TermsConds,
   },
+  mounted() {
+    sessionStorage.clear();
+  }
 }
 </script>
 

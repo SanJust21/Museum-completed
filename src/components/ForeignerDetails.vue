@@ -76,8 +76,8 @@ export default {
           return 'Name is required.'
         },
         value => {
-          if (!/^\s/.test(value)) return true
-          return 'Name should not start with a space.'
+          if (/^[^\s\W]/.test(value)) return true;
+          return 'Name should not start with a special character.';
         },
         value => {
           if (/^\D+$/.test(value)) return true
@@ -87,8 +87,10 @@ export default {
           if (value?.length >= 3) return true
           return 'Name must contain atleast 3 characters.'
         },
-
-
+        value => {
+          if (!/[^a-zA-Z\s.]/g.test(value)) return true
+          return 'Name should not contain special characters'
+        }
       ],
       mobRules: [
         value => {

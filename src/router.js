@@ -51,30 +51,14 @@ const router = createRouter({
           {
             path: '/ticket',
             component: () => import('./components/TicketPage.vue')
-          },   
-          {
-            path: '/about-page',
-            component: () => import('./components/AboutPage.vue'),   
-          },
-          {
-            path: '/contact-page',
-            component: () => import('./components/ContactPage.vue'),
-          },
-          {
-            path: '/terms-page',
-            component: () => import('./components/TermsPage.vue'),   
-          },
-          {
-            path: '/copyright-page',
-            component: () => import('./components/CopyRight.vue'),   
-          },  
-          {
-            path: '/gallery-page',
-            component: () => import('./components/GalleryPage.vue'),   
-          },   
+          },    
           {
             path: '/loading_ticket',
             component: () => import('./components/LoadingPage.vue'),
+          },
+          {
+            path: '/:notFound(.*)',
+            component: () => import('./components/ErrorPage.vue')
           }
        
         ],
@@ -86,5 +70,7 @@ const router = createRouter({
       }
       return {left: 0, top: 0};
   },
+    
 });
+
 export default router;

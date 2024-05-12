@@ -71,24 +71,28 @@ import {mapGetters} from 'vuex';
        color: 'green',
        snackbar: false,
        timeout: 3000,
-      nameRules: [
-        value => {
-          if (value) return true
-          return 'Name is required.'
-        },   
-        value => {
-          if(!/^\s/.test(value)) return true
-          return 'Name should not start with a space.'
-        }, 
-        value => {
-          if(/^\D+$/.test(value)) return true
-          return 'Name should not contain digits.'
-        },
-        value => {
-          if (value?.length >= 3) return true
-          return 'Name must contain atleast 3 characters.'
-        },
-      ],
+       nameRules: [
+         value => {
+           if (value) return true
+           return 'Name is required.'
+         },
+         value => {
+           if (/^[^\s\W]/.test(value)) return true;
+           return 'Name should not start with a special character.';
+         },
+         value => {
+           if (/^\D+$/.test(value)) return true
+           return 'Name should not contain digits.'
+         },
+         value => {
+           if (value?.length >= 3) return true
+           return 'Name must contain atleast 3 characters.'
+         },
+         value => {
+           if (!/[^a-zA-Z\s.']/g.test(value)) return true
+           return 'Name should not contain special characters'
+         }
+       ],
       mobRules: [
       value => {
           if (value) return true;

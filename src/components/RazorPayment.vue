@@ -21,7 +21,8 @@ export default {
       signature: null,
       pay_id: null,
       url: this.$store.getters.getUrl,
-      proceed: 'You are being redirected to payment gateway.'
+      proceed: 'You are being redirected to payment gateway.',
+      razorPayScript: null
     }
   },
   computed: {
@@ -45,7 +46,20 @@ export default {
           resolve(false)
         }
         document.body.appendChild(script)
+        this.razorpayScript = script;
       })
+    },
+    removeRazorPayScript() {
+      // Remove the Razorpay script element from the DOM
+      if (this.razorpayScript && this.razorpayScript.parentNode) {
+        this.razorpayScript.parentNode.removeChild(this.razorpayScript);
+        const elementsToRemove = document.body.getElementsByClassName('razorpay-container');
+
+        // Convert HTMLCollection to array and loop through each element to remove it
+        Array.from(elementsToRemove).forEach(element => {
+          element.remove();
+        });
+      }
     }
   },
   async created() {
@@ -104,11 +118,17 @@ export default {
         this.proceed = 'You are being redirected to home page.'
         this.overlay = true;
         paymentObject.close();
-        setTimeout(() => { sessionStorage.clear(); this.$router.push('/'); }, 3000);
+        setTimeout(() => {
+          sessionStorage.clear();
+          this.removeRazorPayScript(); 
+          this.$router.push('/');
+        }, 3000);
       }
     });
     paymentObject.open();
   },
-  
+  beforeUnmount() {
+    this.removeRazorPayScript();
+  }
 };
 </script>
