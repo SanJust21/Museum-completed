@@ -19,7 +19,7 @@
         ref="dateContainer">
         <!-- Capacity -->
         <div class="ms-3">
-          <h6 class="mt-3 mb-1" style="font-size: 18px;">{{ slots ? 'Slot' : 'Choose a Slot' }}:</h6>
+          <h6 class="mt-3 mb-1" style="font-size: 18px;">{{ slots ? 'Visit Time' : 'Choose your visit time' }}:</h6>
           <div class="capacity mb-0" v-if="selectedSlot.length !== 0">
             <div class="d-flex flex-wrap">
 

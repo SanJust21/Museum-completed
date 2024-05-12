@@ -124,7 +124,8 @@ export default {
     try {
      const url = rootGetters.getUrl;
      const response = await axios.post(`${url}/api/details/submit`, payload);
-     if (response.status === 200) {
+      if (response.status === 200) {
+        // sessionStorage.clear();
       return response.data.amount;
      }
     } 
