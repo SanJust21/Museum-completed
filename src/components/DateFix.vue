@@ -97,7 +97,7 @@ export default {
       error: '',
       load: true,
       selectedSlot : [],
-      // disabledDates: ["2024-05-11", "2024-05-22"]
+      disabledDates: []
     };
   },
   watch: {
@@ -119,12 +119,27 @@ export default {
   },
   mounted() {
     this.navigateToRoute(this.category);
-    if (this.date) {
-      this.setDate();
-    }
-
+    
+    this.$nextTick(() => {
+      this.getHoliday();
+      if (this.date) {
+        this.setDate();
+      }
+    })
+    this.getHoliday();
   },
   methods: {
+    async getHoliday() {
+      try {
+        const response = await this.$store.dispatch('getHoliday');
+        if (response) {
+          this.disabledDates = response.map(date => new Date(date));
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
     getRemainingColor(remainingCapacity, totalCapacity) {
       const percentage = (remainingCapacity / totalCapacity) * 100;
       if (percentage >= 50) {
@@ -149,12 +164,15 @@ export default {
       const today = new Date();
       selectedDate.setHours(0, 0, 0, 0);
       today.setHours(0, 0, 0, 0);
-      // const selectedDateString = selectedDate.toISOString().split('T')[0];
-      // console.log(selectedDateString)
-      // console.log(this.disabledDates.includes(selectedDateString))
-      // if (this.disabledDates.includes(selectedDateString)) {
-      //   return false; // Disable the date if it's in the list of disabled dates
-      // }
+       const selectedDateString = selectedDate.toISOString().split('T')[0];
+       console.log(selectedDateString)
+      const isDisabled = this.disabledDates.some(disabledDate => {
+        return selectedDate.toDateString() === disabledDate.toDateString();
+      });
+
+      if (isDisabled) {
+        return false;
+      }
       const maxDate = new Date(today);
       maxDate.setDate(today.getDate() + 90);
       const isMonday = selectedDate.getDay() === 1;

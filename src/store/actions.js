@@ -70,7 +70,16 @@ export default {
         else throw (error.response.message)
         
       }
-    },
+  },
+     //get holiday
+    async getHoliday({ rootGetters}) {
+    const response = await axios.get(`${rootGetters.getUrl}/api/holidays/getDayList`);
+      if (response.status === 200) {
+        const dates = response.data.map(item => item.date)
+        console.log(dates)
+      return dates;
+    }
+  },
   //get all slots 
   async getSlots({ rootGetters, commit }) {
       try {

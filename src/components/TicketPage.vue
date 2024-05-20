@@ -73,7 +73,7 @@ export default {
     return {
       downloading: false,
       resendTimeout: null,
-      resendCountdown: 3,
+      resendCountdown: 5,
     };
   },
   methods: {
