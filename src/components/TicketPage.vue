@@ -40,7 +40,7 @@
       </div>
       <p class="m">Aksharam</p>
       <div class="movie-details d-flex flex-column align-items-center">
-        <p>{{ adultsCount + childrenCount }} Ticket(s)</p>
+        <p>{{ adultsCount + childrenCount + seniorCount }} Ticket(s)</p>
         <p class="mb-0 mt-0">Date: {{ userDetails.Date }}</p>
         <p class="mb-0">Slot: {{ slotTime }}</p>
         <p class="mb-0">{{ userDetails.Teachers ? 'Teachers' : 'Adults' }}: {{ adultsCount }}</p>
@@ -51,7 +51,7 @@
         <v-divider></v-divider>
       </div>
       <div class="ticket-details mt-1 d-flex flex-column align-items-center">
-        <p class="m-0">{{ adultsCount + childrenCount }} Ticket(s)</p>
+        <p class="m-0">{{ adultsCount + childrenCount + seniorCount }} Ticket(s)</p>
         <v-img id="qr-code" :src="'data:image/png;base64,' + qrdetails.qrCodeImage" alt="QR Code" class="scan"></v-img>
         <h6 class="pb-2">{{ userDetails["Booking ID"] }}</h6>
       </div>

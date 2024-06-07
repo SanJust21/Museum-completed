@@ -2,10 +2,18 @@
   <v-responsive>
     <div class="d-flex justify-content-center align-items-center flex-wrap mx-auto bg-body-tertiary py-4">
       <div class="d-flex flex-column align-items-center">
-
-        <v-date-picker v-model="date" color="light-green-darken-4" :allowed-dates="allowedDates" min="2024-01-01"
-          :max='maxDate' class="mx-5 custom-date-picker" @update:model-value="setDate" max-width="350"
-          width="420"></v-date-picker>
+        <v-date-picker
+          v-model="date"
+          color="light-green-darken-4"
+          :allowed-dates="allowedDates"
+          :active="info"
+          min="2024-01-01"
+          :max="maxDate"
+          class="mx-5 custom-date-picker"
+          @update:model-value="setDate"
+          max-width="350"
+          width="420"
+        ></v-date-picker>
         <div class="d-flex">
           <v-icon class="mdi mdi-circle-medium text-success"></v-icon>
           <p class="text-success me-4">Available</p>
@@ -15,60 +23,117 @@
           <p class="text-danger me-1">Sold Out</p>
         </div>
       </div>
-      <div v-if="date" class="d-flex mx-sm-5 flex-column ms-sm-5 ps-sm-5  ms-3 container" style="width:500px;"
-        ref="dateContainer">
+      <div
+        v-if="date"
+        class="d-flex mx-sm-5 flex-column ms-sm-5 ps-sm-5  ms-3 container"
+        style="width:500px;"
+        ref="dateContainer"
+      >
         <!-- Capacity -->
         <div class="ms-3">
-          <h6 class="mt-3 mb-1" style="font-size: 18px;">{{ slots ? 'Visit Time' : 'Choose your visit time' }}:</h6>
+          <h6 class="mt-3 mb-1" style="font-size: 18px;">
+            {{ slots ? 'Visit Time' : 'Choose your visit time' }}:
+          </h6>
           <div class="capacity mb-0" v-if="selectedSlot.length !== 0">
             <div class="d-flex flex-wrap">
-
-              <div v-for="(slot,index) in selectedSlot" :key="index">
-                <div v-if="slot.status" class="d-flex align-items-start flex-column mt-2" style="width:200px;">
+              <div v-for="(slot, index) in selectedSlot" :key="index">
+                <div
+                  v-if="slot.status"
+                  class="d-flex align-items-start flex-column mt-2"
+                  style="width:200px;"
+                >
                   <div class="me-3">
-                    <input type="radio" :value="slot.startTime" :id="index" class="mt-2 lh-1" v-model="slots"
-                      :name="category" @change="setCapacity(slot.startTime)"
-                      :checked="slots === slot.startTime" />
+                    <input
+                      type="radio"
+                      :value="slot.startTime"
+                      :id="index"
+                      class="mt-2 lh-1"
+                      v-model="slots"
+                      :name="category"
+                      @change="setCapacity(slot.startTime, slot.capacity)"
+                      :checked="slots === slot.startTime"
+                      :disabled="isSlotPast(slot.endTime)"
+                    />
                     {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}
                   </div>
-                  <p class="my-0 lh-1 ms-3" style="font-size: 10px;"
-                    :style="{ color: getRemainingColor(slot.capacity, 100) }"><i>{{
-                      slot.capacity }} remaining</i></p>
-
+                  <p
+                    class="my-0 lh-1 ms-3"
+                    style="font-size: 10px;"
+                    :style="{ color: getRemainingColor(slot.capacity, 100) }"
+                  >
+                    <i>{{ slot.capacity }} remaining</i>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <v-card v-else width="400" max-width="340" height="100"
-            class="d-flex justify-content-center align-items-center bg-transparent " elevation="0">
-            <p v-if="error" class="text-danger text-center lh-1"><v-icon color="danger" class="mdi mdi-alert"></v-icon>
-              <br>Sorry, something went wrong. Please try again later.<br><span style="font-size: small;">{{ error
-                }}</span>
+          <v-card
+            v-else
+            width="400"
+            max-width="340"
+            height="100"
+            class="d-flex justify-content-center align-items-center bg-transparent "
+            elevation="0"
+          >
+            <p v-if="error" class="text-danger text-center lh-1">
+              <v-icon color="danger" class="mdi mdi-alert"></v-icon>
+              <br />Sorry, something went wrong. Please try again later.<br /><span
+                style="font-size: small;"
+                >{{ error }}</span
+              >
             </p>
-            <v-progress-circular v-else v-model="load" color="primary" size="64" indeterminate></v-progress-circular>
-
+            <v-progress-circular
+              v-else
+              v-model="load"
+              color="primary"
+              size="64"
+              indeterminate
+            ></v-progress-circular>
           </v-card>
           <!-- Category -->
           <v-divider></v-divider>
-          <h6 class="mt-3 mb-3" style="font-size: 18px;">{{ category ? 'Category' : 'Select your category' }}:</h6>
+          <h6 class="mt-3 mb-3" style="font-size: 18px;">
+            {{ category ? 'Category' : 'Select your category' }}:
+          </h6>
           <div class="d-flex flex-wrap" ref="routerViewContainer">
             <div>
-              <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"
-                @change="setCategory" />
+              <input
+                type="radio"
+                value="public"
+                id="public"
+                class="me-1"
+                v-model="category"
+                name="category"
+                @change="setCategory"
+              />
               <label for="public" class="me-5">
                 <p>Public</p>
               </label>
             </div>
             <div>
-              <input type="radio" value="institution" id="institution" class="me-1" v-model="category" name="category"
-                @change="setCategory" />
+              <input
+                type="radio"
+                value="institution"
+                id="institution"
+                class="me-1"
+                v-model="category"
+                name="category"
+                @change="setCategory"
+              />
               <label for="institution" class="me-5">
                 <p>Institution</p>
               </label>
             </div>
             <div>
-              <input type="radio" value="foreigner" id="foreigner" class="me-1" v-model="category" name="category"
-                @change="setCategory" />
+              <input
+                type="radio"
+                value="foreigner"
+                id="foreigner"
+                class="me-1"
+                v-model="category"
+                name="category"
+                @change="setCategory"
+              />
               <label for="foreigner" class="me-5">
                 <p>Foreigner</p>
               </label>
@@ -82,6 +147,7 @@
     </div>
   </v-responsive>
 </template>
+
 <script>
 // import axios from 'axios';
 export default {
@@ -97,19 +163,22 @@ export default {
       error: '',
       load: true,
       selectedSlot : [],
-      disabledDates: []
+      disabledDates: [],
+      selectedSlotCapacity: null,
     };
   },
   watch: {
     category(newCategory) {
       this.navigateToRoute(newCategory);
-    }
+    },
+    slots(newSlot) {
+      const slot = this.selectedSlot.find(slot => slot.startTime === newSlot);
+      if (slot) {
+        this.selectedSlotCapacity = slot.capacity;
+      }
+    },
   },
   computed: {
-    // selectedSlot() {
-    //   return this.$store.getters.getSelectedSlot || [];
-    // },
-
     maxDate() {
       const currentDate = new Date();
       const maxDate = new Date(currentDate);
@@ -133,6 +202,7 @@ export default {
       try {
         const response = await this.$store.dispatch('getHoliday');
         if (response) {
+          this.holidayName = response;
           this.disabledDates = response.map(date => new Date(date));
         }
       }
@@ -190,16 +260,18 @@ export default {
       }
     },
     
-    setCapacity(slotId) {
+    setCapacity(slotId, capacity) {
       console.log('Selected slot:', slotId);
       this.slots = slotId
       console.log('slotId', slotId)
       console.log('category', this.slots)
       this.$store.commit('setCapacity', slotId);
+      this.selectedSlotCapacity = capacity;
     },
 
     async setDate() {
-     
+      this.getDateClass(this.date);
+      this.slots = null;
       this.selectedSlot = [];
       this.load = true;
       this.error =null
@@ -251,9 +323,43 @@ export default {
       this.$store.commit('setCategory', this.category);
       this.scrollToElement('routerViewContainer');
     },
+    isSlotPast(slotEndTime) {
+      const selectedDate = new Date(this.date);
+      const now = new Date();
+      if (
+        selectedDate.getFullYear() === now.getFullYear() &&
+        selectedDate.getMonth() === now.getMonth() &&
+        selectedDate.getDate() === now.getDate()
+      ) {
+        const [hours, minutes] = slotEndTime.split(':').map(Number);
+        const slotTime = new Date();
+        slotTime.setHours(hours, minutes, 0, 0);
+        return slotTime < now;
+      }
+      return false;
+    },
+    getDateClass(date) {
+      console.log(date);
+      const selectedDateString = date.toISOString().split('T')[0];
+      console.log('Checking date:', selectedDateString);  // Added console log
+      if (this.formattedDate === selectedDateString && this.selectedSlotCapacity !== null) {
+        console.log('Matched date:', selectedDateString);  // Added console log
+        console.log('Slot capacity:', this.selectedSlotCapacity);  // Added console log
+        const remainingColor = this.getRemainingColor(this.selectedSlotCapacity, 100);
+        if (remainingColor === 'green') {
+          return 'bg-success';
+        } else if (remainingColor === 'orange') {
+          return 'bg-warning';
+        } else {
+          return 'bg-danger';
+        }
+      }
+      return '';
+    }
   }
 };
 </script>
+
 <style scoped>
 button {
   background-color: #1B5E20 !important;
@@ -270,5 +376,21 @@ button {
 :deep(.v-picker-title) {
   font-weight: 400 !important;
   padding-bottom: 0px !important;
+}
+
+input {
+  cursor: pointer;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
 }
 </style>
