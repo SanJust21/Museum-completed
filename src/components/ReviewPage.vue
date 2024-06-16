@@ -1,16 +1,13 @@
 <template>
-  <div class="d-flex  align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2"
-    v-if="!payon">
+  <div class="d-flex align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2" v-if="!payon">
     <div class="card main px-0 bg-white my-4 me-md-5 pb-4">
-      <div class=" text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
-        <!-- to take the full width -->
+      <div class="text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
         ORDER SUMMARY
       </div>
       <div class="container px-lg-5 px-4 pe-2 details">
-        <div class="d-flex justify-content-end ">
-          <v-icon class=" edit mdi mdi-pencil" color="#388E3C" @click="editPage"></v-icon>
+        <div class="d-flex justify-content-end">
+          <v-icon class="edit mdi mdi-pencil" color="#388E3C" @click="editPage"></v-icon>
         </div>
-
         <div class="row">
           <h6 class="col-sm-5 col-xs-4 col">Category</h6>
           <h6 class="col-sm-1 col-1">:</h6>
@@ -19,7 +16,7 @@
         <div class="row">
           <h6 class="col-sm-5 col-xs-4 col">Slot</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-xs-7 col data text-lowercase ">{{ formatTime(details.slot) }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col data text-lowercase">{{ formatTime(details.slot) }}</h6>
         </div>
         <div class="row">
           <h6 class="col-sm-5 col-xs-4 col">{{ details.cat === 'institution' ? 'Name of Institution' : 'Name' }}</h6>
@@ -34,7 +31,7 @@
         <div class="row">
           <h6 class="col-sm-5 col-xs-4 col">Email</h6>
           <h6 class="col-sm-1 col-1">:</h6>
-          <h6 class="col-sm-6 col-xs-7 col" style="font-weight:400 ;">{{ details.email }}</h6>
+          <h6 class="col-sm-6 col-xs-7 col" style="font-weight:400;">{{ details.email }}</h6>
         </div>
         <div class="row">
           <h6 class="col-sm-5 col-xs-4 col">Mobile number</h6>
@@ -62,29 +59,25 @@
           <h6 class="col-sm-6 col-xs-7 col data">{{ details.senior }}</h6>
         </div>
         <hr>
-        <div>
-          <h5 class="mt-2 mb-1 text-end " style="color: #212121;">Sub Total : Rs.{{ details.total }}/-</h5>
+        <div class="d-flex justify-content-between">
+          <h5 class="mt-2 mb-1 text-end" style="color: #212121;">Sub Total : Rs.{{ details.total }}/-</h5>
+          <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable" >Submit Details</v-btn>
         </div>
       </div>
     </div>
-    <div div class="card mb-3 mx-lg-0 mx-4"
-      style="width: 350px; max-width:320px; box-shadow: 5px 8px 5px 8px #7c76760e;">
-      <div class=" text-center card-header" style="background-color: #33691E; color: white;">
-        <!-- to take the full width -->
+    <div class="card mb-3 mx-lg-0 mx-4" :class="{ 'disabled-card': !disablePay }" style="width: 350px; max-width:320px; box-shadow: 5px 8px 5px 8px #7c76760e;">
+      <div class="text-center card-header" style="background-color: #33691E; color: white;">
         PAYMENT DETAILS
       </div>
-      <div class="mx-4">
+      <div class="mx-4" :disabled="!disablePay">
         <p class="mt-2 mb-1" style="font-size: 18px;">Ticket Price : Rs.{{ details.total }}/-</p>
         <div v-for="amt in tax" :key="amt.type">
-          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ?
-            (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price *
-            0.01 * details.total).toFixed(2) : amt.price }}/-</p>
+          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price * 0.01 * details.total).toFixed(2) : amt.price }}/-</p>
         </div>
         <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
       </div>
-      <div class="d-flex justify-content-end ">
-        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable"
-          :loading="disable">Pay</v-btn>
+      <div class="d-flex justify-content-end">
+        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="dialogConfirm = true" :disabled="!disablePay" >Pay</v-btn>
       </div>
       <div class="terms mb-3 mx-2 text-dark">
         <hr>
@@ -93,13 +86,12 @@
             <p>Ticket is Valid for the selected date it is purchased.</p>
           </li>
           <li>
-            <p>Tickets are<b> non-cancellable </b> and <b>non-refundable.</b></p>
+            <p>Tickets are <b>non-cancellable</b> and <b>non-refundable.</b></p>
           </li>
           <li>
-            <p>Visitors are excepted to arrive atleast half an hour before closing time.</p>
+            <p>Visitors are excepted to arrive at least half an hour before closing time.</p>
           </li>
         </ul>
-
       </div>
     </div>
   </div>
@@ -132,18 +124,20 @@
 
 <script>
 import RazorPayment from './RazorPayment.vue';
-// import axios from 'axios';
+
 export default {
   data() {
     return {
       payon: false,
       url: this.$store.getters.getUrl,
       disable: false,
+      disablePay: false,
       amount: null,
       dialogConfirm: false,
       message: '',
       color: 'green',
       snackbar: false,
+      paymentEnabled: false, // new data property
     }
   },
 
@@ -169,7 +163,7 @@ export default {
         if (this.details.cat === "institution") {
           const payload = {
             "type": this.details.cat,
-            "bookingId" : this.bookingId,
+            "bookingId": this.bookingId,
             "institutionName": this.details.name,
             "mobileNumber": this.details.mobile,
             "bookDate": this.details.bDate,
@@ -184,27 +178,10 @@ export default {
           const response = await this.$store.dispatch('submitDetails', payload);
           if (response) {
             this.amount = response;
-            this.dialogConfirm = true;
-            // if (window.confirm('Are you sure you want to continue to pay')) {
-            //   try {
-            //     const payload1 = {
-            //       "amount": amount,
-            //       "sessionId": this.session.Details
-            //     }
-            //     const response1 = await this.$store.dispatch("createOrder", payload1);
-            //     if (response1) {
-            //       this.disable = false;
-            //       this.payon = true;
-            //     }
-            //   }
-            //   catch (error) {
-            //     this.disable = false;
-            //     console.error(error)
-            //   }
-            // }
+            // this.dialogConfirm = true;
+            this.disablePay = false; // Enable payment card
           }
-        }
-        else {
+        } else {
           if (this.details.cat === "public") {
             const payload = {
               "type": this.details.cat,
@@ -223,27 +200,10 @@ export default {
             const response = await this.$store.dispatch('submitDetails', payload);
             if (response) {
               this.amount = response;
-              this.dialogConfirm = true;
-              // if (window.confirm('Are you sure you want to continue to pay')) {
-              //   try {
-              //     const payload1 = {
-              //       "amount": amount,
-              //       "sessionId": this.session.Details
-              //     }
-              //     const response1 = await this.$store.dispatch("createOrder", payload1);
-              //     if (response1) {
-              //       this.disable = false;
-              //       this.payon = true;
-              //     }
-              //   }
-              //   catch (error) {
-              //     this.disable = false;
-              //     console.error(error)
-              //   }
-              // }
+              // this.dialogConfirm = true;
+              this.disablePay = true; // Enable payment card
             }
-          }
-          else {
+          } else {
             const payload = {
               "type": this.details.cat,
               "bookingId": this.bookingId,
@@ -260,14 +220,8 @@ export default {
             const response = await this.$store.dispatch('submitDetails', payload);
             if (response) {
               this.amount = response;
-              this.dialogConfirm = true;
-              // const confirm = window.confirm('Are you sure you want to continue to pay');
-              // if (confirm) {
-                
-              // }
-              // else {
-              //   this.$router.push('/');
-              // }
+              // this.dialogConfirm = true;
+              this.disablePay = false; // Enable payment card
             }
           }
         }
@@ -279,7 +233,9 @@ export default {
       }
     },
     async confirm() {
-      this.dialogConfirm = false;
+      // this.dialogConfirm = true;
+      // this.dialogConfirm = true;
+      this.disablePay = true;
       try {
         const payload1 = {
           "amount": this.amount,
@@ -289,6 +245,7 @@ export default {
         if (response1) {
           this.disable = false;
           this.payon = true;
+          this.dialogConfirm = false;
         }
       }
       catch (error) {
@@ -324,7 +281,13 @@ export default {
   }
 };
 </script>
+
 <style scoped>
+.disabled-card {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .terms p {
   font-size: 12px;
   margin: 0;
@@ -332,7 +295,7 @@ export default {
 
 .main {
   box-shadow: 5px 8px 5px 8px #7c76760e;
-  width: 700px
+  width: 700px;
 }
 
 .details h6 {
@@ -358,7 +321,7 @@ export default {
     font-size: 13px;
   }
 
-  .terms>p {
+  .terms > p {
     font-size: 8px;
   }
 
