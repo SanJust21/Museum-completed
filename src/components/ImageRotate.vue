@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: center;
     width: 500px;
-    height: 500px;
+    height: 390px;
 }
 
 .image {
@@ -27,31 +27,24 @@
 
 .image.middle {
     z-index: 2;
-
-    top: 30%;
+    top: 25%;
     transform: translateY(-80%);
     transform: scale(1.3);
     /*  Adjust the scale for the zoom effect */
 }
-
 .image.left, .image.right {
    /* Adjust the width as needed */
-  
     position: absolute;
     transform: translateY(-50%);
-   
     transform: scale(1.5);
 }
-
 .image.left {
     left: 0;
     top:30px;
     z-index: 1;
     transform: translateX(-1%);
     transform: scale(1.3); 
-
 }
-
 .image.right {
     right: 0;
     bottom:30px;
@@ -61,10 +54,9 @@
 }
 @media screen and (max-width: 1150px) {
     .image-container {
-            width: 450px;
-            height: 450px;
-        }
-    
+    width: 450px;
+    height: 450px;
+    }
     .image {
     width: 120px;
     height: 160px;
