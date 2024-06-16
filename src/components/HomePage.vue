@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid px-0 cover">
     <nav class="d-flex justify-content-between align-items-center container-fluid p-0 gap-2">
-      <div class="d-flex mt-md-3 mt-sm-3 ms-md-2 ms-0">
+      <div class="d-flex pt-md-3 pt-sm-3 ms-md-2 ms-0 ps-4 pb-md-3 pb-sm-2">
         <v-img src="@/assets/logo.png" class="image"></v-img>
         <div class="d-flex flex-column justify-content-lg-center mt-2">
           <h1 class="logo-h1 mb-md-1 mb-0">അക്ഷരം</h1>
@@ -40,14 +40,14 @@
       class="d-flex lh-1 full-caption container-fluid ms-md-0 pb-5 ps-md-0 pt-0 mt-0 align-items-center flex-wrap justify-content-xl-between justify-content-center ">
       <p class="caption ">E</p>
       <div class="d-flex flex-column sub-caption lh-1 justify-content-center ">
-        <p class="mb-lg-4 mb-md-4 mb-2 mt-sm-4">xplore</p>
-        <p class="mb-lg-4 mb-md-3 mb-2 mt-sm-4">xperience</p>
-        <p class="mt-sm-4">nchant</p>
+        <p class="mb-lg-4 mb-md-3 mb-2 mt-sm-5">xplore</p>
+        <p class="mb-lg-4 mb-md-3 mb-2 mt-sm-5">xperience</p>
+        <p class="mt-sm-5 mb-md-4">nchant</p>
       </div>
       <ImageRotate class="mt-0" />
     </div>
   </div>
-  <div class=" overflow-hidden py-5 mt-0 text-center bg-body-tertiary ">
+  <div class=" overflow-hidden mt-0 text-center bg-body-tertiary ">
     <div class="col-md-12 p-lg-5 mx-auto my-5">
       <h1 class="display-3 p-2 fw-bold heading" v-motion-slide-visible>Unveiling the Tapestry of Tongues</h1>
       <h4 class="fw-normal text-muted mb-3 " v-motion-slide-visible>Embark on a linguistic and cultural odyssey
@@ -56,14 +56,11 @@
       <div class="d-flex gap-3 justify-content-center lead fw-normal">
         <a class="icon-link text-decoration-none" @click="$router.push('/about-page')" style="color: #221d18;">
           <TermsConds />
-          <!-- <b>Learn more &rarr;</b> -->
         </a>
       </div>
     </div>
   </div>
-
 </template>
-
 <script>
 import ImageRotate from './ImageRotate.vue';
 import TermsConds from './TermsConds.vue';
@@ -82,25 +79,15 @@ export default {
 .logo-h1 {
   font-family: 'Noto Sans Malayalam', sans-serif;
   color: white;
-  /* font-size: 20px; */font-size: 1.3rem;
   font-weight: 900;
   line-height: 16px;
-  font-size: clamp(0.8rem, 3vw, 1.3rem);
-  /* margin-bottom: 1px;
-  margin-top: 5%; */
+  font-size: clamp(0.8rem, 3vw, 1.5rem);
 }
 .logo-p{
   color: white;
-  /* font-size: 12px; */
-  font-size: 0.8rem;
-  font-size: clamp(0.4rem, 3vw, 0.8rem);
-    line-height: 11px;
-  /* line-height: 16px; */
+  font-size: clamp(0.4rem, 3vw, 1rem);
+  line-height: 11px;
 }
-/* .button{
-  background-color: #f0403a;
-  height: 50px;
-} */
 .contact{
   font-size: 10px;
 }
@@ -147,10 +134,8 @@ a.router-link-active li {
   height: 100%;
 }
 .image{
-/* height: 80px;
-width: 80px; */
-height: clamp(55px, 15vw, 80px);
-  width: clamp(55px, 15vw, 80px);
+  height: clamp(55px, 15vw, 95px);
+  width: clamp(55px, 15vw, 95px);
 }
 button{
   background-color:#74a965 !important ;
@@ -173,26 +158,9 @@ button{
   color: transparent;
   letter-spacing: 3px;
 }
-/* @media screen and (max-width: 1000px) {
-  .image{
-    height: 50px;
-    width: 50px;
-    margin-top: 10px;
-  }
-  .logo-h1{
-    margin-top: 16px;
-    font-size: 12px;
-  }
-  .logo-p{
-    font-size: 8px;
-   line-height: 8px;
-  }
-  .sub-caption{
-    margin-top: 10px;
-    font-size: 4vw;
-  }
-} */
-
+@media screen and (max-width: 1480px) {
+  
+}
 </style>
 
  
