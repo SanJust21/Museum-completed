@@ -16,7 +16,6 @@ export default {
     return {
       overlay: true,
       script: `https://checkout.razorpay.com/v1/checkout.js`,
-      // razor_id: 'rzp_test_Lh738g2oARGFbD',
       order_id: null,
       signature: null,
       pay_id: null,

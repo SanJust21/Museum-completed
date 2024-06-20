@@ -23,7 +23,7 @@ const router = createRouter({
         children: [
           {
             path:'/date',
-            alias: '/booking-page', //to view this calendar when page loads
+            alias: '/booking-page', 
             component: () => import('./components/DateFix.vue'),
             children : [
               {

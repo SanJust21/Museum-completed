@@ -107,12 +107,6 @@
   height: 40px;
   font-size: 1.1rem;
 }
-/* @media screen and (max-width: 1200px) {
-.book{
-  width: 25%;
-}
-} */
-/* > direct li child of rate class */
 .rate>li { 
   letter-spacing: -1px;
 }

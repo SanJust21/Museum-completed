@@ -17,12 +17,6 @@ export default {
             });
               console.log(categorizedData);
                 commit('setPricing', categorizedData);
-                // const publicTickets = ctg.filter(ticket => ticket.category === 'public');
-                // commit('setPublic', publicTickets);
-                // const instituteTickets = ctg.filter(ticket => ticket.category === 'institution');
-                // commit('setInstitute', instituteTickets);
-                // const foreignTickets = ctg.filter(ticket => ticket.category === 'foreigner');
-                // commit('setForeign', foreignTickets)
                 const tax = ctg.filter(ticket => ticket.category === 'tax');
                 commit('setTax', tax)
             }
