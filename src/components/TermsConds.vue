@@ -97,7 +97,7 @@
 .book{
   width: fit-content;
   height: fit-content;
-  background-color: #f0403a !important;
+  background-color: #E53935 !important;
 }
 .book:hover {
   transform: scale(1.1);
@@ -123,9 +123,9 @@
       font-size: 1.1rem;
     }
  }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 500px) {
     .button-style {
-      padding-inline: 8px;
+      padding-inline: 7px;
       height: 35px;
       font-size: 0.8rem;
     }

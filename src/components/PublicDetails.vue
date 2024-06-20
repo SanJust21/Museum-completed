@@ -137,12 +137,13 @@ export default {
      };
     },
     methods: {
-      async submit () {
+      async submit() {
+        console.log('jhjhhjhjh')
         const { valid } = await this.$refs.form.validate()
 
         if (valid && this.total !== 0 && this.$store.getters.getCategory !== null && this.$store.getters.getCapacity !== null) 
         {
-          if (this.quantityAdult === 0 && this.quantityChild > 0) 
+          if (this.quantityAdult === 0 && this.quantitySnr === 0 && this.quantityChild > 0) 
           {
             this.message = 'Atleast one adult must be present.'
             this.color = 'red';
@@ -163,30 +164,33 @@ export default {
             adult: this.quantityAdult,
             child: this.quantityChild,
             senior: this.quantitySnr,
+            capacity: this.capacity,
             total: this.total,
             totalTax: this.totalTax
            };
-           this.$store.commit('setDetails', details)
-          //  const amd = this.$store.getters.getDetails;
-            try {
-              this.disabled = true;
-              const res = await this.$store.dispatch('lockSlot', {
-              capacity: this.capacity,
-              date: details.date,
-              slot: details.slot,
-              cat: details.cat
-            })
-              if (res) {
-                this.disabled = false;
-              this.$router.push('/review-details')
-            } 
-          }
-            catch (error) {
-              this.disabled = false;              
-              this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
-              this.color = 'red';
-              this.snackbar = true;
-           }
+            this.$store.commit('setDetails', details)
+            this.$router.push('/review-details')
+          //
+            //   try {
+            //const amd = this.$store.getters.getDetails;
+          //     this.disabled = true;
+          //     const res = await this.$store.dispatch('lockSlot', {
+          //     capacity: this.capacity,
+          //     date: details.date,
+          //     slot: details.slot,
+          //     cat: details.cat
+          //   })
+          //     if (res) {
+          //       this.disabled = false;
+          //     this.$router.push('/review-details')
+          //   } 
+          // }
+          //   catch (error) {
+          //     this.disabled = false;              
+          //     this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+          //     this.color = 'red';
+          //     this.snackbar = true;
+          //  }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {

@@ -11,10 +11,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 500px;
-    height: 390px;
+    width: 550px;
+    height: 400px;
 }
-
 .image {
     width: 150px;
      /* Adjust the width as needed */
@@ -40,79 +39,119 @@
 }
 .image.left {
     left: 0;
-    top:30px;
+    top:35px;
     z-index: 1;
     transform: translateX(-1%);
     transform: scale(1.3); 
 }
 .image.right {
     right: 0;
-    bottom:30px;
+    bottom:35px;
     z-index: 3;
     transform: translateX(1%);
     transform: scale(1.3); 
 }
-@media screen and (max-width: 1150px) {
+@media screen and (min-width: 1600px) and (max-width: 2160px) {
+.image-container {
+        width: 550px;
+        height: 450px;
+    }
+
+    .image {
+        width: 150px;
+        height: 200px;
+    }
+}
+@media screen and (min-width: 1400px) and (max-width: 1600px) {
     .image-container {
-    width: 450px;
-    height: 450px;
+        width: 550px;
+        height: 380px;
+    }
+}
+@media screen and (min-width: 1000px) and (max-width: 1400px) {
+    .image-container {
+        width: 500px;
+        height: 350px;
     }
     .image {
-    width: 120px;
-    height: 160px;
-}
-.image.middle {
-    z-index: 2;
-    top: 30%;
-    transform: translateY(-80%);
-    transform: scale(1.3);
-    /*  Adjust the scale for the zoom effect */
-}
-.image.left {
-    left: 18%;
-    top:10%;
-    transform: translateX(100%);
-    transform: scale(1.3);
-}
-
-.image.right {
-    right: 18%;
-   top: 50%;
-   
-    transform: scale(1.3);
-
-}
-}
-@media screen and (max-width: 550px){
-    .image-container {
-            width: 300px;
-            height: 300px;
-        }
-.image {
-        width: 80px;
-        height: 100px;
-        border-radius: 0px 45px 0px 40px;
+        width: 135px;
+        height: 180px;
     }
-        .image.middle {
-            z-index: 2;
-            top: 35%;
-            /* transfo2m: translateY(-50%); */
-            transform: scale(1.3);
-            /*  Adjust the scale for the zoom effect */
-        }
-    
+}
+@media screen and (min-width: 720px) and (max-width: 1000px) {
+    .image-container {
+        width: 380px;
+        height: 250px;
+    }
+
+    .image {
+        width: 120px;
+        height: 155px;
+        border-radius: 0px 45px 0px 35px;
+    }
         .image.left {
-            left: 15%;
-            top: 10%;
-            transform: translateX(100%);
-            transform: scale(1.3);
+            top: 0;
         }
-    
+                  .image.middle {
+                      top: 15%;
+                  }
         .image.right {
-            right: 15%;
-            top: 60%;
-            transform: scale(1.3);
-    
+            bottom: 8%;
         }
+}
+@media screen and (min-width: 500px) and (max-width: 720px) {
+    .image-container {
+        width: 230px;
+        height: 210px;
+    }
+    .image {
+        width: 70px;
+        height: 94px;
+        border-radius: 0px 35px 0px 25px;
+    }
+    .image.left {
+        top: 30px;
+    }
+    .image.right {
+        bottom: 45px;
+    }
+}
+
+@media screen and (min-width: 450px) and (max-width: 500px) {
+    .image-container {
+        width: 210px;
+        height: 240px;
+    }
+    .image {
+        width: 70px;
+        height: 94px;
+        border-radius: 0px 35px 0px 25px;
+    }
+    .image.right {
+        bottom: 55px;
+    }
+}
+@media screen and (min-width: 200px) and (max-width: 450px) {
+    .image-container {
+        width: 210px;
+        height: 180px;
+    }
+
+    .image {
+        width: 70px;
+        height: 88px;
+        border-radius: 0px 35px 0px 25px;
+    }
+         .image.left {
+             top: 0;
+         }
+.image.middle {
+    
+    top: 15%;
+
+}
+    .image.right {
+        bottom: 20%;
+    }
 }
 </style>

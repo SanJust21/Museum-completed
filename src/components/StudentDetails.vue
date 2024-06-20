@@ -145,29 +145,31 @@ import {mapGetters} from 'vuex';
               adult:this.quantityAdult,
               child: this.quantityChild,
               total: this.total,
+              capacity: this.capacity,
               district: this.district,
               totalTax: this.totalTax
             }
             this.$store.commit('setDetails', details)
-            try {
-              this.disabled = true;
-              const res = await this.$store.dispatch('lockSlot', {
-                capacity: this.capacity,
-                date: details.date,
-                slot: details.slot,
-                cat: details.cat
-              })
-              if (res) {
-                this.disabled = false;
-                this.$router.push('/review-details')
-              }
-            }
-            catch (error) {      
-              this.disabled = false;
-              this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
-              this.color = 'red';
-              this.snackbar = true;
-            }
+            this.$router.push('/review-details')
+            // try {
+            //   this.disabled = true;
+            //   const res = await this.$store.dispatch('lockSlot', {
+            //     capacity: this.capacity,
+            //     date: details.date,
+            //     slot: details.slot,
+            //     cat: details.cat
+            //   })
+            //   if (res) {
+            //     this.disabled = false;
+            //     this.$router.push('/review-details')
+            //   }
+            // }
+            // catch (error) {      
+            //   this.disabled = false;
+            //   this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+            //   this.color = 'red';
+            //   this.snackbar = true;
+            // }
           }
         } else {
           if (this.$store.getters.getCapacity === null) {

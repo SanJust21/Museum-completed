@@ -21,6 +21,24 @@ const router = createRouter({
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
         children: [
+          // {
+        //   path: '/datedum',
+        //     component: () => import('./components/DateeDum.vue'),
+        // children : [
+        //       {
+        //         path:'/public-details-enter',
+        //         component: () => import('./components/PublicDetails.vue')
+        //       },
+        //       {
+        //         path:'/institution-details-enter',
+        //         component: () => import('./components/StudentDetails.vue')
+        //       },
+        //       {
+        //         path:'/foreigner-details-enter',
+        //         component: () => import('./components/ForeignerDetails.vue')
+        //       }
+        //     ]
+        // },
           {
             path:'/date',
             alias: '/booking-page', //to view this calendar when page loads

@@ -2,7 +2,7 @@
   <v-responsive>
     <div class="container-fluid px-0 cover">
       <nav class="d-flex justify-content-between align-items-center container-fluid p-0 gap-2">
-        <div class="d-flex pt-md-3 pt-sm-3 ms-md-2 ms-0 ps-4 pb-md-3 pb-sm-2 ">
+        <div class="d-flex pt-md-3 pt-sm-3 ms-md-2 ms-0 ps-4 pb-md-3 pb-sm-2 " @click="$router.push('/')" style="cursor: pointer;">
           <v-img src="@/assets/logo.png" class="image"></v-img>
           <div class="d-flex flex-column justify-content-lg-center mt-2">
             <h1 class="logo-h1 mb-md-1 mb-0">അക്ഷരം</h1>
@@ -50,22 +50,15 @@
 .logo-h1 {
   font-family: 'Noto Sans Malayalam', sans-serif;
   color: white;
-  /* font-size: 20px; */
-  font-size: 1.3rem;
   font-weight: 900;
   line-height: 16px;
-  font-size: clamp(0.8rem, 3vw, 1.3rem);
-  /* margin-bottom: 1px;
-  margin-top: 5%; */
+  font-size: clamp(0.8rem, 3vw, 1.5rem);
 }
 
 .logo-p {
   color: white;
-  /* font-size: 12px; */
-  font-size: 0.8rem;
-  font-size: clamp(0.4rem, 3vw, 0.8rem);
+  font-size: clamp(0.4rem, 3vw, 1rem);
   line-height: 11px;
-  /* line-height: 16px; */
 }
 .cover {
   background-color: #221d18;
@@ -81,14 +74,9 @@ width: 80px; */
     .logo{
       cursor: pointer;
     }
-    .image{
-/* height: 80px;
-width: 80px; */
-height: clamp(55px, 10vw, 80px);
-  /* Height scaled between 40px and 80px */
-  width: clamp(55px, 10vw, 80px);
-  /* Width scaled between 40px and 80px */
-
+.image {
+  height: clamp(55px, 15vw, 95px);
+  width: clamp(55px, 15vw, 95px);
 }
 .nav-item,a {
   cursor: pointer;

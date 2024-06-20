@@ -28,7 +28,7 @@ export default {
     },
     setSession(state, payload) {
         state.session = payload;
-        sessionStorage.setItem('session', payload);
+        sessionStorage.setItem('session', JSON.stringify(payload));
     },
     setCategory(state, payload) {
         state.category = payload;

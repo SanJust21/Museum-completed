@@ -3,7 +3,6 @@
   <v-form ref="form">
     <v-text-field v-model="mobile" color="teritiary" placeholder="Enter your Mobile Number"
       prepend-inner-icon="mdi-cellphone" variant="underlined" class="mb-4" :rules="mobRules" required></v-text-field>
-    <p v-if="errorMessage" class="text-danger mt-3">{{ errorMessage }}</p>
     <v-btn block height="40" color="green-darken-4" class="bg-gradient" @click="validate"
       :disabled="!isMobileValid || buttonDisabled" :loading="buttonDisabled">Generate OTP</v-btn>
   </v-form>

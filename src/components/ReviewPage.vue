@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2" v-if="!payon">
+  <div class="d-flex align-items-center justify-content-center my-5 flex-wrap mx-lg-5 bg-body-tertiary py-2"
+    v-if="!payon">
     <div class="card main px-0 bg-white my-4 me-md-5 pb-4">
       <div class="text-center py-1 mb-3 fs-4 mx-0 px-0 card-header" style="background-color: #33691E; color: white;">
         ORDER SUMMARY
       </div>
       <div class="container px-lg-5 px-4 pe-2 details">
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end" v-if="!disable">
           <v-icon class="edit mdi mdi-pencil" color="#388E3C" @click="editPage"></v-icon>
         </div>
         <div class="row">
@@ -34,22 +35,22 @@
           <h6 class="col-sm-6 col-xs-7 col" style="font-weight:400;">{{ details.email }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-5 col-xs-4 col">Mobile number</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Mobile Number</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-xs-7 col data">{{ details.mobile }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-5 col-xs-4 col">Visit date</h6>
+          <h6 class="col-sm-5 col-xs-4 col">Visit Date</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-xs-7 col data">{{ details.date }}, {{ day }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'teachers' : 'adults' }}</h6>
+          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'Teachers' : 'Adults' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-xs-7 col data">{{ details.adult }}</h6>
         </div>
         <div class="row">
-          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'students' : 'children' }}</h6>
+          <h6 class="col-sm-5 col-xs-4 col">No. of {{ details.cat === 'institution' ? 'Students' : 'Children' }}</h6>
           <h6 class="col-sm-1 col-1">:</h6>
           <h6 class="col-sm-6 col-xs-7 col data">{{ details.child }}</h6>
         </div>
@@ -61,23 +62,27 @@
         <hr>
         <div class="d-flex justify-content-between">
           <h5 class="mt-2 mb-1 text-end" style="color: #212121;">Sub Total : Rs.{{ details.total }}/-</h5>
-          <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="pay" :disabled="disable" >Submit Details</v-btn>
+          <v-btn class="my-2 text-white" color="green-darken-4" @click="pay" v-if="!disable" size="small">Submit</v-btn>
         </div>
       </div>
     </div>
-    <div class="card mb-3 mx-lg-0 mx-4" :class="{ 'disabled-card': !disablePay }" style="width: 350px; max-width:320px; box-shadow: 5px 8px 5px 8px #7c76760e;">
+    <div class="card mb-3 mx-lg-0 mx-4" :class="{ 'disabled-card': !disablePay }"
+      style="width: 350px; max-width:320px; box-shadow: 5px 8px 5px 8px #7c76760e;">
       <div class="text-center card-header" style="background-color: #33691E; color: white;">
         PAYMENT DETAILS
       </div>
       <div class="mx-4" :disabled="!disablePay">
         <p class="mt-2 mb-1" style="font-size: 18px;">Ticket Price : Rs.{{ details.total }}/-</p>
         <div v-for="amt in tax" :key="amt.type">
-          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price * 0.01 * details.total).toFixed(2) : amt.price }}/-</p>
+          <p class="mb-0" style="font-size: 14px;">{{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ?
+            (amt.price + '%') : ('Rs.' + amt.price) }}) : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price *
+            0.01 * details.total).toFixed(2) : amt.price }}/-</p>
         </div>
         <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
       </div>
       <div class="d-flex justify-content-end">
-        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="dialogConfirm = true" :disabled="!disablePay" >Pay</v-btn>
+        <v-btn class="my-2 w-25 text-white me-4" color="green-darken-4" @click="dialogConfirm = true"
+          :disabled="!disablePay" size="small">Pay</v-btn>
       </div>
       <div class="terms mb-3 mx-2 text-dark">
         <hr>
@@ -160,87 +165,105 @@ export default {
     async pay() {
       this.disable = true;
       try {
-        if (this.details.cat === "institution") {
-          const payload = {
-            "type": this.details.cat,
-            "bookingId": this.bookingId,
-            "institutionName": this.details.name,
-            "mobileNumber": this.details.mobile,
-            "bookDate": this.details.bDate,
-            "email": this.details.email,
-            "district": this.details.district,
-            "numberOfTeachers": this.details.adult,
-            "numberOfStudents": this.details.child,
-            "visitDate": this.details.date,
-            "totalPrice": this.grandTotal,
-            "sessionId": this.session.Details,
-          };
-          const response = await this.$store.dispatch('submitDetails', payload);
-          if (response) {
-            this.amount = response;
-            // this.dialogConfirm = true;
-            this.disablePay = false; // Enable payment card
-          }
-        } else {
-          if (this.details.cat === "public") {
-            const payload = {
-              "type": this.details.cat,
-              "bookingId": this.bookingId,
-              "name": this.details.name,
-              "mobileNumber": this.details.mobile,
-              "email": this.details.email,
-              "bookDate": this.details.bDate,
-              "numberOfAdults": this.details.adult,
-              "numberOfChildren": this.details.child,
-              "numberOfSeniors": this.details.senior,
-              "visitDate": this.details.date,
-              "sessionId": this.session.Details,
-              "totalPrice": this.grandTotal
-            };
-            const response = await this.$store.dispatch('submitDetails', payload);
-            if (response) {
-              this.amount = response;
-              // this.dialogConfirm = true;
-              this.disablePay = true; // Enable payment card
-            }
-          } else {
-            const payload = {
-              "type": this.details.cat,
-              "bookingId": this.bookingId,
-              "name": this.details.name,
-              "mobileNumber": this.details.mobile,
-              "email": this.details.email,
-              "bookDate": this.details.bDate,
-              "numberOfAdults": this.details.adult,
-              "numberOfChildren": this.details.child,
-              "visitDate": this.details.date,
-              "sessionId": this.session.Details,
-              "totalPrice": this.grandTotal
-            };
-            const response = await this.$store.dispatch('submitDetails', payload);
-            if (response) {
-              this.amount = response;
-              // this.dialogConfirm = true;
-              this.disablePay = false; // Enable payment card
-            }
-          }
-        }
+            const res = await this.$store.dispatch('lockSlot', {
+            capacity: this.details.capacity,
+            date: this.details.date,
+            slot: this.details.slot,
+            cat: this.details.cat
+          })
+            if (res) {
+              try {
+                if (this.details.cat === "institution") {
+                  const payload = {
+                    "type": this.details.cat,
+                    "bookingId": this.bookingId,
+                    "institutionName": this.details.name,
+                    "mobileNumber": this.details.mobile,
+                    "bookDate": this.details.bDate,
+                    "email": this.details.email,
+                    "district": this.details.district,
+                    "numberOfTeachers": this.details.adult,
+                    "numberOfStudents": this.details.child,
+                    "visitDate": this.details.date,
+                    "totalPrice": this.grandTotal,
+                    "sessionId": this.session.Details,
+                  };
+                  const response = await this.$store.dispatch('submitDetails', payload);
+                  if (response) {
+                    this.amount = response;
+                    // this.dialogConfirm = true;
+                    this.disablePay = true; // Enable payment card
+                  }
+                } else {
+                  if (this.details.cat === "public") {
+                    // console.log('entered')
+                    const payload = {
+                      "type": this.details.cat,
+                      "bookingId": this.bookingId,
+                      "name": this.details.name,
+                      "mobileNumber": this.details.mobile,
+                      "email": this.details.email,
+                      "bookDate": this.details.bDate,
+                      "numberOfAdults": this.details.adult,
+                      "numberOfChildren": this.details.child,
+                      "numberOfSeniors": this.details.senior,
+                      "visitDate": this.details.date,
+                      "sessionId": this.session.Details,
+                      "totalPrice": this.grandTotal
+                    };
+                    const response = await this.$store.dispatch('submitDetails', payload);
+                    if (response) {
+                      this.amount = response;
+                      // this.dialogConfirm = true;
+                      this.disablePay = true; // Enable payment card
+                    }
+                  } else {
+                    const payload = {
+                      "type": this.details.cat,
+                      "bookingId": this.bookingId,
+                      "name": this.details.name,
+                      "mobileNumber": this.details.mobile,
+                      "email": this.details.email,
+                      "bookDate": this.details.bDate,
+                      "numberOfAdults": this.details.adult,
+                      "numberOfChildren": this.details.child,
+                      "visitDate": this.details.date,
+                      "sessionId": this.session.Details,
+                      "totalPrice": this.grandTotal
+                    };
+                    const response = await this.$store.dispatch('submitDetails', payload);
+                    if (response) {
+                      this.amount = response;
+                      // this.dialogConfirm = true;
+                      this.disablePay = true; // Enable payment card
+                    }
+                  }
+                }
+              }
+              catch (error) {
+                this.disablePay = false;
+                console.log(error)
+                this.disable = false;
+                alert('Sorry something went wrong! Please check the entered details or try again later.', error);
+              }
+          } 
       }
       catch (error) {
-        console.log(error)
         this.disable = false;
-        alert('Sorry something went wrong! Please check the entered details or try again later.', error);
+        this.message = 'Capacity limit exceeded! Please select another slot or try again later!'
+        this.color = 'red';
+        this.snackbar = true;
       }
+      
     },
     async confirm() {
-      // this.dialogConfirm = true;
-      // this.dialogConfirm = true;
       this.disablePay = true;
       try {
         const payload1 = {
           "amount": this.amount,
           "sessionId": this.session.Details
         }
+        console.log(payload1)
         const response1 = await this.$store.dispatch("createOrder", payload1);
         if (response1) {
           this.disable = false;
@@ -257,6 +280,9 @@ export default {
     }
   },
   computed: {
+    // capacity() {
+    //   return parseInt(this.details.adult) + parseInt(this.details.adult) + parseInt(this.quantitySnr);
+    // },
     bookingId() {
       return this.$store.getters.getCapacityId
     },

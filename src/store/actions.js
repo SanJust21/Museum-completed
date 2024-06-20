@@ -41,12 +41,13 @@ export default {
           if (response.status === 200) {
               const messag = JSON.parse(response.data.message);
               commit('setMobile', response.data.mobileNumber);
-              commit('setSession', messag);
+            commit('setSession', messag);
+            console.log('session', rootGetters.getsession)
               return true;
           }
         }
         catch (error) {
-          console.error(error)
+          throw Error(error);
         }
     },
     //validate otp
@@ -94,7 +95,8 @@ export default {
         }
       }
       catch (error) {
-        console.error(error)
+        console.log(error);
+        
       }
   },
   //get slots by date
@@ -139,7 +141,7 @@ export default {
      }
     } 
     catch (error) {
-      console.error(error);
+      throw Error(error);
     }
   },
   //create orderid with razorpay
