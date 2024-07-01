@@ -112,7 +112,7 @@
         Are you sure you want to proceed to payment?
       </v-card-text>
       <v-card-actions class="d-block mx-2">
-        <v-btn color="#388E3C" @click="confirm" block variant="elevated">Yes</v-btn>
+        <v-btn color="#388E3C" @click="confirm" block variant="elevated" :disabled="confirmPay" :loading="confirmPay">Yes</v-btn>
         <v-btn @click="dialogConfirm = !dialogConfirm; disable = false;" block>Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -143,6 +143,8 @@ export default {
       color: 'green',
       snackbar: false,
       paymentEnabled: false, // new data property
+      uniqueID: '',
+      confirmPay: false
     }
   },
 
@@ -164,6 +166,7 @@ export default {
     },
     async pay() {
       this.disable = true;
+      console.log('session', this.session.Details)
       try {
             const res = await this.$store.dispatch('lockSlot', {
             capacity: this.details.capacity,
@@ -190,7 +193,8 @@ export default {
                   };
                   const response = await this.$store.dispatch('submitDetails', payload);
                   if (response) {
-                    this.amount = response;
+                    this.amount = response.amount;
+                    this.uniqueID = response.id;
                     // this.dialogConfirm = true;
                     this.disablePay = true; // Enable payment card
                   }
@@ -213,7 +217,8 @@ export default {
                     };
                     const response = await this.$store.dispatch('submitDetails', payload);
                     if (response) {
-                      this.amount = response;
+                      this.amount = response.amount;
+                      this.uniqueID = response.id;
                       // this.dialogConfirm = true;
                       this.disablePay = true; // Enable payment card
                     }
@@ -233,7 +238,8 @@ export default {
                     };
                     const response = await this.$store.dispatch('submitDetails', payload);
                     if (response) {
-                      this.amount = response;
+                      this.amount = response.amount;
+                      this.uniqueID = response.id;
                       // this.dialogConfirm = true;
                       this.disablePay = true; // Enable payment card
                     }
@@ -258,14 +264,17 @@ export default {
     },
     async confirm() {
       this.disablePay = true;
+      this.confirmPay = true;
       try {
         const payload1 = {
           "amount": this.amount,
-          "sessionId": this.session.Details
+          "sessionId": this.session.Details,
+          "uniqueId" : this.uniqueID
         }
         console.log(payload1)
         const response1 = await this.$store.dispatch("createOrder", payload1);
         if (response1) {
+          this.confirmPay = false;
           this.disable = false;
           this.payon = true;
           this.dialogConfirm = false;
@@ -273,6 +282,7 @@ export default {
       }
       catch (error) {
         this.disable = false;
+        this.confirmPay = false;
         this.message = 'Something went wrong. Please try again later.';
         this.color = 'red';
         this.snackbar = true;

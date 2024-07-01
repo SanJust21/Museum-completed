@@ -21,6 +21,7 @@ export default {
     },
     setTax(state, payload) {
         state.tax = payload;
+        sessionStorage.setItem('tax', JSON.stringify(payload));
     },
     setMobile(state, payload) {
         state.mobile = payload;

@@ -18,6 +18,9 @@ const router = createRouter({
         ]
       },
       {
+
+      },
+      {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
         children: [

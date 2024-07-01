@@ -17,7 +17,8 @@ export default {
             });
               console.log(categorizedData);
                 commit('setPricing', categorizedData);
-                const tax = ctg.filter(ticket => ticket.category === 'tax');
+              const tax = ctg.filter(ticket => ticket.category === 'tax');
+              
                 commit('setTax', tax)
             }
         }
@@ -40,8 +41,9 @@ export default {
               return true;
           }
         }
-        catch (error) {
-          throw Error(error);
+        catch (err) {
+          console.log(err)
+           throw Error(err.response? err.response.data : err.message);
         }
     },
     //validate otp
@@ -95,7 +97,6 @@ export default {
   },
   //get slots by date
   async getSlotDate({ rootGetters, commit }, payload) {
-   
     try
     {
       const ids = rootGetters.getSlots.join(',');
@@ -118,20 +119,24 @@ export default {
   async lockSlot({ rootGetters,commit}, payload) {
       const res = await axios.get(`${rootGetters.getUrl}/api/booking/lock?capacity=${payload.capacity}&visitDate=${payload.date}&slotName=${payload.slot}&category=${payload.cat}`)
         if (res.status === 200) {
-          console.log('successfully locked')
-          console.log(res.data)
           commit('setCapacityId', res.data);
           return true;
         }
   },
   //submit details
-  async submitDetails({ rootGetters }, payload) {
+  async submitDetails({  rootGetters }, payload) {
     try {
      const url = rootGetters.getUrl;
      const response = await axios.post(`${url}/api/details/submit`, payload);
       if (response.status === 200) {
-        // sessionStorage.clear();
-      return response.data.amount;
+        
+        console.log('submitted',response.data)
+        const result = {
+          amount: response.data.totalPrice,
+          id: response.data.uniqueId
+        };
+        console.log('result', result)
+      return result;
      }
     } 
     catch (error) {
@@ -144,7 +149,7 @@ export default {
      const url = rootGetters.getUrl;
      const response = await axios.post(`${url}/api/payment/create-order`, payload);
       if (response.status === 200) {
-        sessionStorage.clear();
+       
         console.log(response.data)
         commit('setRazor', response.data)
         return true;

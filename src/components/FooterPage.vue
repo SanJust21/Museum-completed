@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid mt-0 px-sm-4 px-4">
+  <div class="container-fluid mt-0 px-sm-4 px-3">
     <footer class="pt-3 pb-2 text-white">
       <div class="row px-md-4 d-flex justify-content-between ">
         <div class="col-sm-6 col mb-3">
@@ -19,7 +19,7 @@
           <p class="text-white text-end details ms-3">+91-9876543210 | 0471-2275469</p>
         </div>
       </div>
-      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-end mb-3 border-top mx-md-3">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-end mb-3 border-top mx-md-3 mx-1">
         <p class="rights">© 2024 Aksharam Museum. All rights reserved.</p>
       </div>
     </footer>

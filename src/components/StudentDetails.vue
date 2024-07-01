@@ -122,7 +122,7 @@ import {mapGetters} from 'vuex';
      };
     },
     methods: {
-      async submit () {
+      async submit() {
         const { valid } = await this.$refs.form.validate()
         if (valid && this.total !== 0 && this.$store.getters.getCategory !== null && this.$store.getters.getCapacity !== null) 
         { 

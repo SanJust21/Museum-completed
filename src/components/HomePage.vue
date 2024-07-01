@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid px-0 cover">
     <nav class="d-flex justify-content-between align-items-center container-fluid p-0 gap-2">
-      <div class="d-flex pt-md-3 pt-sm-3 ms-md-2 ms-0 ps-4 pb-md-3 pb-sm-2">
+      <div class="d-flex pt-md-3 pt-sm-3 pt-2 ms-md-2 ms-0 ps-sm-4 ps-2 pb-md-3 pb-sm-2">
         <v-img src="@/assets/logo.png" class="image"></v-img>
         <div class="d-flex flex-column justify-content-lg-center mt-2">
           <h1 class="logo-h1 mb-md-1 mb-0">അക്ഷരം</h1>
@@ -62,7 +62,7 @@
         at Aksharam, museum of letters, literature & culture! Plan your immersive journey now and unlock the secrets of
         Kerala's vibrant heritage. </h4>
       <div class="d-flex gap-3 justify-content-center lead fw-normal">
-        <a class="icon-link text-decoration-none" @click="$router.push('/about-page')" style="color: #221d18;">
+        <a class="icon-link text-decoration-none" style="color: #221d18;">
           <TermsConds />
         </a>
       </div>
@@ -77,9 +77,7 @@ export default {
     ImageRotate,
     TermsConds,
   },
-  // mounted() {
-  //   sessionStorage.clear();
-  // }
+
 }
 </script>
 
