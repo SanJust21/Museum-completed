@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import store from './store';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -18,11 +19,9 @@ const router = createRouter({
         ]
       },
       {
-
-      },
-      {
         path: '/booking-page',
         component: () => import('./components/BookingPage.vue'),
+        meta: { requiresAuth: true },
         children: [
           {
             path:'/date',
@@ -45,27 +44,37 @@ const router = createRouter({
           },
           {
             path:'/review-details',
-            component: () => import('./components/ReviewPage.vue')
+            component: () => import('./components/ReviewPage.vue'),
+            meta: { requiresAuth: true },
           },  
           {
             path: '/payment',
+            meta: { requiresAuth: true },
             component : () => import('./components/RazorPayment.vue')
           },
           {
             path: '/ticket',
+            meta: { requiresAuth: true },
             component: () => import('./components/TicketPage.vue')
           },    
           {
             path: '/loading_ticket',
+            meta: { requiresAuth: true },
             component: () => import('./components/LoadingPage.vue'),
           },
-          {
-            path: '/:notFound(.*)',
-            component: () => import('./components/ErrorPage.vue')
-          }
-       
+          
         ],
       },
+      {
+        path: '/:notFound(.*)',
+        component: () => import('./components/ErrorPage.vue')
+      },
+      {
+        path: '/access-not-allowed',
+        name: 'forbid',
+        component: () => import('./components/ForbiddenPage.vue')
+      },
+      
     ],
     scrollBehavior(_, _2, savedPosition) {
       if (savedPosition) {
@@ -75,5 +84,17 @@ const router = createRouter({
   },
     
 });
+router.beforeEach((to, _2, next) => {
+  const token = store.getters.getsession;
 
+  if (to.meta.requiresAuth) {
+    if (!token) {
+      next({name:'forbid'});
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 export default router;

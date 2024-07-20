@@ -2,7 +2,7 @@
   <!-- <v-row justify="center"> -->
   <v-dialog v-model="dialog" width="600" height="650">
     <template v-slot:activator="{ props }">
-      <v-btn color="#74a965" class=" book container fs-md-5 me-sm-5 me-sm-4 me-3 py-2 button-style"
+      <v-btn color="#74a965" class=" book container fs-md-5 py-2 button-style"
         v-bind="props">Book
         <span class="ms-1">Now</span></v-btn>
     </template>

@@ -138,7 +138,6 @@ export default {
     },
     methods: {
       async submit() {
-        console.log('jhjhhjhjh')
         const { valid } = await this.$refs.form.validate()
 
         if (valid && this.total !== 0 && this.$store.getters.getCategory !== null && this.$store.getters.getCapacity !== null) 

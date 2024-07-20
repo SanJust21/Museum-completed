@@ -31,6 +31,11 @@ export default {
         state.session = payload;
         sessionStorage.setItem('session', JSON.stringify(payload));
     },
+    clearSession(state) {
+        sessionStorage.removeItem('session');
+        state.session = null;
+        state.details = {};
+    },
     setCategory(state, payload) {
         state.category = payload;
         sessionStorage.setItem('category', payload);

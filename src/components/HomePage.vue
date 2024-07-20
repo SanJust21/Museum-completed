@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid px-0 cover">
-    <nav class="d-flex justify-content-between align-items-center container-fluid p-0 gap-2">
+    <nav class="d-flex justify-content-between align-items-center container-fluid p-0 ">
       <div class="d-flex pt-md-3 pt-sm-3 pt-2 ms-md-2 ms-0 ps-sm-4 ps-2 pb-md-3 pb-sm-2">
         <v-img src="@/assets/logo.png" class="image"></v-img>
         <div class="d-flex flex-column justify-content-lg-center mt-2">
@@ -8,7 +8,10 @@
           <p class="logo-p lh-1">Museum of letters, literature<br> & culture</p>
         </div>
       </div>
-      <TermsConds />
+      <div class="me-sm-5 me-sm-4 me-3">
+        <TermsConds />
+      </div>
+
       <!-- <nav class="navbar navbar-expand-lg">
         <div class="container-fluid d-flex justify-content-end"> -->
       <!-- <button class="navbar-toggler py-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="outline: none;">

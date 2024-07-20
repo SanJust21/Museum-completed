@@ -16,11 +16,11 @@
           <h5 class="text-center text-danger mb-0 mt-0">Thank You!!</h5>
         </v-card-text>
         <div class="d-flex justify-content-center mt-0" v-if="downloading">
-          <v-btn size="small" class="mb-3 mt-0 me-2 text-white" rounded="xl" color="green-darken-4"
+          <v-btn size="small" class="mb-3 mt-0 me-2 text-white"  color="green-darken-4"
             @click="download">Download</v-btn>
-          <v-btn size="small" class="mb-3 mt-0 me-2 text-white" rounded="xl" color="green-darken-4"
+          <v-btn size="small" class="mb-3 mt-0 me-2 text-white"  color="green-darken-4"
             @click="$router.push('/booking-page')">Book again</v-btn>
-          <v-btn size="small" class="mb-3 mt-0 text-white" rounded="xl" color="green-darken-4"
+          <v-btn size="small" class="mb-3 mt-0 text-white"  color="green-darken-4"
             @click=" $router.push('/')">Home</v-btn>
         </div>
         <div v-else class="text-center">
