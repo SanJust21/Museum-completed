@@ -69,5 +69,17 @@ export default {
     },
     getCapacityId(state) {
         return state.capacityId;
-    }
+    },
+    getCategories(state) {
+        return state.categories;
+    },
+    getCategoryTypes(state) {
+        return state.categoryTypes;
+    },
+    getCategoryPrices(state) {
+        return state.categoryPrices;
+    },
+    getCategoryId(state) {
+        return state.categoryId;
+    },
 };

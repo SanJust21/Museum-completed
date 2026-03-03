@@ -19,52 +19,43 @@ const router = createRouter({
         ]
       },
       {
-        path: '/booking-page',
-        component: () => import('./components/BookingPage.vue'),
-        meta: { requiresAuth: true },
-        children: [
-          {
-            path:'/date',
-            alias: '/booking-page', 
-            component: () => import('./components/DateFix.vue'),
-            children : [
-              {
-                path:'/public-details-enter',
-                component: () => import('./components/PublicDetails.vue')
-              },
-              {
-                path:'/institution-details-enter',
-                component: () => import('./components/StudentDetails.vue')
-              },
-              {
-                path:'/foreigner-details-enter',
-                component: () => import('./components/ForeignerDetails.vue')
-              }
-            ]
-          },
-          {
-            path:'/review-details',
-            component: () => import('./components/ReviewPage.vue'),
-            meta: { requiresAuth: true },
-          },  
-          {
-            path: '/payment',
-            meta: { requiresAuth: true },
-            component : () => import('./components/RazorPayment.vue')
-          },
-          {
-            path: '/ticket',
-            meta: { requiresAuth: true },
-            component: () => import('./components/TicketPage.vue')
-          },    
-          {
-            path: '/loading_ticket',
-            meta: { requiresAuth: true },
-            component: () => import('./components/LoadingPage.vue'),
-          },
-          
-        ],
-      },
+  path: '/booking-page',
+  component: () => import('./components/BookingPage.vue'), // ← this is the file above
+  meta: { requiresAuth: true },
+  children: [
+    {
+      path: '',
+      alias: '/date',
+      name: 'booking-selection',
+      component: () => import('./components/DateFix.vue')  // or the same file if merged
+    },
+    {
+      path: 'booking-details',
+      name: 'BookingDetails',
+      component: () => import('./components/PublicDetails.vue') // your dynamic details form
+    },
+    {
+      path: '/review-details',
+      component: () => import('./components/ReviewPage.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/payment',
+      component: () => import('./components/RazorPayment.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/ticket',
+      component: () => import('./components/TicketPage.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/loading_ticket',
+      component: () => import('./components/LoadingPage.vue'),
+      meta: { requiresAuth: true }
+    }
+  ]
+},
       {
         path: '/:notFound(.*)',
         component: () => import('./components/ErrorPage.vue')

@@ -44,23 +44,31 @@ import axios from 'axios';
     },
     methods: {
         async getTicket() {
-            try {
-                this.error = false;
-                this.overlay = true;
-                const response2 = await axios.post(`${this.$store.getters.getUrl}/api/qr/book`, { "paymentid": this.payId });
-                if (response2.status === 200) {
-                   
-                    this.$store.commit('setQR', response2.data);
-                    console.log('session',sessionStorage.getItem('payment_id'))
-                    this.$router.push('/ticket')
-                }
+    try {
+        this.error = false;
+        this.overlay = true;
+
+        const paymentId  = this.payId;
+        const categoryId = this.$store.getters.getRazor?.categoryId 
+                        || this.$store.getters.getDetails?.categoryId;
+
+        const response = await axios.get(
+            `${this.$store.getters.getUrl}/api/onlineBooking/generateTicketQrCode`,
+            {
+                params: { categoryId, paymentId }
             }
-            catch (err) {
-                this.error = true;
-                this.overlay = false
-                console.error(err)
-            }
+        );
+
+        if (response.status === 200) {
+            this.$store.commit('setQR', response.data);
+            this.$router.push('/ticket');
         }
+    } catch (err) {
+        this.error = true;
+        this.overlay = false;
+        console.error(err);
+    }
+}
     }
   }
 </script>

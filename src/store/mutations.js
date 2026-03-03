@@ -78,5 +78,21 @@ export default {
     setCapacityId(state, payload) {
         state.capacityId = payload;
         sessionStorage.setItem('capacityId', payload);
+    },
+    setCategories(state, payload) {
+        state.categories = payload;
+        sessionStorage.setItem('categories', JSON.stringify(payload));
+    },
+    setCategoryTypes(state, payload) {
+        state.categoryTypes = payload;
+        sessionStorage.setItem('categoryTypes', JSON.stringify(payload));
+    },
+    setCategoryPrices(state, payload) {
+        state.categoryPrices = payload;
+        sessionStorage.setItem('categoryPrices', JSON.stringify(payload));
+    },
+    setCategoryId(state, payload) {
+        state.categoryId = payload;
+        sessionStorage.setItem('categoryId', payload);
     }
 };

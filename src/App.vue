@@ -22,6 +22,11 @@ export default {
       this.$store.dispatch('loadPrice')
     },
   },
+  created() {
+    // Load categories and prices on app start
+    this.$store.dispatch('getAllCategories');
+    this.$store.dispatch('getCategoryPrices');
+  },
   mounted() {
     this.loadPrice();
     this.$store.dispatch('getSlots');

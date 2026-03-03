@@ -24,6 +24,7 @@ export default {
       razorPayScript: null
     }
   },
+
   computed: {
     details() {
       return this.$store.getters.getDetails
@@ -32,102 +33,172 @@ export default {
       return this.$store.getters.getRazor
     },
   },
+
   methods: {
     async loadRazorPay() {
       return new Promise(resolve => {
         const script = document.createElement('script')
         script.src = this.script
         script.onload = () => {
-          resolve(true);
-          this.overlay = false;
+          resolve(true)
+          this.overlay = false
         }
-        script.onerror = () => {
-          resolve(false)
-        }
+        script.onerror = () => resolve(false)
         document.body.appendChild(script)
-        this.razorpayScript = script;
+        this.razorpayScript = script
       })
     },
-    removeRazorPayScript() {
-      // Remove the Razorpay script element from the DOM
-      if (this.razorpayScript && this.razorpayScript.parentNode) {
-        this.razorpayScript.parentNode.removeChild(this.razorpayScript);
-        const elementsToRemove = document.body.getElementsByClassName('razorpay-container');
 
-        // Convert HTMLCollection to array and loop through each element to remove it
-        Array.from(elementsToRemove).forEach(element => {
-          element.remove();
-        });
+    removeRazorPayScript() {
+      if (this.razorpayScript && this.razorpayScript.parentNode) {
+        this.razorpayScript.parentNode.removeChild(this.razorpayScript)
+        Array.from(document.body.getElementsByClassName('razorpay-container'))
+          .forEach(el => el.remove())
+      }
+    },
+
+    /**
+     * Calls generateTicketQrCode after payment verification succeeds.
+     * Stores { userDetails, qrCodeImage } in Vuex via setQR mutation.
+     */
+    async generateTicketQr(paymentId, categoryId) {
+      try {
+        this.proceed = 'Generating your ticket...'
+        this.overlay = true
+
+        const response = await axios.get(
+          `${this.url}/api/onlineBooking/generateTicketQrCode`,
+          {
+            params: { categoryId, paymentId }
+          }
+        )
+
+        if (response.status === 200 && response.data) {
+          // Store { userDetails: {...}, qrCodeImage: "base64..." } in Vuex
+          this.$store.commit('setQR', response.data)
+          console.log('[RazorPayment] QR generated successfully:', response.data)
+          return true
+        } else {
+          console.error('[RazorPayment] generateTicketQrCode unexpected response:', response)
+          return false
+        }
+      } catch (error) {
+        console.error('[RazorPayment] generateTicketQrCode error:', error)
+        return false
       }
     }
   },
+
   async created() {
-    const result = await this.loadRazorPay()
-    if (!result) {
-      alert('Failed to load razorpay script')
+    if (!this.razor) {
+      console.error(
+        '[RazorPayment] razor is null in created().\n' +
+        'getRazor getter returned:', this.razor, '\n' +
+        'This means setRazor was not committed before payon = true.\n' +
+        'Check that createOrder action completed successfully.'
+      )
+      this.proceed = 'Something went wrong. Redirecting back...'
+      setTimeout(() => this.$router.push('/review-details'), 2000)
       return
     }
+
+    console.log('[RazorPayment] razor data from store:', this.razor)
+
+    const result = await this.loadRazorPay()
+    if (!result) {
+      alert('Failed to load Razorpay script')
+      return
+    }
+
     const options = {
-      key: this.razor.razorpayKeyId,
-      amount: this.razor.amount,
-      currency: this.razor.currency,
-      name: `Aksharam Museum`,
-      description: `Description of the payment`,
-      order_id: this.razor.orderId,
+      key:         this.razor.razorpayKeyId,
+      amount:      this.razor.amount,
+      currency:    this.razor.currency,
+      name:        'Aksharam Museum',
+      description: 'Description of the payment',
+      order_id:    this.razor.orderId,
 
       handler: async (response) => {
-        this.pay_id = response.razorpay_payment_id;
-        this.order_id = response.razorpay_order_id;
-        this.signature = response.razorpay_signature;
+        this.pay_id    = response.razorpay_payment_id
+        this.order_id  = response.razorpay_order_id
+        this.signature = response.razorpay_signature
         this.$store.commit('setPayment', this.pay_id)
-        // console.log(this.pay_id);
+
+        this.proceed = 'Verifying your payment...'
+        this.overlay = true
+
         try {
-          const response1 = await axios.post(`${this.url}/api/payment/verify-payment`, {
-            "orderId": this.order_id,
-            "paymentId": this.pay_id,
-            "signature": this.signature,
-          });
+          // Step 1: Verify payment
+          const verifyResponse = await axios.post(
+            `${this.url}/api/onlineBooking/verifyPayment`,
+            {},
+            {
+              params: {
+                orderId:       this.order_id,
+                paymentId:     this.pay_id,
+                signatureData: this.signature,
+                categoryId:    this.$store.getters.getRazor?.categoryId,
+              }
+            }
+          )
 
-          if (response1.status === 200) {
-            this.$router.push('/loading_ticket')
+          if (verifyResponse.status === 200) {
+            // Step 2: Generate QR ticket after successful verification
+            const categoryId = this.$store.getters.getRazor?.categoryId
+            const qrSuccess  = await this.generateTicketQr(this.pay_id, categoryId)
+
+            if (qrSuccess) {
+              this.$router.push('/loading_ticket')
+            } else {
+              // QR failed but payment was successful — still navigate, ticket page handles empty state
+              console.warn('[RazorPayment] QR generation failed, navigating anyway.')
+              this.$router.push('/loading_ticket')
+            }
           }
+        } catch (error) {
+          console.error('[RazorPayment] verifyPayment error:', error)
+          this.proceed = 'Payment verification failed. Please contact support.'
+          this.overlay = true
         }
-        catch (error) {
-          console.error(error);
-        }
       },
-      prefill: {
-        name: this.details.name,
-        email: this.details.email,
-        contact: this.details.mobile
-      },
-      "theme": {
-        "color": "#388E3C"
-      },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.on('payment.failed', (response) => {
-      console.log('Payment failed event triggered');
-      console.log('Response:', response);
 
-      const proceed = confirm(`${response.error.description}. Do you want to proceed to another payment method?`);
-      console.log('Proceed:', proceed);
+      prefill: {
+        name:    this.details?.name,
+        email:   this.details?.email,
+        contact: this.details?.mobile,
+      },
+
+      theme: {
+        color: '#388E3C'
+      },
+    }
+
+    const paymentObject = new window.Razorpay(options)
+
+    paymentObject.on('payment.failed', (response) => {
+      console.log('[RazorPayment] payment.failed:', response)
+
+      const proceed = confirm(
+        `${response.error.description}. Do you want to proceed to another payment method?`
+      )
 
       if (!proceed) {
         this.proceed = 'You are being redirected to home page.'
-        this.overlay = true;
-        paymentObject.close();
+        this.overlay = true
+        paymentObject.close()
         setTimeout(() => {
-          sessionStorage.clear();
-          this.removeRazorPayScript(); 
-          this.$router.push('/');
-        }, 3000);
+          sessionStorage.clear()
+          this.removeRazorPayScript()
+          this.$router.push('/')
+        }, 3000)
       }
-    });
-    paymentObject.open();
+    })
+
+    paymentObject.open()
   },
+
   beforeUnmount() {
-    this.removeRazorPayScript();
+    this.removeRazorPayScript()
   }
-};
+}
 </script>

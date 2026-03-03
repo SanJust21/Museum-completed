@@ -1,336 +1,655 @@
 <template>
   <v-responsive>
-    <div class="d-flex justify-content-center bg-body-tertiary m-2 p-3 gap-5 flex-wrap">
-      <div class="d-flex flex-column align-items-center">
-        <v-date-picker v-model="date" color="light-green-darken-4" :allowed-dates="allowedDates"
-          min="2024-01-01" :max="maxDate" class=" custom-date-picker" @update:model-value="setDate" max-width="350"
-          width="350" height="450"></v-date-picker>
-        <div class="d-flex">
-          <v-icon class="mdi mdi-circle-medium text-success"></v-icon>
-          <p class="text-success me-4 my-0 available">Available</p>
-          <v-icon class="mdi mdi-circle-medium text-warning"></v-icon>
-          <p class="text-warning me-4 my-0 available">Limited</p>
-          <v-icon class="mdi mdi-circle-medium text-danger"></v-icon>
-          <p class="text-danger me-1 my-0 available">Sold Out</p>
-        </div>
-      </div>
-      <div v-if="date" class="d-flex" style="width:420px;" ref="dateContainer">
-        <div class="px-2 bg-white">
-          <div class="">
-            <h6 class="mt-2 mb-3" style="font-size: 18px;">
-              {{ slots ? 'Visit Time' : 'Choose your visit time' }}:
-            </h6>
-            <div class="capacity mb-0" v-if="selectedSlot.length !== 0">
-              <div class="d-flex flex-wrap">
-                <div v-for="(slot, index) in selectedSlot" :key="index">
-                  <div v-if="slot.status" class="d-flex align-items-start flex-column mb-2" style="width:200px;">
-                    <!-- <div v-if="!isSlotPast(slot.endTime)"> -->
-                    <div class="me-3">
-                      <input type="radio" :value="slot.startTime" :id="index" class="mb-2 lh-1" v-model="slots"
-                        :name="category" @change="setCapacity(slot.startTime, slot.capacity, slot.totalCapacity)"
-                        :checked="slots === slot.startTime" :disabled="isSlotPast(slot.endTime)" />
-                      {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}
-                    </div>
-                    <p class="my-0 lh-1 ms-3" style="font-size: 10px;"
-                      :style="{ color: getRemainingColor(slot.capacity, slot.totalCapacity) }">
-                      <i>{{ slot.capacity }} remaining</i>
-                    </p>
-                    <!-- </div> -->
+    <div class="container-fluid px-3 py-4">
+      <div class="row g-4">
 
-                  </div>
-                </div>
+        <!-- SECTION 1: Date Picker -->
+        <div class="col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body d-flex flex-column align-items-center">
+              <h5 class="card-title mb-4 text-center">Select Visit Date</h5>
+
+              <v-date-picker
+                v-model="date"
+                color="light-green-darken-4"
+                :allowed-dates="allowedDates"
+                min="2024-01-01"
+                :max="maxDate"
+                max-width="320"
+                width="320"
+                height="420"
+                class="custom-date-picker mx-auto"
+                @update:model-value="setDate"
+              />
+
+              <div class="d-flex mt-4 flex-wrap justify-content-center gap-4">
+                <span v-for="legend in capacityLegend" :key="legend.label" class="d-flex align-items-center">
+                  <v-icon :class="`mdi mdi-circle-medium text-${legend.color} me-1`" />
+                  <span :class="`text-${legend.color} small`">{{ legend.label }}</span>
+                </span>
               </div>
             </div>
-            <v-card v-else width="400" max-width="340" height="100"
-              class="d-flex justify-content-center align-items-center bg-transparent " elevation="0">
-              <p v-if="error" class="text-danger text-center lh-1">
-                <v-icon color="danger" class="mdi mdi-alert"></v-icon>
-                <br />Sorry, something went wrong. Please try again later.<br /><span style="font-size: small;">{{ error
-                  }}</span>
-              </p>
-              <v-progress-circular v-else v-model="load" color="primary" size="64" indeterminate></v-progress-circular>
-              <!-- <v-skeleton-loader v-else v-model="load" type="table-tbody"></v-skeleton-loader> -->
-            </v-card>
-          </div>
-
-          <v-divider class="mx-1"></v-divider>
-          <h6 class=" mb-3" style="font-size: 18px;">
-            {{ category ? 'Category' : 'Select your category' }}:
-          </h6>
-
-          <div>
-            <input type="radio" value="public" id="public" class="me-1" v-model="category" name="category"
-              @change="setCategory" />
-            <label for="public" class="me-5">
-              <p>Public</p>
-            </label>
-          </div>
-          <div>
-            <input type="radio" value="institution" id="institution" class="me-1" v-model="category" name="category"
-              @change="setCategory" />
-            <label for="institution" class="me-5">
-              <p>Institution</p>
-            </label>
-          </div>
-          <div>
-            <input type="radio" value="foreigner" id="foreigner" class="me-1" v-model="category" name="category"
-              @change="setCategory" />
-            <label for="foreigner" class="me-5">
-              <p>Foreigner</p>
-            </label>
           </div>
         </div>
-      </div>
-      <div class="mt-1 mb-0" v-if="category" ref="detailscontainer">
-        <router-view></router-view>
+
+        <!-- SECTION 2: Time Slots + Category -->
+        <div v-if="date" class="col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h5 class="card-title mb-4">Choose Time & Category</h5>
+
+              <h6 class="mb-3 fw-semibold">Visit Time Slots</h6>
+
+              <template v-if="visibleSlots.length > 0">
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                  <label
+                    v-for="(slot, index) in visibleSlots"
+                    :key="slot.id"
+                    class="slot-label d-flex flex-column mb-2 p-2 border rounded"
+                    style="width: 48%; min-width: 180px; cursor: pointer;"
+                  >
+                    <div class="d-flex align-items-center">
+                      <input
+                        type="radio"
+                        :value="slot.startTime"
+                        :id="`slot-${index}`"
+                        class="me-2"
+                        v-model="selectedSlotTime"
+                        name="visit-time"
+                        :disabled="isSlotPast(slot.endTime)"
+                        @change="onSlotSelected(slot)"
+                      />
+                      <span class="fw-medium">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</span>
+                    </div>
+                    <small
+                      class="ms-4 mt-1"
+                      :style="{ color: getRemainingColor(slot.capacity, slot.totalCapacity) }"
+                    >
+                      {{ slot.capacity }} remaining
+                    </small>
+                  </label>
+                </div>
+              </template>
+
+              <div v-else class="text-center py-5 text-muted">
+                <v-progress-circular v-if="load" indeterminate color="primary" size="48" class="mb-3" />
+                <p class="mb-0">No available slots for this date</p>
+              </div>
+
+              <v-divider class="my-4" />
+
+              <h6 class="mb-3 fw-semibold">Category</h6>
+
+              <div v-if="categories.length === 0" class="text-center py-4">
+                <v-progress-circular indeterminate color="primary" size="32" />
+                <p class="mt-2 small text-muted">Loading categories...</p>
+              </div>
+
+              <div v-else class="d-flex flex-column gap-2">
+                <label
+                  v-for="cat in categories"
+                  :key="cat.id"
+                  class="d-flex align-items-center p-2 border rounded"
+                  style="cursor: pointer;"
+                >
+                  <input
+                    type="radio"
+                    :value="cat.id"
+                    :id="`cat-${cat.id}`"
+                    class="me-2"
+                    v-model="selectedCategoryId"
+                    name="category"
+                    @change="onCategorySelected"
+                  />
+                  <span class="fw-medium">{{ cat.category }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: User Form + Tickets -->
+        <div v-if="date && selectedCategoryId" class="col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h5 class="card-title mb-4">Your Details & Tickets</h5>
+
+              <v-form ref="userForm" class="mb-5">
+                <v-text-field
+                  v-model="name"
+                  label="Full Name *"
+                  :rules="nameRules"
+                  required outlined dense hide-details="auto"
+                  class="mb-3"
+                />
+                <v-text-field
+                  v-model="mobileNum"
+                  label="Mobile Number *"
+                  :rules="mobRules"
+                  required outlined dense hide-details="auto"
+                  class="mb-3"
+                  :readonly="!!mobileNum"
+                />
+                <v-text-field
+                  v-model="email"
+                  label="Email Address *"
+                  :rules="emailRules"
+                  required outlined dense hide-details="auto"
+                  class="mb-3"
+                />
+
+                <!-- District field with "Other" support -->
+                <template v-if="selectedCategoryRequiresDistrict">
+                  <v-select
+                    v-model="districtSelection"
+                    :items="districtsWithOther"
+                    label="District *"
+                    :rules="districtRules"
+                    required outlined dense hide-details="auto"
+                    class="mb-3"
+                    placeholder="Select your district"
+                    @update:model-value="onDistrictChange"
+                  />
+                  <v-text-field
+                    v-if="districtSelection === 'Other'"
+                    v-model="customDistrict"
+                    label="Please specify your district *"
+                    :rules="customDistrictRules"
+                    required outlined dense hide-details="auto"
+                    class="mb-3"
+                    placeholder="Enter your district"
+                    autofocus
+                  />
+                </template>
+              </v-form>
+
+              <h6 class="mb-3 fw-semibold">Select Tickets</h6>
+
+              <div v-if="loadingTypes" class="text-center py-5">
+                <v-progress-circular indeterminate color="primary" size="40" />
+                <p class="mt-3 text-muted">Loading ticket types & prices...</p>
+              </div>
+
+              <template v-else-if="categoryTypes.length > 0">
+                <div class="d-flex flex-column gap-3 mb-4">
+                  <div
+                    v-for="type in categoryTypes"
+                    :key="type.id"
+                    class="ticket-row d-flex justify-content-between align-items-center px-3 py-3 border rounded bg-light shadow-sm"
+                  >
+                    <div class="pe-3">
+                      <strong>{{ type.typeName }}</strong>
+                      <div class="text-muted small">₹{{ type.price ?? 0 }}</div>
+                    </div>
+                    <div class="quantity-controls d-flex align-items-center gap-2">
+                      <button
+                        type="button"
+                        class="quantity-btn minus"
+                        :disabled="getQuantity(type.id) === 0"
+                        @click="updateQuantity(type.id, -1)"
+                      >−</button>
+                      <span class="quantity-display">{{ getQuantity(type.id) }}</span>
+                      <button
+                        type="button"
+                        class="quantity-btn plus"
+                        @click="updateQuantity(type.id, 1)"
+                      >+</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                  <h5 class="mb-0">Total</h5>
+                  <h5 class="text-success fw-bold mb-0">₹{{ totalAmount.toFixed(2) }}</h5>
+                </div>
+
+                <v-btn
+                  v-if="selectedSlotTime && totalAmount > 0"
+                  color="green-darken-4"
+                  class="mt-4 text-white"
+                  x-large block
+                  :disabled="!isFormValid"
+                  @click="proceedToDetails"
+                >
+                  PROCEED TO BOOK
+                </v-btn>
+              </template>
+
+              <div v-else class="text-center py-5 text-warning">
+                <p>No ticket types available for selected category.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder when no date selected -->
+        <div v-if="!date" class="col-lg-8 d-flex align-items-center justify-content-center" style="min-height: 420px;">
+          <h5 class="text-muted text-center m-0">Please select a date to view available time slots and categories.</h5>
+        </div>
+
       </div>
     </div>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" :color="snackColor" timeout="5000" top>
+      {{ snackMessage }}
+      <template #action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-responsive>
 </template>
 
 <script>
-// import axios from 'axios';
+const MOBILE_REGEX = /^\d{10}$/;
+const EMAIL_REGEX  = /.+@.+\..+/;
+
 export default {
-  name: 'App',
+  name: 'DateFix',
 
   data() {
     return {
-      date: this.$store.getters.getOrigDate,
-      formattedDate: null,
-      bookingDate: this.$store.getters.getBdate,
-      category: this.$store.getters.getCategory,
-      slots: this.$store.getters.getCapacity,
-      error: '',
-      load: true,
-      selectedSlot: [],
-      disabledDates: [],
+      date:                this.$store.getters.getOrigDate || null,
+      formattedDate:       null,
+      selectedCategoryId:  this.$store.getters.getCategoryId || null,
+      selectedCategoryObj: null,
+
+      // Slot state — single source of truth
+      allSlots:             [],
+      selectedSlotTime:     this.$store.getters.getCapacity || null,
+      selectedSlotId:       null,
       selectedSlotCapacity: null,
+
+      load:          true,
+      loadingTypes:  false,
+      disabledDates: [],
+
+      categoryTypes: [],
+      quantities:    {},
+
+      // User details
+      name:      '',
+      mobileNum: '',
+      email:     '',
+
+      // District — two-part state
+      districtSelection: null,  // v-select value (named district or 'Other')
+      customDistrict:    '',    // free-text shown only when 'Other' is selected
+
+      districts: [
+        'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod',
+        'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad',
+        'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad',
+      ],
+
+      capacityLegend: [
+        { label: 'Available', color: 'success' },
+        { label: 'Limited',   color: 'warning' },
+        { label: 'Sold Out',  color: 'danger'  },
+      ],
+
+      snackbar:     false,
+      snackMessage: '',
+      snackColor:   'success',
     };
   },
-  watch: {
-    category(newCategory) {
-      this.navigateToRoute(newCategory);
-    },
-    slots(newSlot) {
-      const slot = this.selectedSlot.find(slot => slot.startTime === newSlot);
-      if (slot) {
-        this.selectedSlotCapacity = slot.capacity;
-      }
-    },
-  },
+
   computed: {
+    categories() {
+      return this.$store.getters.getCategories || [];
+    },
+
+    categoryMap() {
+      return Object.fromEntries(this.categories.map(c => [c.id, c]));
+    },
+
+    slotMap() {
+      return Object.fromEntries(this.allSlots.map(s => [s.startTime, s]));
+    },
+
+    visibleSlots() {
+      return this.allSlots.filter(s => s.status === true);
+    },
+
     maxDate() {
-      const currentDate = new Date();
-      const maxDate = new Date(currentDate);
-      maxDate.setDate(currentDate.getDate() + 90);
-      return maxDate.toISOString().slice(0, 10);
+      const d = new Date();
+      d.setDate(d.getDate() + 90);
+      return d.toISOString().slice(0, 10);
+    },
+
+    totalAmount() {
+      return this.categoryTypes.reduce((sum, type) => {
+        return sum + (this.quantities[type.id] || 0) * (type.price || 0);
+      }, 0);
+    },
+
+    districtsWithOther() {
+      return [...this.districts, 'Other'];
+    },
+
+    /**
+     * Always resolves to the actual district name.
+     * When 'Other' is selected, returns the manually typed value.
+     * Never exposes the raw "Other" string to the store or review page.
+     */
+    resolvedDistrict() {
+      if (this.districtSelection === 'Other') {
+        return this.customDistrict.trim() || null;
+      }
+      return this.districtSelection || null;
+    },
+
+    selectedCategoryRequiresDistrict() {
+      if (!this.selectedCategoryObj) return false;
+      if (typeof this.selectedCategoryObj.requiresDistrict === 'boolean') {
+        return this.selectedCategoryObj.requiresDistrict;
+      }
+      return (this.selectedCategoryObj.category || '').toLowerCase().includes('institution');
+    },
+
+    isFormValid() {
+      const base = (
+        this.name.trim().length >= 3 &&
+        MOBILE_REGEX.test(this.mobileNum) &&
+        EMAIL_REGEX.test(this.email)
+      );
+      if (!this.selectedCategoryRequiresDistrict) return base;
+      if (this.districtSelection === 'Other') {
+        return base && this.customDistrict.trim().length >= 2;
+      }
+      return base && !!this.districtSelection;
+    },
+
+    nameRules()     { return [v => !!v || 'Name is required']; },
+    mobRules()      { return [v => !!v || 'Mobile is required', v => MOBILE_REGEX.test(v) || 'Must be 10 digits']; },
+    emailRules()    { return [v => !!v || 'E-mail is required', v => EMAIL_REGEX.test(v) || 'E-mail must be valid']; },
+    districtRules() { return [v => !!v || 'District is required for this category']; },
+    customDistrictRules() {
+      return [
+        v => !!v?.trim()           || 'Please enter your district',
+        v => v?.trim().length >= 2 || 'District name is too short',
+      ];
     },
   },
-  mounted() {
-    this.navigateToRoute(this.category);
-    this.$nextTick(() => {
-      this.getHoliday();
-      if (this.date) {
-        this.setDate();
+
+  async mounted() {
+    await this.loadCategories();
+
+    const details  = this.$store.getters.getDetails || {};
+    this.mobileNum = this.$store.getters.getMobile || '';
+    this.name      = details.name  || '';
+    this.email     = details.email || '';
+
+    // Restore saved district — detect whether it was a custom (non-listed) value
+    const savedDistrict = details.district || null;
+    if (savedDistrict) {
+      if (this.districts.includes(savedDistrict)) {
+        this.districtSelection = savedDistrict;
+      } else {
+        this.districtSelection = 'Other';
+        this.customDistrict    = savedDistrict;
       }
-    })
+    }
+
+    await this.$nextTick();
     this.getHoliday();
+    if (this.date) await this.setDate();
+    if (this.selectedCategoryId) await this.onCategorySelected();
   },
+
   methods: {
+    // ─── Data Loading ─────────────────────────────────────────────────────────
+
+    async loadCategories() {
+      if (this.categories.length > 0) return;
+      try {
+        await this.$store.dispatch('getAllCategories');
+      } catch (err) {
+        console.error('loadCategories:', err);
+      }
+    },
+
     async getHoliday() {
       try {
         const response = await this.$store.dispatch('getHoliday');
-        if (response) {
-          this.holidayName = response;
-          this.disabledDates = response.map(date => new Date(date));
-        }
+        if (response) this.disabledDates = response.map(d => new Date(d));
+      } catch (err) {
+        console.error('getHoliday:', err);
       }
-      catch (error) {
-        console.log(error)
-      }
-    },
-    getRemainingColor(remainingCapacity, totalCapacity) {
-      const percentage = (remainingCapacity / totalCapacity) * 100;
-      if (percentage >= 50) {
-        return 'green';
-      } else if (percentage > 0) {
-        return 'orange';
-      } else {
-        return 'red';
-      }
-    },
-    formatTime(timeString) {
-      const [hours, minutes] = timeString.split(':');
-      let hoursInt = parseInt(hours, 10);
-      const ampm = hoursInt >= 12 ? 'pm' : 'am';
-      hoursInt = hoursInt % 12;
-      hoursInt = hoursInt ? hoursInt : 12; // Handle midnight (0 hours)
-      return `${hoursInt}:${minutes} ${ampm}`;
-    },
-
-    allowedDates(val) {
-      const selectedDate = new Date(val);
-      const today = new Date();
-      selectedDate.setHours(0, 0, 0, 0);
-      today.setHours(0, 0, 0, 0);
-      const selectedDateString = selectedDate.toISOString().split('T')[0];
-      console.log(selectedDateString)
-      const isDisabled = this.disabledDates.some(disabledDate => {
-        return selectedDate.toDateString() === disabledDate.toDateString();
-      });
-
-      if (isDisabled) {
-        return false;
-      }
-      const maxDate = new Date(today);
-      maxDate.setDate(today.getDate() + 90);
-      const isMonday = selectedDate.getDay() === 1;
-      const isBeforeToday = selectedDate < today;
-      return !isMonday && !isBeforeToday;
-    },
-
-    navigateToRoute(category) {
-      if (category === 'public') {
-        this.$router.push('/public-details-enter');
-      } else if (category === 'institution') {
-        this.$router.push('/institution-details-enter');
-      } else if (category === 'foreigner') {
-        this.$router.push('/foreigner-details-enter');
-      }
-    },
-
-    setCapacity(slotId, capacity, total) {
-      // console.log('Selected slot:', slotId);
-      this.slots = slotId
-      // console.log('slotId', slotId)
-      // console.log('category', this.slots)
-      this.$store.commit('setCapacity', slotId);
-      const percentage = (capacity / total) * 100;
-      console.log(percentage)
-      const selectedDateButton = document.querySelector('.v-date-picker-month__day--selected>button');
-      if (selectedDateButton) {
-        // Remove any existing color classes
-        selectedDateButton.classList.remove('bg-green', 'bg-orange', 'bg-danger');
-      }
-      if (percentage >= 50) {
-        selectedDateButton.classList.add('bg-green');
-      } else if (percentage > 0) {
-        selectedDateButton.classList.add('bg-orange');
-      } else if (percentage === 0){
-        selectedDateButton.classList.add('bg-danger');
-      }
-      this.selectedSlotCapacity = capacity;
     },
 
     async setDate() {
-      // this.getDateClass(this.date);
-      this.slots = null;
-      this.selectedSlot = [];
-      this.load = true;
-      this.error = null
-      const parsedDate = new Date(Date.parse(this.date));
-      this.$store.commit('setOrigDate', this.date)
-      if (!isNaN(parsedDate.getTime())) {
-        this.date = parsedDate;
-        var year = this.date.getFullYear();
-        var month = String(this.date.getMonth() + 1).padStart(2, '0');
-        var day = String(this.date.getDate()).padStart(2, '0');
-        this.formattedDate = `${year}-${month}-${day}`;
-        this.$store.commit('setDate', this.formattedDate);
-        try {
+      this.resetSlotState();
 
-          const res = await this.$store.dispatch('getSlotDate', this.formattedDate);
-          if (res) {
-            this.load = false;
-            this.selectedSlot = res;
-          }
+      const d = new Date(this.date);
+      if (isNaN(d.getTime())) return;
+
+      this.$store.commit('setOrigDate', this.date);
+
+      const y   = d.getFullYear();
+      const m   = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      this.formattedDate = `${y}-${m}-${day}`;
+      this.$store.commit('setDate', this.formattedDate);
+
+      try {
+        const res = await this.$store.dispatch('getSlotByDate', this.formattedDate);
+        if (res) {
+          this.allSlots = res.map(slot => ({
+            id:            slot.slotId          ?? slot.id,
+            startTime:     slot.slotStartTime   ?? slot.startTime,
+            endTime:       slot.slotEndTime     ?? slot.endTime,
+            capacity:      slot.presentCapacity ?? slot.capacity,
+            totalCapacity: slot.totalCapacity,
+            status:        slot.presentStatus   ?? slot.status,
+          }));
         }
-        catch (error) {
-          this.load = false;
-          console.log(error);
-          this.error = error;
-        }
-        var today = new Date();
-        month = String(today.getMonth() + 1).padStart(2, '0');
-        day = String(today.getDate()).padStart(2, '0');
-        year = today.getFullYear();
-        today = `${year}-${month}-${day}`;
-        this.$store.commit('setBdate', today);
+      } catch (err) {
+        console.error('setDate:', err);
+      } finally {
+        this.load = false;
       }
-      this.scrollToElement('dateContainer');
-    },
-    scrollToElement(refName) {
-      const element = this.$refs[refName];
-      if (element) {
-        const originalScrollBehavior = this.$router.options.scrollBehavior;
-        this.$router.options.scrollBehavior = null;
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setTimeout(() => {
-          if (!this.scrolledToElement) {
-            this.$router.options.scrollBehavior = originalScrollBehavior;
-          }
-        }, 500);
-      }
-    },
-    setCategory() {
-      this.$store.commit('setCategory', this.category);
-      this.scrollToElement('routerViewContainer');
-    },
-    isSlotPast(slotEndTime) {
-      const selectedDate = new Date(this.date);
-      const now = new Date();
-      if (
-        selectedDate.getFullYear() === now.getFullYear() &&
-        selectedDate.getMonth() === now.getMonth() &&
-        selectedDate.getDate() === now.getDate()
-      ) {
-        const [hours, minutes] = slotEndTime.split(':').map(Number);
-        const slotTime = new Date();
-        slotTime.setHours(hours, minutes, 0, 0);
-        return slotTime < now;
-      }
-      return false;
     },
 
-  }
+    async onCategorySelected() {
+      const cat = this.categoryMap[this.selectedCategoryId];
+      if (!cat) return;
+
+      this.selectedCategoryObj = cat;
+      this.$store.commit('setCategory', cat.category?.trim() || null);
+      this.$store.commit('setCategoryId', cat.id);
+
+      this.loadingTypes  = true;
+      this.categoryTypes = [];
+      this.quantities    = {};
+
+      try {
+        const [types, prices] = await Promise.all([
+          this.$store.dispatch('getTypesByCategoryId', cat.id),
+          this.$store.dispatch('getCategoryPrices'),
+        ]);
+
+        const catName = cat.category?.trim();
+        this.categoryTypes = types.map(type => {
+          const priceObj = prices.find(p =>
+            (p.typeId && p.typeId === type.id) ||
+            (p.categoryName === catName && p.typeName === type.typeName)
+          );
+          return { ...type, price: priceObj?.price ?? 0 };
+        });
+
+        this.quantities = Object.fromEntries(this.categoryTypes.map(t => [t.id, 0]));
+      } catch (err) {
+        console.error('onCategorySelected:', err);
+      } finally {
+        this.loadingTypes = false;
+      }
+    },
+
+    // ─── District Handlers ────────────────────────────────────────────────────
+
+    onDistrictChange(value) {
+      if (value !== 'Other') this.customDistrict = '';
+    },
+
+    // ─── Slot Helpers ─────────────────────────────────────────────────────────
+
+    onSlotSelected(slot) {
+      this.selectedSlotTime     = slot.startTime;
+      this.selectedSlotId       = slot.id;
+      this.selectedSlotCapacity = slot.capacity;
+      this.$store.commit('setCapacity', slot.startTime);
+    },
+
+    resetSlotState() {
+      this.load             = true;
+      this.allSlots         = [];
+      this.selectedSlotTime = null;
+      this.selectedSlotId   = null;
+    },
+
+    isSlotPast(endTime) {
+      const selDate = new Date(this.date);
+      const now     = new Date();
+      if (selDate.toDateString() !== now.toDateString()) return false;
+      const [h, m] = endTime.split(':').map(Number);
+      const end = new Date();
+      end.setHours(h, m, 0, 0);
+      return end < now;
+    },
+
+    // ─── Ticket Helpers ───────────────────────────────────────────────────────
+
+    getQuantity(typeId) {
+      return this.quantities[typeId] || 0;
+    },
+
+    updateQuantity(typeId, delta) {
+      const next = (this.quantities[typeId] || 0) + delta;
+      if (next < 0) return;
+      this.quantities = { ...this.quantities, [typeId]: next };
+    },
+
+    // ─── Form Submission ──────────────────────────────────────────────────────
+
+    proceedToDetails() {
+      if (!this.$refs.userForm.validate()) {
+        return this.showSnackbar('Please fill all required fields correctly', 'red');
+      }
+      if (!this.selectedSlotTime) {
+        return this.showSnackbar('Please select your visit time!', 'red');
+      }
+      if (!this.selectedCategoryId) {
+        return this.showSnackbar('Please select your category!', 'red');
+      }
+      if (this.totalAmount === 0) {
+        return this.showSnackbar('Please select at least one ticket!', 'red');
+      }
+      if (this.selectedCategoryRequiresDistrict && !this.resolvedDistrict) {
+        return this.showSnackbar(
+          this.districtSelection === 'Other'
+            ? 'Please enter your district name'
+            : 'District is required for this category',
+          'red'
+        );
+      }
+
+      const payload = {
+        categoryId:    this.selectedCategoryId,
+        categoryObj:   { ...this.selectedCategoryObj },
+        cat:           this.selectedCategoryObj?.category?.trim() || this.$store.getters.getCategory || '',
+        date:          this.formattedDate,
+        slot:          this.selectedSlotTime,
+        slotId:        this.selectedSlotId,
+        name:          this.name,
+        mobile:        this.mobileNum,
+        email:         this.email,
+        district:      this.selectedCategoryRequiresDistrict ? this.resolvedDistrict : null,
+        quantities:    { ...this.quantities },
+        categoryTypes: this.categoryTypes.map(t => ({ ...t })),
+        total:         this.totalAmount,
+        capacity:      this.selectedSlotCapacity,
+      };
+
+      this.$store.commit('setDetails', payload);
+      this.$store.commit('setMobile', this.mobileNum);
+      this.$router.push('/review-details');
+    },
+
+    // ─── UI Utilities ─────────────────────────────────────────────────────────
+
+    showSnackbar(message, color = 'success') {
+      this.snackMessage = message;
+      this.snackColor   = color;
+      this.snackbar     = true;
+    },
+
+    getRemainingColor(remaining, total) {
+      const pct = (remaining / total) * 100;
+      return pct >= 50 ? 'green' : pct > 0 ? 'orange' : 'red';
+    },
+
+    formatTime(str) {
+      const [h, m]  = str.split(':');
+      const hours   = parseInt(h, 10);
+      const ampm    = hours >= 12 ? 'pm' : 'am';
+      const display = hours % 12 || 12;
+      return `${display}:${m.padStart(2, '0')} ${ampm}`;
+    },
+
+    allowedDates(val) {
+      const sel   = new Date(val);
+      const today = new Date();
+      sel.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      if (sel < today) return false;
+      if (sel.getDay() === 1) return false;
+      if (this.disabledDates.some(d => sel.toDateString() === d.toDateString())) return false;
+      return true;
+    },
+  },
 };
 </script>
 
 <style scoped>
-button {
-  background-color: #1B5E20 !important;
+.ticket-row {
+  background: #f8f9fa;
+  transition: background 0.18s;
+}
+.ticket-row:hover {
+  background: #e9ecef;
 }
 
-.v-date-picker-header {
-  padding-bottom: 1px !important;
-}
-
-:deep(.v-date-picker-header__content) {
-  font-size: 24px !important;
-}
-
-:deep(.v-picker-title) {
-  font-weight: 400 !important;
-  padding-bottom: 0px !important;
-}
-
-input {
+.quantity-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #1b5e20;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
-
-.available {
-  font-size: 14px;
+.quantity-btn:disabled {
+  background: #a5d6a7;
+  opacity: 0.75;
+  cursor: not-allowed;
 }
 
-.bg-success {
-  background-color: #28a745 !important;
-}
-
-.bg-warning {
-  background-color: #ffc107 !important;
-}
-
-.bg-danger {
-  background-color: #dc3545 !important;
+.quantity-display {
+  min-width: 50px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  font-weight: 600;
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
 }
 </style>
