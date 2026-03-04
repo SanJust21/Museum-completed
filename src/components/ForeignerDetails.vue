@@ -146,7 +146,7 @@ export default {
             totalTax: this.totalTax
           }
           this.$store.commit('setDetails', details)
-          this.$router.push('/review-details')
+          this.$router.push('/beta/review-details')
           // try {
           //   this.disabled = true;
           //   const res = await this.$store.dispatch('lockSlot', {

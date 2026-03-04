@@ -11,6 +11,7 @@ const store = createStore({
       // base_url: 'http://localhost:8083/beta',
       payment_id: sessionStorage.getItem('payment_id') || null,
        base_url: 'https://aksharammuseum.com/beta',
+       publicPath: '/beta/',
       ctg: [],
       details: JSON.parse(sessionStorage.getItem('details')) || {},
       razordetails: JSON.parse(sessionStorage.getItem('razordetails')) || null, 

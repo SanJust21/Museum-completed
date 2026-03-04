@@ -98,7 +98,7 @@ export default {
         'Check that createOrder action completed successfully.'
       )
       this.proceed = 'Something went wrong. Redirecting back...'
-      setTimeout(() => this.$router.push('/review-details'), 2000)
+      setTimeout(() => this.$router.push('/beta/review-details'), 2000)
       return
     }
 
@@ -148,11 +148,11 @@ export default {
             const qrSuccess  = await this.generateTicketQr(this.pay_id, categoryId)
 
             if (qrSuccess) {
-              this.$router.push('/loading_ticket')
+              this.$router.push('/beta/loading_ticket')
             } else {
               // QR failed but payment was successful — still navigate, ticket page handles empty state
               console.warn('[RazorPayment] QR generation failed, navigating anyway.')
-              this.$router.push('/loading_ticket')
+              this.$router.push('/beta/loading_ticket')
             }
           }
         } catch (error) {
@@ -189,7 +189,7 @@ export default {
         setTimeout(() => {
           sessionStorage.clear()
           this.removeRazorPayScript()
-          this.$router.push('/')
+          this.$router.push('/beta/')
         }, 3000)
       }
     })

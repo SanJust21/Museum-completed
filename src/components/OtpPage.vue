@@ -5,7 +5,7 @@
       Enter the code we just sent to your mobile phone <br>
       <span class="font-weight-black">{{ mobile }}</span>
       <span class="ms-3">(</span>
-      <router-link to="/" class=" text-decoration-none"><b>change </b></router-link>)
+      <router-link to="/beta/" class=" text-decoration-none"><b>change </b></router-link>)
     </div>
     <v-sheet color="surface">
       <v-otp-input v-model="otp" variant="solo-filled" length="6"></v-otp-input>
@@ -61,7 +61,7 @@ export default {
         });
         if (success) {
           this.buttonDisabled = false;
-          this.$router.push('/booking-page')
+          this.$router.push('/beta/booking-page')
         }
       }
       catch (error) {

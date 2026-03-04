@@ -573,7 +573,7 @@ export default {
 
       this.$store.commit('setDetails', payload);
       this.$store.commit('setMobile', this.mobileNum);
-      this.$router.push('/review-details');
+      this.$router.push('/beta/review-details');
     },
 
     // ─── UI Utilities ─────────────────────────────────────────────────────────

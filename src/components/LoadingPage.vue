@@ -61,7 +61,7 @@ import axios from 'axios';
 
         if (response.status === 200) {
             this.$store.commit('setQR', response.data);
-            this.$router.push('/ticket');
+            this.$router.push('/beta/ticket');
         }
     } catch (err) {
         this.error = true;

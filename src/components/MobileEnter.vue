@@ -58,7 +58,7 @@ export default {
             if (success) {
               this.buttonDisabled = false;
               
-            this.$router.push('/otp');
+            this.$router.push('/beta/otp');
           }
           }
           catch (err) {

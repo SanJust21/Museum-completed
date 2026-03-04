@@ -1,9 +1,10 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  devServer: {
+ devServer: {
         allowedHosts:"all"
-   },
+  },
+ publicPath: '/beta/',
   pluginOptions: {
     vuetify: {
 			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader

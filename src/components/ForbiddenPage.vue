@@ -2,7 +2,7 @@
     <v-empty-state headline="Whoops, 403" title="Forbidden" text="Your session must have timed out or you might not have permission to access this page. Please book
             tickets to continue." height="60vh">
         <div class="mx-auto">
-            <v-btn color="green-darken-4" @click="$router.push('/')">Home</v-btn>
+            <v-btn color="green-darken-4" @click="$router.push('/beta/')">Home</v-btn>
         </div>
     </v-empty-state>
 </template>

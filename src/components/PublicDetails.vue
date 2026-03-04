@@ -168,7 +168,7 @@ export default {
             totalTax: this.totalTax
            };
             this.$store.commit('setDetails', details)
-            this.$router.push('/review-details')
+            this.$router.push('/beta/review-details')
           //
             //   try {
             //const amd = this.$store.getters.getDetails;

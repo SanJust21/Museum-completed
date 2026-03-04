@@ -50,7 +50,7 @@
       <v-card-actions class="justify-end">
         <v-icon
           class="mdi mdi-close-circle-outline text-white fs-3"
-          @click="isActive.value = false, $router.push('/')">
+          @click="isActive.value = false, $router.push('/beta/')">
         </v-icon>
       </v-card-actions>
       <v-card class="py-8 px-6 text-center mx-auto" elevation="2" max-width="400" width="100%" height="450">

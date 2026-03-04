@@ -200,7 +200,7 @@ export default {
 
   methods: {
     editPage() {
-      this.$router.push('/booking-page');
+      this.$router.push('/beta/booking-page');
     },
 
     formatTime(timeString) {
