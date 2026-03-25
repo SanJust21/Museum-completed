@@ -121,6 +121,8 @@
                   :rules="nameRules"
                   required outlined dense hide-details="auto"
                   class="mb-3"
+                  @keypress="allowOnlyLetters"
+                  @paste="sanitizePaste"
                 />
                 <v-text-field
                   v-model="mobileNum"
@@ -243,6 +245,7 @@
 <script>
 const MOBILE_REGEX = /^\d{10}$/;
 const EMAIL_REGEX  = /.+@.+\..+/;
+const NAME_REGEX   = /^[a-zA-Z\s]+$/;
 
 export default {
   name: 'DateFix',
@@ -350,6 +353,7 @@ export default {
     isFormValid() {
       const base = (
         this.name.trim().length >= 3 &&
+        NAME_REGEX.test(this.name.trim()) &&
         MOBILE_REGEX.test(this.mobileNum) &&
         EMAIL_REGEX.test(this.email)
       );
@@ -360,7 +364,13 @@ export default {
       return base && !!this.districtSelection;
     },
 
-    nameRules()     { return [v => !!v || 'Name is required']; },
+    nameRules() {
+      return [
+        v => !!v || 'Name is required',
+        v => (v && v.trim().length >= 3) || 'Name must be at least 3 characters',
+        v => NAME_REGEX.test(v) || 'Name must contain letters and spaces only',
+      ];
+    },
     mobRules()      { return [v => !!v || 'Mobile is required', v => MOBILE_REGEX.test(v) || 'Must be 10 digits']; },
     emailRules()    { return [v => !!v || 'E-mail is required', v => EMAIL_REGEX.test(v) || 'E-mail must be valid']; },
     districtRules() { return [v => !!v || 'District is required for this category']; },
@@ -595,6 +605,18 @@ export default {
       const ampm    = hours >= 12 ? 'pm' : 'am';
       const display = hours % 12 || 12;
       return `${display}:${m.padStart(2, '0')} ${ampm}`;
+    },
+
+    allowOnlyLetters(event) {
+      const char = String.fromCharCode(event.keyCode ?? event.which);
+      if (!/^[a-zA-Z\s]$/.test(char)) event.preventDefault();
+    },
+
+    sanitizePaste(event) {
+      event.preventDefault();
+      const pasted = (event.clipboardData || window.clipboardData).getData('text');
+      const cleaned = pasted.replace(/[^a-zA-Z\s]/g, '');
+      this.name = (this.name + cleaned).trim();
     },
 
     allowedDates(val) {

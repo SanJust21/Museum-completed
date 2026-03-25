@@ -80,12 +80,12 @@
         </div>
         <div class="mx-4" :disabled="!disablePay">
           <p class="mt-2 mb-1" style="font-size: 18px;">Ticket Price : Rs.{{ details.total }}/-</p>
-          <div v-for="amt in tax" :key="amt.type">
+          <!-- <div v-for="amt in tax" :key="amt.type">
             <p class="mb-0" style="font-size: 14px;">
               {{ amt.type }} ({{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price + '%') : ('Rs.' + amt.price) }})
               : Rs.{{ amt.type === 'GST' || amt.type === 'IGST' ? (amt.price * 0.01 * details.total).toFixed(2) : amt.price }} /-
             </p>
-          </div>
+          </div> -->
           <h5 class="mt-1 text-end" style="color: #212121;">Grand Total : Rs.{{ grandTotal }}/-</h5>
         </div>
         <div class="d-flex justify-content-end">
